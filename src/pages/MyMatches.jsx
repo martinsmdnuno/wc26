@@ -1,8 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import schedule from '../data/schedule.json';
 import PhaseFilter from '../components/PhaseFilter';
 import MatchCard from '../components/MatchCard';
 import { useLanguage } from '../i18n/LanguageContext';
+import { downloadMultipleICS } from '../utils/calendar';
 
 export default function MyMatches({ favorites, onNavigate }) {
   const [activePhase, setActivePhase] = useState('group');
@@ -22,6 +23,30 @@ export default function MyMatches({ favorites, onNavigate }) {
         favorites.includes(m.home_iso) || favorites.includes(m.away_iso)
     );
   }, [favorites, activePhase]);
+
+  // All group stage matches for favourites (for bulk export)
+  const groupMatches = useMemo(() => {
+    if (favorites.length === 0) return [];
+    const phase = schedule.phases.find((p) => p.id === 'group');
+    if (!phase) return [];
+    return phase.matches.filter(
+      (m) =>
+        favorites.includes(m.home_iso) || favorites.includes(m.away_iso)
+    );
+  }, [favorites]);
+
+  const handleExportAll = useCallback(() => {
+    const events = groupMatches.map((m) => {
+      const home = m.home_iso ? t(`team.${m.home_iso}`) : m.home;
+      const away = m.away_iso ? t(`team.${m.away_iso}`) : m.away;
+      return {
+        title: `${home} vs ${away}`,
+        date: m.date,
+        kickoff: m.kickoff_bst,
+      };
+    });
+    downloadMultipleICS(events, 'Mundial_2026_Jogos.ics');
+  }, [groupMatches, t]);
 
   if (favorites.length === 0) {
     return (
@@ -52,6 +77,14 @@ export default function MyMatches({ favorites, onNavigate }) {
         active={activePhase}
         onSelect={setActivePhase}
       />
+
+      {groupMatches.length > 0 && (
+        <div className="my-matches__export">
+          <button className="my-matches__export-btn" onClick={handleExportAll}>
+            📅 {t('exportAllMatches')}
+          </button>
+        </div>
+      )}
 
       {filteredMatches.length === 0 ? (
         <div className="my-matches__no-results">

@@ -14,6 +14,7 @@ export const translations = {
     group: 'Grupo',
     vs: 'vs',
     addToCalendar: 'Adicionar ao calendário',
+    exportAllMatches: 'Exportar jogos para o calendário',
 
     // Teams page
     searchPlaceholder: 'Procurar equipa...',
@@ -139,6 +140,7 @@ export const translations = {
     group: 'Group',
     vs: 'vs',
     addToCalendar: 'Add to calendar',
+    exportAllMatches: 'Export matches to calendar',
 
     // Teams page
     searchPlaceholder: 'Search team...',

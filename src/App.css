@@ -570,6 +570,27 @@
   color: var(--gray);
 }
 
+.my-matches__export {
+  padding: 0 16px 8px;
+}
+
+.my-matches__export-btn {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  min-height: 44px;
+  transition: transform 0.2s;
+}
+
+.my-matches__export-btn:active {
+  transform: scale(0.97);
+}
+
 .my-matches {
   padding-bottom: 0;
 }
