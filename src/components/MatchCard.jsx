@@ -1,39 +1,42 @@
+import { useLanguage } from '../i18n/LanguageContext';
+
 function getFlagUrl(iso) {
   return `https://flagcdn.com/w80/${iso}.png`;
 }
 
-function formatDate(dateStr) {
-  const d = new Date(dateStr + 'T00:00:00');
-  return d.toLocaleDateString('pt-PT', {
-    weekday: 'short',
-    day: 'numeric',
-    month: 'short',
-  });
-}
-
 export default function MatchCard({ match, isNext }) {
+  const { t } = useLanguage();
   const hasTeams = !!match.home_iso;
   const isKnockout = !hasTeams;
+
+  const dateStr = (() => {
+    const d = new Date(match.date + 'T00:00:00');
+    return d.toLocaleDateString(t('dateLocale'), {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+    });
+  })();
 
   return (
     <div className={`match-card ${isNext ? 'match-card--next' : ''}`}>
       {isNext && (
         <div className="match-card__next-badge">
           <span className="match-card__pulse" />
-          Proximo Jogo
+          {t('nextMatch')}
         </div>
       )}
 
       {match.group_label && (
-        <span className="match-card__group">Grupo {match.group_label}</span>
+        <span className="match-card__group">{t('group')} {match.group_label}</span>
       )}
 
       {match.label && isKnockout && (
-        <span className="match-card__label">{match.label}</span>
+        <span className="match-card__label">{t(`label.${match.label}`) || match.label}</span>
       )}
 
       <div className="match-card__date">
-        {formatDate(match.date)} &middot; {match.kickoff_bst}
+        {dateStr} &middot; {match.kickoff_bst}
       </div>
 
       <div className="match-card__teams">
@@ -51,7 +54,7 @@ export default function MatchCard({ match, isNext }) {
           <span className="match-card__name">{match.home}</span>
         </div>
 
-        <span className="match-card__vs">vs</span>
+        <span className="match-card__vs">{t('vs')}</span>
 
         <div className="match-card__team">
           {hasTeams ? (

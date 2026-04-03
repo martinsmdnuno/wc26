@@ -2,9 +2,16 @@ import { useState, useMemo } from 'react';
 import schedule from '../data/schedule.json';
 import PhaseFilter from '../components/PhaseFilter';
 import MatchCard from '../components/MatchCard';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function MyMatches({ favorites, onNavigate }) {
   const [activePhase, setActivePhase] = useState('group');
+  const { t } = useLanguage();
+
+  const translatedPhases = useMemo(
+    () => schedule.phases.map((p) => ({ ...p, name: t(`phase.${p.id}`) })),
+    [t]
+  );
 
   const filteredMatches = useMemo(() => {
     if (favorites.length === 0) return [];
@@ -20,13 +27,13 @@ export default function MyMatches({ favorites, onNavigate }) {
     return (
       <div className="my-matches__empty">
         <span className="my-matches__empty-icon">⭐</span>
-        <h2>Ainda nao segues nenhuma equipa</h2>
-        <p>Vai a Equipas e escolhe a tua!</p>
+        <h2>{t('emptyTitle')}</h2>
+        <p>{t('emptyDescription')}</p>
         <button
           className="my-matches__empty-cta"
           onClick={() => onNavigate('teams')}
         >
-          Escolher Equipas
+          {t('emptyCta')}
         </button>
       </div>
     );
@@ -41,20 +48,20 @@ export default function MyMatches({ favorites, onNavigate }) {
   return (
     <div className="my-matches">
       <PhaseFilter
-        phases={schedule.phases}
+        phases={translatedPhases}
         active={activePhase}
         onSelect={setActivePhase}
       />
 
       {filteredMatches.length === 0 ? (
         <div className="my-matches__no-results">
-          <p>Nenhum jogo nesta fase para as tuas equipas.</p>
+          <p>{t('noMatchesInPhase')}</p>
         </div>
       ) : (
         <div className="schedule__list">
           {Object.entries(matchesByDate).map(([date, matches]) => {
             const d = new Date(date + 'T00:00:00');
-            const label = d.toLocaleDateString('pt-PT', {
+            const label = d.toLocaleDateString(t('dateLocale'), {
               weekday: 'long',
               day: 'numeric',
               month: 'long',

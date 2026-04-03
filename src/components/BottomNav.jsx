@@ -1,12 +1,15 @@
 import { motion } from 'framer-motion';
-
-const tabs = [
-  { id: 'schedule', label: 'Calendario', icon: '🏆' },
-  { id: 'my-matches', label: 'Os Meus Jogos', icon: '⭐' },
-  { id: 'teams', label: 'Equipas', icon: '🌍' },
-];
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function BottomNav({ active, onNavigate, favoriteCount }) {
+  const { t } = useLanguage();
+
+  const tabs = [
+    { id: 'schedule', label: t('navSchedule'), icon: '🏆' },
+    { id: 'my-matches', label: t('navMyMatches'), icon: '⭐' },
+    { id: 'teams', label: t('navTeams'), icon: '🌍' },
+  ];
+
   return (
     <nav className="bottom-nav">
       {tabs.map((tab) => (

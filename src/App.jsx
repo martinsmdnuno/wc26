@@ -3,7 +3,9 @@ import BottomNav from './components/BottomNav';
 import Schedule from './pages/Schedule';
 import MyMatches from './pages/MyMatches';
 import Teams from './pages/Teams';
+import LanguageSwitcher from './components/LanguageSwitcher';
 import { useFavorites } from './hooks/useFavorites';
+import { useLanguage } from './i18n/LanguageContext';
 import logo from './assets/logo.png';
 import './App.css';
 
@@ -11,6 +13,7 @@ export default function App() {
   const [page, setPage] = useState('schedule');
   const [animClass, setAnimClass] = useState('page-enter-done');
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
+  const { t } = useLanguage();
 
   const navigate = useCallback((newPage) => {
     if (newPage === page) return;
@@ -32,9 +35,10 @@ export default function App() {
         <div className="app-header__content">
           <img src={logo} alt="Mundial 2026" className="app-header__logo" />
           <h1 className="app-header__title">
-            <span className="app-header__mundial">MUNDIAL</span>{' '}
-            <span className="app-header__year">2026</span>
+            <span className="app-header__mundial">{t('appTitle')}</span>{' '}
+            <span className="app-header__year">{t('appYear')}</span>
           </h1>
+          <LanguageSwitcher />
         </div>
       </header>
 

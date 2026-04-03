@@ -1,15 +1,17 @@
 import { useState, useMemo } from 'react';
 import schedule from '../data/schedule.json';
 import TeamCard from '../components/TeamCard';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function Teams({ favorites, toggleFavorite, isFavorite }) {
   const [search, setSearch] = useState('');
+  const { t } = useLanguage();
 
   const sorted = useMemo(() => {
     let teams = [...schedule.teams];
     if (search) {
       const q = search.toLowerCase();
-      teams = teams.filter((t) => t.name.toLowerCase().includes(q));
+      teams = teams.filter((team) => team.name.toLowerCase().includes(q));
     }
     teams.sort((a, b) => {
       const aFav = favorites.includes(a.iso);
@@ -27,7 +29,7 @@ export default function Teams({ favorites, toggleFavorite, isFavorite }) {
         <input
           type="text"
           className="teams__search"
-          placeholder="Procurar equipa..."
+          placeholder={t('searchPlaceholder')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />

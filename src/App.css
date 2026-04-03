@@ -18,6 +18,31 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+  position: relative;
+}
+
+.lang-switcher {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  border-radius: 6px;
+  font-size: 18px;
+  padding: 4px 8px;
+  cursor: pointer;
+  line-height: 1;
+  transition: background 0.2s;
+  min-width: 36px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lang-switcher:active {
+  background: rgba(255, 255, 255, 0.22);
 }
 
 .app-header__logo {
@@ -28,10 +53,11 @@
 }
 
 .app-header__title {
-  font-size: 20px;
-  letter-spacing: 4px;
+  font-size: 18px;
+  letter-spacing: 3px;
   margin: 0;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .app-header__mundial {

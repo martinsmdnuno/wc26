@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import schedule from '../data/schedule.json';
 import PhaseFilter from '../components/PhaseFilter';
 import MatchCard from '../components/MatchCard';
+import { useLanguage } from '../i18n/LanguageContext';
 
 function getNextMatchId(matches) {
   const now = new Date();
@@ -16,6 +17,12 @@ function getNextMatchId(matches) {
 
 export default function Schedule() {
   const [activePhase, setActivePhase] = useState('group');
+  const { t } = useLanguage();
+
+  const translatedPhases = useMemo(
+    () => schedule.phases.map((p) => ({ ...p, name: t(`phase.${p.id}`) })),
+    [t]
+  );
 
   const phase = schedule.phases.find((p) => p.id === activePhase);
   const allGroupMatches = schedule.phases.find((p) => p.id === 'group')?.matches || [];
@@ -34,7 +41,7 @@ export default function Schedule() {
   return (
     <div className="schedule">
       <PhaseFilter
-        phases={schedule.phases}
+        phases={translatedPhases}
         active={activePhase}
         onSelect={setActivePhase}
       />
@@ -42,7 +49,7 @@ export default function Schedule() {
       <div className="schedule__list">
         {Object.entries(matchesByDate).map(([date, matches]) => {
           const d = new Date(date + 'T00:00:00');
-          const label = d.toLocaleDateString('pt-PT', {
+          const label = d.toLocaleDateString(t('dateLocale'), {
             weekday: 'long',
             day: 'numeric',
             month: 'long',
