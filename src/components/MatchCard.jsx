@@ -1,10 +1,11 @@
 import { useLanguage } from '../i18n/LanguageContext';
+import { downloadICS } from '../utils/calendar';
 
 function getFlagUrl(iso) {
   return `https://flagcdn.com/w80/${iso}.png`;
 }
 
-export default function MatchCard({ match, isNext }) {
+export default function MatchCard({ match, isNext, showCalButton = false }) {
   const { t } = useLanguage();
   const hasTeams = !!match.home_iso;
   const isKnockout = !hasTeams;
@@ -20,6 +21,15 @@ export default function MatchCard({ match, isNext }) {
       month: 'short',
     });
   })();
+
+  const handleAddToCalendar = (e) => {
+    e.stopPropagation();
+    downloadICS({
+      title: `${homeName} vs ${awayName}`,
+      date: match.date,
+      kickoff: match.kickoff_bst,
+    });
+  };
 
   return (
     <div className={`match-card ${isNext ? 'match-card--next' : ''}`}>
@@ -40,6 +50,16 @@ export default function MatchCard({ match, isNext }) {
 
       <div className="match-card__date">
         {dateStr} &middot; {match.kickoff_bst}
+        {showCalButton && hasTeams && (
+          <button
+            className={`match-card__cal-pill ${isNext ? 'match-card__cal-pill--next' : ''}`}
+            onClick={handleAddToCalendar}
+            aria-label={t('addToCalendar')}
+          >
+            <span className="match-card__cal-plus">+</span>
+            <span className="match-card__cal-icon">📅</span>
+          </button>
+        )}
       </div>
 
       <div className="match-card__teams">

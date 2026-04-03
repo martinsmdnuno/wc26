@@ -63,6 +63,7 @@ export default function Schedule() {
                   key={match.id}
                   match={match}
                   isNext={match.id === nextMatchId && activePhase === 'group'}
+                  showCalButton
                   index={i}
                 />
               ))}

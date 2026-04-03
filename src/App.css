@@ -308,6 +308,46 @@
   font-size: 12px;
   color: var(--gray);
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.match-card__cal-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px 2px 5px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.06);
+  transition: background 0.2s;
+  cursor: pointer;
+  font-family: inherit;
+  margin-left: auto;
+}
+
+.match-card__cal-pill:active {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.match-card__cal-pill--next {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.match-card__cal-pill--next:active {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.match-card__cal-plus {
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.6;
+  line-height: 1;
+}
+
+.match-card__cal-icon {
+  font-size: 12px;
+  line-height: 1;
 }
 
 .match-card__teams {
@@ -544,20 +584,25 @@
 }
 
 .my-matches__export {
-  padding: 0 16px 8px;
+  position: sticky;
+  bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  z-index: 50;
+  padding: 12px 16px;
+  background: linear-gradient(to top, var(--off-white) 60%, transparent);
 }
 
 .my-matches__export-btn {
   width: 100%;
-  padding: 12px 16px;
-  border-radius: 8px;
+  padding: 14px 16px;
+  border-radius: 12px;
   background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
   color: var(--white);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   letter-spacing: 0.5px;
-  min-height: 44px;
+  min-height: 48px;
   transition: transform 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 99, 65, 0.3);
 }
 
 .my-matches__export-btn:active {

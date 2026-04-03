@@ -78,14 +78,6 @@ export default function MyMatches({ favorites, onNavigate }) {
         onSelect={setActivePhase}
       />
 
-      {groupMatches.length > 0 && (
-        <div className="my-matches__export">
-          <button className="my-matches__export-btn" onClick={handleExportAll}>
-            📅 {t('exportAllMatches')}
-          </button>
-        </div>
-      )}
-
       {filteredMatches.length === 0 ? (
         <div className="my-matches__no-results">
           <p>{t('noMatchesInPhase')}</p>
@@ -108,6 +100,14 @@ export default function MyMatches({ favorites, onNavigate }) {
               </div>
             );
           })}
+        </div>
+      )}
+
+      {groupMatches.length > 0 && (
+        <div className="my-matches__export">
+          <button className="my-matches__export-btn" onClick={handleExportAll}>
+            📅 {t('exportAllMatches')}
+          </button>
         </div>
       )}
     </div>
