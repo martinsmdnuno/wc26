@@ -392,6 +392,45 @@
   color: var(--gray);
 }
 
+.teams__view-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.teams__view-chip {
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--white);
+  color: var(--gray);
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  min-height: 36px;
+}
+
+.teams__view-chip--active {
+  background: var(--green-dark);
+  color: var(--white);
+}
+
+.teams__section {
+  margin-bottom: 20px;
+}
+
+.teams__section-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gold);
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+  margin-bottom: 10px;
+}
+
 .teams__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

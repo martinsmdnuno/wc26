@@ -18,6 +18,17 @@ export const translations = {
     searchPlaceholder: 'Procurar equipa...',
     removeFavourite: 'Remover favorito',
     addFavourite: 'Adicionar favorito',
+    viewAZ: 'A-Z',
+    viewByGroup: 'Por Grupo',
+    viewByConfederation: 'Confederação',
+
+    // Confederations
+    'conf.UEFA': 'UEFA (Europa)',
+    'conf.CONMEBOL': 'CONMEBOL (Am. Sul)',
+    'conf.CAF': 'CAF (África)',
+    'conf.AFC': 'AFC (Ásia)',
+    'conf.CONCACAF': 'CONCACAF (Am. Norte)',
+    'conf.OFC': 'OFC (Oceânia)',
 
     // My Matches empty state
     emptyTitle: 'Ainda não segues nenhuma equipa',
@@ -131,6 +142,17 @@ export const translations = {
     searchPlaceholder: 'Search team...',
     removeFavourite: 'Remove favourite',
     addFavourite: 'Add favourite',
+    viewAZ: 'A-Z',
+    viewByGroup: 'By Group',
+    viewByConfederation: 'Confederation',
+
+    // Confederations
+    'conf.UEFA': 'UEFA (Europe)',
+    'conf.CONMEBOL': 'CONMEBOL (S. America)',
+    'conf.CAF': 'CAF (Africa)',
+    'conf.AFC': 'AFC (Asia)',
+    'conf.CONCACAF': 'CONCACAF (N. America)',
+    'conf.OFC': 'OFC (Oceania)',
 
     // My Matches empty state
     emptyTitle: "You're not following any team yet",
