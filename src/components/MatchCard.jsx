@@ -1,5 +1,4 @@
 import { useLanguage } from '../i18n/LanguageContext';
-import { downloadICS } from '../utils/calendar';
 
 function getFlagUrl(iso) {
   return `https://flagcdn.com/w80/${iso}.png`;
@@ -22,15 +21,6 @@ export default function MatchCard({ match, isNext }) {
     });
   })();
 
-  const handleAddToCalendar = (e) => {
-    e.stopPropagation();
-    downloadICS({
-      title: `${homeName} vs ${awayName}`,
-      date: match.date,
-      kickoff: match.kickoff_bst,
-    });
-  };
-
   return (
     <div className={`match-card ${isNext ? 'match-card--next' : ''}`}>
       {isNext && (
@@ -48,16 +38,9 @@ export default function MatchCard({ match, isNext }) {
         <span className="match-card__label">{t(`label.${match.label}`) || match.label}</span>
       )}
 
-      <button
-        className={`match-card__date-btn ${isNext ? 'match-card__date-btn--next' : ''}`}
-        onClick={handleAddToCalendar}
-        aria-label={t('addToCalendar')}
-      >
-        <span className="match-card__date-plus">+</span>
-        <span className="match-card__date-text">
-          {dateStr} &middot; {match.kickoff_bst}
-        </span>
-      </button>
+      <div className="match-card__date">
+        {dateStr} &middot; {match.kickoff_bst}
+      </div>
 
       <div className="match-card__teams">
         <div className="match-card__team">
