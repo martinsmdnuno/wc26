@@ -9,6 +9,9 @@ export default function MatchCard({ match, isNext }) {
   const hasTeams = !!match.home_iso;
   const isKnockout = !hasTeams;
 
+  const homeName = hasTeams ? t(`team.${match.home_iso}`) : match.home;
+  const awayName = hasTeams ? t(`team.${match.away_iso}`) : match.away;
+
   const dateStr = (() => {
     const d = new Date(match.date + 'T00:00:00');
     return d.toLocaleDateString(t('dateLocale'), {
@@ -44,14 +47,14 @@ export default function MatchCard({ match, isNext }) {
           {hasTeams ? (
             <img
               src={getFlagUrl(match.home_iso)}
-              alt={match.home}
+              alt={homeName}
               className="match-card__flag"
               loading="lazy"
             />
           ) : (
             <div className="match-card__flag-placeholder" />
           )}
-          <span className="match-card__name">{match.home}</span>
+          <span className="match-card__name">{homeName}</span>
         </div>
 
         <span className="match-card__vs">{t('vs')}</span>
@@ -60,14 +63,14 @@ export default function MatchCard({ match, isNext }) {
           {hasTeams ? (
             <img
               src={getFlagUrl(match.away_iso)}
-              alt={match.away}
+              alt={awayName}
               className="match-card__flag"
               loading="lazy"
             />
           ) : (
             <div className="match-card__flag-placeholder" />
           )}
-          <span className="match-card__name">{match.away}</span>
+          <span className="match-card__name">{awayName}</span>
         </div>
       </div>
     </div>

@@ -6,16 +6,17 @@ function getFlagUrl(iso) {
 
 export default function TeamCard({ team, isFav, onToggle }) {
   const { t } = useLanguage();
+  const teamName = t(`team.${team.iso}`);
 
   return (
     <div className="team-card">
       <img
         src={getFlagUrl(team.iso)}
-        alt={team.name}
+        alt={teamName}
         className="team-card__flag"
         loading="lazy"
       />
-      <span className="team-card__name">{team.name}</span>
+      <span className="team-card__name">{teamName}</span>
       <span className="team-card__group">{t('group')} {team.group}</span>
       <button
         className={`team-card__fav ${isFav ? 'team-card__fav--active' : ''}`}

@@ -11,17 +11,23 @@ export default function Teams({ favorites, toggleFavorite, isFavorite }) {
     let teams = [...schedule.teams];
     if (search) {
       const q = search.toLowerCase();
-      teams = teams.filter((team) => team.name.toLowerCase().includes(q));
+      teams = teams.filter((team) => {
+        const translatedName = t(`team.${team.iso}`);
+        return translatedName.toLowerCase().includes(q) ||
+               team.name.toLowerCase().includes(q);
+      });
     }
     teams.sort((a, b) => {
       const aFav = favorites.includes(a.iso);
       const bFav = favorites.includes(b.iso);
       if (aFav && !bFav) return -1;
       if (!aFav && bFav) return 1;
-      return a.name.localeCompare(b.name);
+      const aName = t(`team.${a.iso}`);
+      const bName = t(`team.${b.iso}`);
+      return aName.localeCompare(bName);
     });
     return teams;
-  }, [search, favorites]);
+  }, [search, favorites, t]);
 
   return (
     <div className="teams">

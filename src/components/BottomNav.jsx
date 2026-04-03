@@ -6,8 +6,8 @@ export default function BottomNav({ active, onNavigate, favoriteCount }) {
 
   const tabs = [
     { id: 'schedule', label: t('navSchedule'), icon: '🏆' },
-    { id: 'my-matches', label: t('navMyMatches'), icon: '⭐' },
     { id: 'teams', label: t('navTeams'), icon: '🌍' },
+    { id: 'my-matches', label: t('navMyMatches'), icon: '⭐' },
   ];
 
   return (
