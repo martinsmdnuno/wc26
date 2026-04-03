@@ -3,6 +3,7 @@ import BottomNav from './components/BottomNav';
 import Schedule from './pages/Schedule';
 import MyMatches from './pages/MyMatches';
 import Teams from './pages/Teams';
+import Missing from './pages/Missing';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import { useFavorites } from './hooks/useFavorites';
 import { useLanguage } from './i18n/LanguageContext';
@@ -55,6 +56,7 @@ export default function App() {
               isFavorite={isFavorite}
             />
           )}
+          {page === 'missing' && <Missing />}
         </div>
       </main>
 

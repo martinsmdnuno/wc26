@@ -90,6 +90,21 @@ export const translations = {
     'team.uy': 'Uruguai',
     'team.uz': 'Usbequistão',
 
+    // Missing page
+    navMissing: 'Ausentes',
+    missingTitle: 'Ficaram de Fora do Mundial',
+    missingSubtitle: 'Estas selecções vão ver o mundial na TV (aliás no Youtube)',
+
+    // Missing teams
+    'team.cm': 'Camarões',
+    'team.dk': 'Dinamarca',
+    'team.hu': 'Hungria',
+    'team.it': 'Itália',
+    'team.ng': 'Nigéria',
+    'team.pl': 'Polónia',
+    'team.ru': 'Rússia',
+    'team.si': 'Eslovénia',
+
     // Date locale
     dateLocale: 'pt-PT',
 
@@ -187,6 +202,21 @@ export const translations = {
     'team.us': 'USA',
     'team.uy': 'Uruguay',
     'team.uz': 'Uzbekistan',
+
+    // Missing page
+    navMissing: 'Missing',
+    missingTitle: 'Missing Out the World Cup',
+    missingSubtitle: "These teams will be watching the World Cup on TV (well, YouTube)",
+
+    // Missing teams
+    'team.cm': 'Cameroon',
+    'team.dk': 'Denmark',
+    'team.hu': 'Hungary',
+    'team.it': 'Italy',
+    'team.ng': 'Nigeria',
+    'team.pl': 'Poland',
+    'team.ru': 'Russia',
+    'team.si': 'Slovenia',
 
     // Date locale
     dateLocale: 'en-GB',
