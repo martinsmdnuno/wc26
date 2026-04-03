@@ -13,6 +13,7 @@ export const translations = {
     nextMatch: 'Próximo Jogo',
     group: 'Grupo',
     vs: 'vs',
+    addToCalendar: 'Adicionar ao calendário',
 
     // Teams page
     searchPlaceholder: 'Procurar equipa...',
@@ -137,6 +138,7 @@ export const translations = {
     nextMatch: 'Next Match',
     group: 'Group',
     vs: 'vs',
+    addToCalendar: 'Add to calendar',
 
     // Teams page
     searchPlaceholder: 'Search team...',
