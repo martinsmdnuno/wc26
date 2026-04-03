@@ -4,6 +4,7 @@ import Schedule from './pages/Schedule';
 import MyMatches from './pages/MyMatches';
 import Teams from './pages/Teams';
 import { useFavorites } from './hooks/useFavorites';
+import logo from './assets/logo.png';
 import './App.css';
 
 export default function App() {
@@ -28,10 +29,13 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1 className="app-header__title">
-          <span className="app-header__mundial">MUNDIAL</span>{' '}
-          <span className="app-header__year">2026</span>
-        </h1>
+        <div className="app-header__content">
+          <img src={logo} alt="Mundial 2026" className="app-header__logo" />
+          <h1 className="app-header__title">
+            <span className="app-header__mundial">MUNDIAL</span>{' '}
+            <span className="app-header__year">2026</span>
+          </h1>
+        </div>
       </header>
 
       <main className="app-main">
