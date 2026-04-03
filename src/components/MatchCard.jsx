@@ -48,19 +48,16 @@ export default function MatchCard({ match, isNext }) {
         <span className="match-card__label">{t(`label.${match.label}`) || match.label}</span>
       )}
 
-      <div className="match-card__top-row">
-        <div className="match-card__date">
+      <button
+        className={`match-card__date-btn ${isNext ? 'match-card__date-btn--next' : ''}`}
+        onClick={handleAddToCalendar}
+        aria-label={t('addToCalendar')}
+      >
+        <span className="match-card__date-plus">+</span>
+        <span className="match-card__date-text">
           {dateStr} &middot; {match.kickoff_bst}
-        </div>
-        <button
-          className={`match-card__cal ${isNext ? 'match-card__cal--next' : ''}`}
-          onClick={handleAddToCalendar}
-          aria-label={t('addToCalendar')}
-          title={t('addToCalendar')}
-        >
-          📅
-        </button>
-      </div>
+        </span>
+      </button>
 
       <div className="match-card__teams">
         <div className="match-card__team">
