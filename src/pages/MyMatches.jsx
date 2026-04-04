@@ -100,14 +100,14 @@ export default function MyMatches({ favorites, onNavigate, onTeamClick }) {
               </div>
             );
           })}
-        </div>
-      )}
 
-      {groupMatches.length > 0 && (
-        <div className="my-matches__export">
-          <button className="my-matches__export-btn" onClick={handleExportAll}>
-            📅 {t('exportShort')}
-          </button>
+          {groupMatches.length > 0 && (
+            <div className="my-matches__export">
+              <button className="my-matches__export-btn" onClick={handleExportAll}>
+                📅 {t('exportShort')}
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
