@@ -106,7 +106,7 @@ export default function MyMatches({ favorites, onNavigate, onTeamClick }) {
       {groupMatches.length > 0 && (
         <div className="my-matches__export">
           <button className="my-matches__export-btn" onClick={handleExportAll}>
-            📅 {t('exportAllMatches')}
+            📅 {t('exportShort')}
           </button>
         </div>
       )}
