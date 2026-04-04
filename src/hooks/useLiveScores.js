@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { doc, setDoc, getDocs, collection } from 'firebase/firestore';
 import { db } from '../firebase';
-import { useAuth } from './useAuth';
+import { usePools } from './usePools';
 import { getTodayMatches, mapApiStatus, extractScore } from '../utils/footballApi';
 
 const POLL_INTERVAL = 60_000;
 
 export function useLiveScores() {
-  const { profile } = useAuth();
-  const groupCode = profile?.groupCode;
+  const { activePoolId } = usePools();
   const [liveData, setLiveData] = useState({});
   const [hasLive, setHasLive] = useState(false);
   const timerRef = useRef(null);
@@ -27,9 +26,9 @@ export function useLiveScores() {
         updates[m.id] = { status, score, apiMatchId: m.id };
         if (status === 'live') anyLive = true;
 
-        if (status === 'finished' && score && groupCode) {
+        if (status === 'finished' && score && activePoolId) {
           await setDoc(
-            doc(db, 'groups', groupCode, 'matches', String(m.id)),
+            doc(db, 'pools', activePoolId, 'matches', String(m.id)),
             { status, scoreHome: score.home, scoreAway: score.away },
             { merge: true }
           );
@@ -41,7 +40,7 @@ export function useLiveScores() {
     } catch {
       // Silently fail — will retry on next poll
     }
-  }, [groupCode]);
+  }, [activePoolId]);
 
   useEffect(() => {
     fetchScores();
@@ -60,15 +59,14 @@ export function useLiveScores() {
 }
 
 export function useCachedScores() {
-  const { profile } = useAuth();
-  const groupCode = profile?.groupCode;
+  const { activePoolId } = usePools();
   const [scores, setScores] = useState({});
 
   useEffect(() => {
-    if (!groupCode) return;
+    if (!activePoolId) return;
     let cancelled = false;
     (async () => {
-      const snap = await getDocs(collection(db, 'groups', groupCode, 'matches'));
+      const snap = await getDocs(collection(db, 'pools', activePoolId, 'matches'));
       if (cancelled) return;
       const map = {};
       snap.docs.forEach((d) => {
@@ -77,7 +75,7 @@ export function useCachedScores() {
       setScores(map);
     })();
     return () => { cancelled = true; };
-  }, [groupCode]);
+  }, [activePoolId]);
 
   return scores;
 }

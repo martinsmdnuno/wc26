@@ -1131,6 +1131,29 @@
   padding: 0 0 16px;
 }
 
+.bets__pool-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 0;
+}
+
+.bets__pool-name {
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.bets__pool-code {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold);
+  background: rgba(201, 168, 76, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
 .bets__view-toggle {
   display: flex;
   gap: 8px;
@@ -1145,6 +1168,292 @@
   text-align: center;
   padding: 40px 20px;
   color: var(--gray);
+}
+
+.bets__no-pool {
+  text-align: center;
+  padding: 48px 32px 24px;
+}
+
+.bets__no-pool-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.bets__no-pool-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 8px;
+}
+
+.bets__no-pool-desc {
+  font-size: 14px;
+  color: var(--gray);
+}
+
+/* ===== POOL SELECTOR ===== */
+.pool-selector {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+}
+
+.pool-selector__trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.pool-selector__trigger:active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.pool-selector__arrow {
+  font-size: 10px;
+  transition: transform 0.2s;
+}
+
+.pool-selector__arrow--open {
+  transform: rotate(180deg);
+}
+
+.pool-selector__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+}
+
+.pool-selector__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 6px;
+  background: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 160;
+  min-width: 180px;
+  overflow: hidden;
+}
+
+.pool-selector__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--dark);
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.pool-selector__option:active {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.pool-selector__option--active {
+  color: var(--green-dark);
+  font-weight: 600;
+}
+
+.pool-selector__option--manage {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* ===== POOL MANAGER ===== */
+.pool-manager {
+  padding: 24px 16px;
+}
+
+.pool-manager__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 16px;
+}
+
+.pool-manager__back {
+  font-size: 14px;
+  color: var(--green-dark);
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.pool-manager__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.pool-manager__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  border: 2px solid transparent;
+  text-align: left;
+  transition: border-color 0.2s;
+}
+
+.pool-manager__item--active {
+  border-color: var(--green-dark);
+}
+
+.pool-manager__item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pool-manager__item-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--dark);
+}
+
+.pool-manager__item-code {
+  font-size: 12px;
+  color: var(--gray);
+  font-weight: 500;
+}
+
+.pool-manager__item-check {
+  color: var(--green-dark);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.pool-manager__empty {
+  text-align: center;
+  padding: 24px;
+  color: var(--gray);
+  font-size: 14px;
+}
+
+.pool-manager__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.pool-manager__action-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 44px;
+  background: var(--white);
+  color: var(--green-dark);
+  border: 2px solid var(--green-dark);
+  transition: all 0.2s;
+}
+
+.pool-manager__action-btn:active {
+  transform: scale(0.97);
+}
+
+.pool-manager__action-btn--create {
+  background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+  color: var(--white);
+  border-color: transparent;
+}
+
+.pool-manager__success {
+  text-align: center;
+  padding: 16px 0;
+}
+
+.pool-manager__success-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.pool-manager__success-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+
+.pool-manager__success-name {
+  font-size: 14px;
+  color: var(--gray);
+  margin-bottom: 20px;
+}
+
+.pool-manager__code-display {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.pool-manager__code-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray);
+  margin-bottom: 6px;
+}
+
+.pool-manager__code-value {
+  font-family: 'Oswald', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--green-dark);
+  letter-spacing: 2px;
+}
+
+.pool-manager__share-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+  color: var(--white);
+  font-weight: 700;
+  font-size: 15px;
+  min-height: 48px;
+  margin-bottom: 10px;
+  transition: transform 0.2s;
+}
+
+.pool-manager__share-btn:active {
+  transform: scale(0.97);
+}
+
+.pool-manager__done-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray);
+  min-height: 44px;
 }
 
 /* ===== BET CARD ===== */

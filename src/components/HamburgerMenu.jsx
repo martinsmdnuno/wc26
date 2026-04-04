@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useAuth } from '../hooks/useAuth';
+import { usePools } from '../hooks/usePools';
 
 export default function HamburgerMenu({ onNavigate }) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const { t } = useLanguage();
   const { profile } = useAuth();
+  const { activePool } = usePools();
 
   const handleNav = (page) => {
     setOpen(false);
@@ -14,7 +16,7 @@ export default function HamburgerMenu({ onNavigate }) {
   };
 
   const handleShare = async () => {
-    const code = profile?.groupCode;
+    const code = activePool?.inviteCode;
     if (!code) return;
 
     const appUrl = window.location.origin + window.location.pathname;
@@ -58,15 +60,22 @@ export default function HamburgerMenu({ onNavigate }) {
             <span className="hamburger-menu__avatar">{profile.nickname?.charAt(0).toUpperCase()}</span>
             <div>
               <span className="hamburger-menu__nick">{profile.nickname}</span>
-              <span className="hamburger-menu__group">{profile.groupCode}</span>
+              {activePool && (
+                <span className="hamburger-menu__group">{activePool.name}</span>
+              )}
             </div>
           </div>
         )}
 
         <nav className="hamburger-menu__nav">
-          <button className="hamburger-menu__item hamburger-menu__item--share" onClick={handleShare}>
-            <span>📩</span> {copied ? t('copiedToClipboard') : t('inviteFriends')}
+          <button className="hamburger-menu__item" onClick={() => handleNav('pools')}>
+            <span>🎱</span> {t('poolMyPools')}
           </button>
+          {activePool && (
+            <button className="hamburger-menu__item hamburger-menu__item--share" onClick={handleShare}>
+              <span>📩</span> {copied ? t('copiedToClipboard') : t('inviteFriends')}
+            </button>
+          )}
           <button className="hamburger-menu__item" onClick={() => handleNav('rules')}>
             <span>📋</span> {t('navRules')}
           </button>

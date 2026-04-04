@@ -2,20 +2,21 @@ import { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../hooks/useAuth';
+import { usePools } from '../hooks/usePools';
 import { useLanguage } from '../i18n/LanguageContext';
 
 export default function Leaderboard() {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
+  const { activePoolId } = usePools();
   const { t } = useLanguage();
-  const groupCode = profile?.groupCode;
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!groupCode) return;
+    if (!activePoolId) return;
     let cancelled = false;
     (async () => {
-      const snap = await getDocs(collection(db, 'groups', groupCode, 'leaderboard'));
+      const snap = await getDocs(collection(db, 'pools', activePoolId, 'leaderboard'));
       if (cancelled) return;
       const list = snap.docs
         .map((d) => ({ uid: d.id, ...d.data() }))
@@ -28,7 +29,7 @@ export default function Leaderboard() {
       setLoading(false);
     })();
     return () => { cancelled = true; };
-  }, [groupCode]);
+  }, [activePoolId]);
 
   if (loading) {
     return <div className="leaderboard__loading">{t('loading')}</div>;

@@ -3,14 +3,17 @@ import schedule from '../data/schedule.json';
 import PhaseFilter from '../components/PhaseFilter';
 import BetCard from '../components/BetCard';
 import Leaderboard from '../components/Leaderboard';
+import PoolManager from '../components/PoolManager';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useBets, useMyBetsMap } from '../hooks/useBets';
+import { usePools } from '../hooks/usePools';
 import { useCachedScores } from '../hooks/useLiveScores';
 
 export default function Bets() {
   const [activePhase, setActivePhase] = useState('group');
   const [view, setView] = useState('bet');
   const { t } = useLanguage();
+  const { activePoolId, activePool } = usePools();
   const { saveBet } = useBets();
   const { betsMap, setBetsMap, loading } = useMyBetsMap();
   const cachedScores = useCachedScores();
@@ -40,8 +43,29 @@ export default function Bets() {
     }));
   };
 
+  // No active pool — show CTA
+  if (!activePoolId) {
+    return (
+      <div className="bets">
+        <div className="bets__no-pool">
+          <span className="bets__no-pool-icon">🎯</span>
+          <h2 className="bets__no-pool-title">{t('poolRequired')}</h2>
+          <p className="bets__no-pool-desc">{t('poolRequiredDesc')}</p>
+        </div>
+        <PoolManager />
+      </div>
+    );
+  }
+
   return (
     <div className="bets">
+      {activePool && (
+        <div className="bets__pool-header">
+          <span className="bets__pool-name">{activePool.name}</span>
+          <span className="bets__pool-code">{activePool.inviteCode}</span>
+        </div>
+      )}
+
       <div className="bets__view-toggle">
         <button
           className={`teams__view-chip ${view === 'bet' ? 'teams__view-chip--active' : ''}`}

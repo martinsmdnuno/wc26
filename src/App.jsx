@@ -7,6 +7,8 @@ import Missing from './pages/Missing';
 import Bets from './pages/Bets';
 import Rules from './pages/Rules';
 import HamburgerMenu from './components/HamburgerMenu';
+import PoolSelector from './components/PoolSelector';
+import PoolManager from './components/PoolManager';
 import NicknameModal from './components/NicknameModal';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import { useFavorites } from './hooks/useFavorites';
@@ -51,7 +53,7 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         <div className="app-header__content">
-          <HamburgerMenu onNavigate={navigate} />
+          {profile && <HamburgerMenu onNavigate={navigate} />}
           <img src={logo} alt="Mundial 2026" className="app-header__logo" />
           <h1 className="app-header__title">
             <span className="app-header__mundial">{t('appTitle')}</span>{' '}
@@ -59,6 +61,9 @@ export default function App() {
           </h1>
           <LanguageSwitcher />
         </div>
+        {profile && (
+          <PoolSelector onManagePools={() => navigate('pools')} />
+        )}
       </header>
 
       {!profile ? (
@@ -79,6 +84,7 @@ export default function App() {
                 />
               )}
               {page === 'bets' && <Bets />}
+              {page === 'pools' && <PoolManager />}
               {page === 'rules' && <Rules />}
               {page === 'missing' && <Missing />}
             </div>

@@ -12,17 +12,18 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from './useAuth';
+import { usePools } from './usePools';
 import { calculatePoints } from '../utils/scoring';
 
 export function useBets() {
-  const { user, profile } = useAuth();
-  const groupCode = profile?.groupCode;
+  const { user } = useAuth();
+  const { activePoolId } = usePools();
 
   const saveBet = useCallback(
     async (matchId, predictedScoreA, predictedScoreB) => {
-      if (!user || !groupCode) return;
+      if (!user || !activePoolId) return;
       const docId = `${user.uid}_${matchId}`;
-      const ref = doc(db, 'groups', groupCode, 'bets', docId);
+      const ref = doc(db, 'pools', activePoolId, 'bets', docId);
       const existing = await getDoc(ref);
 
       const data = {
@@ -40,35 +41,35 @@ export function useBets() {
 
       await setDoc(ref, data, { merge: true });
     },
-    [user, groupCode]
+    [user, activePoolId]
   );
 
   const getMyBets = useCallback(async () => {
-    if (!user || !groupCode) return [];
+    if (!user || !activePoolId) return [];
     const q = query(
-      collection(db, 'groups', groupCode, 'bets'),
+      collection(db, 'pools', activePoolId, 'bets'),
       where('userId', '==', user.uid)
     );
     const snap = await getDocs(q);
     return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-  }, [user, groupCode]);
+  }, [user, activePoolId]);
 
   const getMatchBets = useCallback(
     async (matchId) => {
-      if (!groupCode) return [];
+      if (!activePoolId) return [];
       const q = query(
-        collection(db, 'groups', groupCode, 'bets'),
+        collection(db, 'pools', activePoolId, 'bets'),
         where('matchId', '==', matchId)
       );
       const snap = await getDocs(q);
       return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     },
-    [groupCode]
+    [activePoolId]
   );
 
   const scoreMatch = useCallback(
     async (matchId, actualScoreA, actualScoreB) => {
-      if (!groupCode) return;
+      if (!activePoolId) return;
       const bets = await getMatchBets(matchId);
       const batch = writeBatch(db);
       const leaderboardUpdates = {};
@@ -82,7 +83,7 @@ export function useBets() {
         );
         if (!result) continue;
 
-        const betRef = doc(db, 'groups', groupCode, 'bets', bet.id);
+        const betRef = doc(db, 'pools', activePoolId, 'bets', bet.id);
         batch.update(betRef, { pointsAwarded: result.points });
 
         if (!leaderboardUpdates[bet.userId]) {
@@ -96,7 +97,7 @@ export function useBets() {
       await batch.commit();
 
       for (const [uid, delta] of Object.entries(leaderboardUpdates)) {
-        const lbRef = doc(db, 'groups', groupCode, 'leaderboard', uid);
+        const lbRef = doc(db, 'pools', activePoolId, 'leaderboard', uid);
         const lbSnap = await getDoc(lbRef);
         if (lbSnap.exists()) {
           const current = lbSnap.data();
@@ -109,7 +110,7 @@ export function useBets() {
         }
       }
     },
-    [groupCode, getMatchBets]
+    [activePoolId, getMatchBets]
   );
 
   return { saveBet, getMyBets, getMatchBets, scoreMatch };
@@ -119,17 +120,17 @@ export function useMyBetsMap() {
   const { user, profile } = useAuth();
   const [betsMap, setBetsMap] = useState({});
   const [loading, setLoading] = useState(true);
-  const groupCode = profile?.groupCode;
+  const activePoolId = profile?.activePoolId;
 
   useEffect(() => {
-    if (!user || !groupCode) {
+    if (!user || !activePoolId) {
       setLoading(false);
       return;
     }
     let cancelled = false;
     (async () => {
       const q = query(
-        collection(db, 'groups', groupCode, 'bets'),
+        collection(db, 'pools', activePoolId, 'bets'),
         where('userId', '==', user.uid)
       );
       const snap = await getDocs(q);
@@ -143,7 +144,7 @@ export function useMyBetsMap() {
       setLoading(false);
     })();
     return () => { cancelled = true; };
-  }, [user, groupCode]);
+  }, [user, activePoolId]);
 
   return { betsMap, setBetsMap, loading };
 }
