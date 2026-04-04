@@ -6,10 +6,13 @@ import {
   getDocs,
   setDoc,
   updateDoc,
+  deleteDoc,
   query,
   where,
   arrayUnion,
+  arrayRemove,
   serverTimestamp,
+  writeBatch,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from './useAuth';
@@ -180,6 +183,131 @@ export function PoolProvider({ children }) {
     return joinedPool;
   }, [user, profile, selectPool]);
 
+  const updatePool = useCallback(async (poolId, updates) => {
+    if (!user) return;
+    const pool = pools.find((p) => p.id === poolId);
+    if (!pool || pool.createdBy !== user.uid) throw new Error('NOT_ADMIN');
+
+    const allowed = {};
+    if (updates.name !== undefined) allowed.name = updates.name;
+    await updateDoc(doc(db, 'pools', poolId), allowed);
+    setPools((prev) => prev.map((p) => p.id === poolId ? { ...p, ...allowed } : p));
+  }, [user, pools]);
+
+  const deletePool = useCallback(async (poolId) => {
+    if (!user) return;
+    const pool = pools.find((p) => p.id === poolId);
+    if (!pool || pool.createdBy !== user.uid) throw new Error('NOT_ADMIN');
+
+    // Delete subcollections
+    for (const sub of ['bets', 'leaderboard']) {
+      const subSnap = await getDocs(collection(db, 'pools', poolId, sub));
+      const batch = writeBatch(db);
+      subSnap.docs.forEach((d) => batch.delete(d.ref));
+      await batch.commit();
+    }
+
+    // Delete pool doc
+    await deleteDoc(doc(db, 'pools', poolId));
+
+    // Remove pool from current user
+    await updateDoc(doc(db, 'users', user.uid), {
+      pools: arrayRemove(poolId),
+    });
+
+    setPools((prev) => prev.filter((p) => p.id !== poolId));
+    if (activePoolId === poolId) {
+      const remaining = pools.filter((p) => p.id !== poolId);
+      selectPool(remaining.length > 0 ? remaining[0].id : null);
+    }
+  }, [user, pools, activePoolId, selectPool]);
+
+  const removeMember = useCallback(async (poolId, memberUid) => {
+    if (!user) return;
+    const pool = pools.find((p) => p.id === poolId);
+    if (!pool || pool.createdBy !== user.uid) throw new Error('NOT_ADMIN');
+    if (memberUid === user.uid) throw new Error('CANNOT_REMOVE_SELF');
+
+    await updateDoc(doc(db, 'pools', poolId), {
+      members: arrayRemove(memberUid),
+    });
+
+    // Remove leaderboard entry
+    await deleteDoc(doc(db, 'pools', poolId, 'leaderboard', memberUid));
+
+    // Remove pool from member's user doc
+    await updateDoc(doc(db, 'users', memberUid), {
+      pools: arrayRemove(poolId),
+    });
+
+    setPools((prev) => prev.map((p) =>
+      p.id === poolId
+        ? { ...p, members: (p.members || []).filter((m) => m !== memberUid) }
+        : p
+    ));
+  }, [user, pools]);
+
+  const leavePool = useCallback(async (poolId) => {
+    if (!user) return;
+    const pool = pools.find((p) => p.id === poolId);
+    if (!pool) return;
+    if (pool.createdBy === user.uid) throw new Error('OWNER_CANNOT_LEAVE');
+
+    await updateDoc(doc(db, 'pools', poolId), {
+      members: arrayRemove(user.uid),
+    });
+
+    await deleteDoc(doc(db, 'pools', poolId, 'leaderboard', user.uid));
+
+    await updateDoc(doc(db, 'users', user.uid), {
+      pools: arrayRemove(poolId),
+    });
+
+    setPools((prev) => prev.filter((p) => p.id !== poolId));
+    if (activePoolId === poolId) {
+      const remaining = pools.filter((p) => p.id !== poolId);
+      selectPool(remaining.length > 0 ? remaining[0].id : null);
+    }
+  }, [user, pools, activePoolId, selectPool]);
+
+  const regenerateInviteCode = useCallback(async (poolId) => {
+    if (!user) return;
+    const pool = pools.find((p) => p.id === poolId);
+    if (!pool || pool.createdBy !== user.uid) throw new Error('NOT_ADMIN');
+
+    let inviteCode;
+    let exists = true;
+    while (exists) {
+      inviteCode = generateInviteCode();
+      const q = query(collection(db, 'pools'), where('inviteCode', '==', inviteCode));
+      const snap = await getDocs(q);
+      exists = !snap.empty;
+    }
+
+    await updateDoc(doc(db, 'pools', poolId), { inviteCode });
+    setPools((prev) => prev.map((p) => p.id === poolId ? { ...p, inviteCode } : p));
+    return inviteCode;
+  }, [user, pools]);
+
+  const getPoolMembers = useCallback(async (poolId) => {
+    const pool = pools.find((p) => p.id === poolId);
+    if (!pool) return [];
+
+    const members = pool.members || [];
+    const result = [];
+    for (const uid of members) {
+      const userSnap = await getDoc(doc(db, 'users', uid));
+      const lbSnap = await getDoc(doc(db, 'pools', poolId, 'leaderboard', uid));
+      result.push({
+        uid,
+        nickname: userSnap.exists() ? userSnap.data().nickname : '?',
+        totalPoints: lbSnap.exists() ? lbSnap.data().totalPoints || 0 : 0,
+        isAdmin: pool.createdBy === uid,
+      });
+    }
+    return result.sort((a, b) => b.totalPoints - a.totalPoints);
+  }, [pools]);
+
   const activePool = pools.find((p) => p.id === activePoolId) || null;
 
   return (
@@ -190,6 +318,12 @@ export function PoolProvider({ children }) {
       selectPool,
       createPool,
       joinPool,
+      updatePool,
+      deletePool,
+      removeMember,
+      leavePool,
+      regenerateInviteCode,
+      getPoolMembers,
       loading,
     }}>
       {children}

@@ -1,8 +1,11 @@
 import { useState } from 'react';
+import { useAuth } from '../hooks/useAuth';
 import { usePools } from '../hooks/usePools';
 import { useLanguage } from '../i18n/LanguageContext';
+import PoolAdmin from './PoolAdmin';
 
 export default function PoolManager() {
+  const { user } = useAuth();
   const { pools, activePoolId, selectPool, createPool, joinPool } = usePools();
   const { t } = useLanguage();
   const [view, setView] = useState('list');
@@ -12,6 +15,7 @@ export default function PoolManager() {
   const [error, setError] = useState('');
   const [createdPool, setCreatedPool] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [adminPoolId, setAdminPoolId] = useState(null);
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -68,6 +72,16 @@ export default function PoolManager() {
       setTimeout(() => setCopied(false), 2000);
     }
   };
+
+  // Admin view
+  if (view === 'admin' && adminPoolId) {
+    return (
+      <PoolAdmin
+        poolId={adminPoolId}
+        onBack={() => { setView('list'); setAdminPoolId(null); }}
+      />
+    );
+  }
 
   if (view === 'created' && createdPool) {
     return (
@@ -160,17 +174,30 @@ export default function PoolManager() {
       {pools.length > 0 ? (
         <div className="pool-manager__list">
           {pools.map((pool) => (
-            <button
+            <div
               key={pool.id}
               className={`pool-manager__item ${pool.id === activePoolId ? 'pool-manager__item--active' : ''}`}
-              onClick={() => selectPool(pool.id)}
             >
-              <div className="pool-manager__item-info">
-                <span className="pool-manager__item-name">{pool.name}</span>
-                <span className="pool-manager__item-code">{pool.inviteCode}</span>
-              </div>
-              {pool.id === activePoolId && <span className="pool-manager__item-check">✓</span>}
-            </button>
+              <button
+                className="pool-manager__item-main"
+                onClick={() => selectPool(pool.id)}
+              >
+                <div className="pool-manager__item-info">
+                  <span className="pool-manager__item-name">{pool.name}</span>
+                  <span className="pool-manager__item-code">
+                    {pool.inviteCode} · {pool.members?.length || 0} {t('poolMemberCount')}
+                  </span>
+                </div>
+                {pool.id === activePoolId && <span className="pool-manager__item-check">✓</span>}
+              </button>
+              <button
+                className="pool-manager__item-settings"
+                onClick={() => { setAdminPoolId(pool.id); setView('admin'); }}
+                aria-label={t('poolSettings')}
+              >
+                ⚙️
+              </button>
+            </div>
           ))}
         </div>
       ) : (
