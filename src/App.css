@@ -1621,6 +1621,119 @@
   color: #D32F2F;
 }
 
+/* ===== INSTALL BANNER ===== */
+.install-banner {
+  position: fixed;
+  bottom: calc(72px + env(safe-area-inset-bottom, 0px) + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  width: calc(100% - 32px);
+  max-width: 400px;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  z-index: 90;
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+}
+
+.install-banner--show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.install-banner__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--gray);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.install-banner__content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.install-banner__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.install-banner__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.install-banner__msg {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1.4;
+}
+
+.install-banner__hint {
+  font-size: 12px;
+  color: var(--gray);
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1.4;
+}
+
+.install-banner__share-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--green-dark);
+}
+
+.install-banner__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.install-banner__btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 40px;
+  transition: transform 0.2s;
+}
+
+.install-banner__btn:active {
+  transform: scale(0.97);
+}
+
+.install-banner__btn--install {
+  background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+  color: var(--white);
+}
+
+.install-banner__btn--later {
+  color: var(--gray);
+}
+
+.install-banner__btn--ios-dismiss {
+  width: 100%;
+  margin-top: 10px;
+  color: var(--green-dark);
+}
+
 /* ===== LEADERBOARD ===== */
 .leaderboard {
   padding: 16px;

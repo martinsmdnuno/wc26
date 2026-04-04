@@ -177,6 +177,14 @@ export const translations = {
     done: 'Feito',
     back: 'Voltar',
 
+    // Install banner
+    installAndroidMsg: 'Adiciona ao ecrã principal para uma experiência melhor.',
+    installIOSMsg: 'Instala a app no teu iPhone.',
+    installIOSHint: 'Toca em Partilhar e depois "Adicionar ao ecrã de início".',
+    installBtn: 'Instalar',
+    installLater: 'Agora não',
+    installGotIt: 'Entendi',
+
     // Rules
     navRules: 'Regras',
     rulesTitle: 'Regras do Bolão',
@@ -375,6 +383,14 @@ export const translations = {
     selectPool: 'Select pool',
     done: 'Done',
     back: 'Back',
+
+    // Install banner
+    installAndroidMsg: 'Add to home screen for a better experience.',
+    installIOSMsg: 'Install the app on your iPhone.',
+    installIOSHint: 'Tap Share then "Add to Home Screen".',
+    installBtn: 'Install',
+    installLater: 'Not now',
+    installGotIt: 'Got it',
 
     // Rules
     navRules: 'Rules',

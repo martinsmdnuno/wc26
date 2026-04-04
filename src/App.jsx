@@ -11,6 +11,7 @@ import PoolSelector from './components/PoolSelector';
 import PoolManager from './components/PoolManager';
 import NicknameModal from './components/NicknameModal';
 import LanguageSwitcher from './components/LanguageSwitcher';
+import InstallBanner from './components/InstallBanner';
 import { useFavorites } from './hooks/useFavorites';
 import { useLanguage } from './i18n/LanguageContext';
 import { useAuth } from './hooks/useAuth';
@@ -89,6 +90,8 @@ export default function App() {
               {page === 'missing' && <Missing />}
             </div>
           </main>
+
+          <InstallBanner />
 
           <BottomNav
             active={page}
