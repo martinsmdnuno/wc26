@@ -99,10 +99,11 @@
 .bottom-nav {
   position: fixed;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
   width: 100%;
   max-width: 430px;
+  margin: 0 auto;
   background: var(--white);
   display: flex;
   justify-content: space-around;
@@ -111,6 +112,8 @@
   padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
   box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
   z-index: 100;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .bottom-nav__tab {

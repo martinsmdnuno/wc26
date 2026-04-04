@@ -13,6 +13,14 @@ function getFlagUrl(iso) {
   return `https://flagcdn.com/w160/${iso}.png`;
 }
 
+// Resolve bilingual fields: { pt: '...', en: '...' } or plain string
+function loc(value, lang) {
+  if (!value) return '';
+  if (typeof value === 'string') return value;
+  const key = lang === 'pt-PT' ? 'pt' : 'en';
+  return value[key] ?? value.pt ?? value.en ?? '';
+}
+
 function getTeamMatches(iso) {
   const matches = [];
   for (const phase of schedule.phases) {
@@ -31,7 +39,7 @@ function getTeamInfo(iso) {
 }
 
 export default function TeamProfile({ iso, onBack, onTeamClick }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const data = getTeamData(iso);
   const teamInfo = getTeamInfo(iso);
   const matches = useMemo(() => getTeamMatches(iso), [iso]);
@@ -115,7 +123,7 @@ export default function TeamProfile({ iso, onBack, onTeamClick }) {
           <span className="team-profile__stat-label">{t('statAppearances')}</span>
         </div>
         <div className="team-profile__stat">
-          <span className="team-profile__stat-value">{data.bestResult}</span>
+          <span className="team-profile__stat-value">{loc(data.bestResult, lang)}</span>
           <span className="team-profile__stat-label">{t('statBestResult')}</span>
         </div>
         <div className="team-profile__stat">
@@ -164,22 +172,22 @@ export default function TeamProfile({ iso, onBack, onTeamClick }) {
         <div className="team-profile__qual-grid">
           <div className="team-profile__qual-item">
             <span className="team-profile__qual-label">{t('qualTopScorer')}</span>
-            <span className="team-profile__qual-value">{data.qualification2026.topScorer}</span>
+            <span className="team-profile__qual-value">{loc(data.qualification2026.topScorer, lang)}</span>
           </div>
           <div className="team-profile__qual-item">
             <span className="team-profile__qual-label">{t('qualAssists')}</span>
-            <span className="team-profile__qual-value">{data.qualification2026.topAssists}</span>
+            <span className="team-profile__qual-value">{loc(data.qualification2026.topAssists, lang)}</span>
           </div>
           <div className="team-profile__qual-item">
             <span className="team-profile__qual-label">{t('qualMostUsed')}</span>
-            <span className="team-profile__qual-value">{data.qualification2026.mostUsed}</span>
+            <span className="team-profile__qual-value">{loc(data.qualification2026.mostUsed, lang)}</span>
           </div>
           <div className="team-profile__qual-item">
             <span className="team-profile__qual-label">{t('qualChances')}</span>
-            <span className="team-profile__qual-value">{data.qualification2026.chancesCreated}</span>
+            <span className="team-profile__qual-value">{loc(data.qualification2026.chancesCreated, lang)}</span>
           </div>
         </div>
-        <p className="team-profile__qual-note">{data.qualification2026.note}</p>
+        <p className="team-profile__qual-note">{loc(data.qualification2026.note, lang)}</p>
       </section>
 
       {/* Fun Facts */}
@@ -189,7 +197,7 @@ export default function TeamProfile({ iso, onBack, onTeamClick }) {
           {data.funFacts.map((fact, i) => (
             <div key={i} className="team-profile__fact">
               <span className="team-profile__fact-emoji">{fact.emoji}</span>
-              <span className="team-profile__fact-text">{fact.text}</span>
+              <span className="team-profile__fact-text">{loc(fact.text || fact, lang)}</span>
             </div>
           ))}
         </div>
@@ -203,7 +211,7 @@ export default function TeamProfile({ iso, onBack, onTeamClick }) {
             <div key={item.year} className="team-profile__tl-item">
               <span className="team-profile__tl-year">{item.year}</span>
               <div className="team-profile__tl-dot" />
-              <span className="team-profile__tl-text">{item.text}</span>
+              <span className="team-profile__tl-text">{loc(item.text || item, lang)}</span>
             </div>
           ))}
         </div>
