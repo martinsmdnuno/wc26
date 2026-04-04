@@ -21,7 +21,9 @@ export function useBets() {
 
   const saveBet = useCallback(
     async (matchId, predictedScoreA, predictedScoreB) => {
-      if (!user || !activePoolId) return;
+      if (!user || !activePoolId) {
+        throw new Error('NO_POOL');
+      }
       const docId = `${user.uid}_${matchId}`;
       const ref = doc(db, 'pools', activePoolId, 'bets', docId);
       const existing = await getDoc(ref);

@@ -21,6 +21,7 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
   const [scoreB, setScoreB] = useState(bet?.predictedScoreB ?? '');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState(false);
   const debounceRef = useRef(null);
 
   const dateStr = (() => {
@@ -45,13 +46,15 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
         debounceRef.current = setTimeout(async () => {
           setSaving(true);
           setSaved(false);
+          setSaveError(false);
           try {
             await onSave(match.id, Number(newA), Number(newB));
             setSaved(true);
             setTimeout(() => setSaved(false), 2000);
           } catch (err) {
             console.error('Failed to save bet:', err);
-            setSaved(false);
+            setSaveError(true);
+            setTimeout(() => setSaveError(false), 4000);
           }
           setSaving(false);
         }, 800);
@@ -74,6 +77,7 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
         {isLive && <span className="bet-card__live-badge">{t('live')}</span>}
         {saving && <span className="bet-card__status">{t('saving')}</span>}
         {saved && <span className="bet-card__status bet-card__status--saved">✓</span>}
+        {saveError && <span className="bet-card__status bet-card__status--error">{t('saveFailed')}</span>}
       </div>
 
       {match.venue && match.venue !== 'TBD' && (
