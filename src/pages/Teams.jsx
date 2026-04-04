@@ -6,7 +6,7 @@ import { useLanguage } from '../i18n/LanguageContext';
 
 const VIEW_MODES = ['az', 'group', 'confederation'];
 
-export default function Teams({ favorites, toggleFavorite, isFavorite }) {
+export default function Teams({ favorites, toggleFavorite, isFavorite, onTeamClick }) {
   const [search, setSearch] = useState('');
   const [viewMode, setViewMode] = useState('az');
   const { t } = useLanguage();
@@ -118,6 +118,7 @@ export default function Teams({ favorites, toggleFavorite, isFavorite }) {
                 team={team}
                 isFav={isFavorite(team.iso)}
                 onToggle={toggleFavorite}
+                onTeamClick={onTeamClick}
               />
             ))}
           </div>

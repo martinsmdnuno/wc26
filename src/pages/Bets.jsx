@@ -9,7 +9,7 @@ import { useBets, useMyBetsMap } from '../hooks/useBets';
 import { usePools } from '../hooks/usePools';
 import { useCachedScores } from '../hooks/useLiveScores';
 
-export default function Bets() {
+export default function Bets({ onTeamClick }) {
   const [activePhase, setActivePhase] = useState('group');
   const [view, setView] = useState('bet');
   const { t } = useLanguage();
@@ -113,6 +113,7 @@ export default function Bets() {
                         bet={betsMap[match.id]}
                         matchScore={cachedScores[String(match.id)]}
                         onSave={handleSave}
+                        onTeamClick={onTeamClick}
                       />
                     ))}
                   </div>

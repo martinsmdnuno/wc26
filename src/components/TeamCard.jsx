@@ -4,12 +4,12 @@ function getFlagUrl(iso) {
   return `https://flagcdn.com/w80/${iso}.png`;
 }
 
-export default function TeamCard({ team, isFav, onToggle }) {
+export default function TeamCard({ team, isFav, onToggle, onTeamClick }) {
   const { t } = useLanguage();
   const teamName = t(`team.${team.iso}`);
 
   return (
-    <div className="team-card">
+    <div className="team-card" onClick={() => onTeamClick?.(team.iso)} style={onTeamClick ? { cursor: 'pointer' } : undefined}>
       <img
         src={getFlagUrl(team.iso)}
         alt={teamName}
@@ -20,7 +20,7 @@ export default function TeamCard({ team, isFav, onToggle }) {
       <span className="team-card__group">{t('group')} {team.group}</span>
       <button
         className={`team-card__fav ${isFav ? 'team-card__fav--active' : ''}`}
-        onClick={() => onToggle(team.iso)}
+        onClick={(e) => { e.stopPropagation(); onToggle(team.iso); }}
         aria-label={isFav ? t('removeFavourite') : t('addFavourite')}
       >
         {isFav ? '★' : '☆'}

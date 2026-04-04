@@ -15,7 +15,7 @@ function getNextMatchId(matches) {
   return null;
 }
 
-export default function Schedule() {
+export default function Schedule({ onTeamClick }) {
   const [activePhase, setActivePhase] = useState('group');
   const { t } = useLanguage();
 
@@ -64,6 +64,7 @@ export default function Schedule() {
                   match={match}
                   isNext={match.id === nextMatchId && activePhase === 'group'}
                   showCalButton
+                  onTeamClick={onTeamClick}
                   index={i}
                 />
               ))}

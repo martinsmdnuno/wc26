@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import BottomNav from './components/BottomNav';
 import Schedule from './pages/Schedule';
 import MyMatches from './pages/MyMatches';
@@ -6,6 +6,7 @@ import Teams from './pages/Teams';
 import Missing from './pages/Missing';
 import Bets from './pages/Bets';
 import Rules from './pages/Rules';
+import TeamProfile from './pages/TeamProfile';
 import HamburgerMenu from './components/HamburgerMenu';
 import PoolSelector from './components/PoolSelector';
 import PoolManager from './components/PoolManager';
@@ -21,6 +22,8 @@ import './App.css';
 export default function App() {
   const [page, setPage] = useState('schedule');
   const [animClass, setAnimClass] = useState('page-enter-done');
+  const [teamIso, setTeamIso] = useState(null);
+  const prevPageRef = useRef('schedule');
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
   const { t } = useLanguage();
   const { profile, loading } = useAuth();
@@ -38,6 +41,25 @@ export default function App() {
       });
     }, 150);
   }, [page]);
+
+  const navigateToTeam = useCallback((iso) => {
+    prevPageRef.current = page;
+    setTeamIso(iso);
+    setAnimClass('page-exit');
+    setTimeout(() => {
+      setPage('team');
+      setAnimClass('page-enter');
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setAnimClass('page-enter-done');
+        });
+      });
+    }, 150);
+  }, [page]);
+
+  const navigateBackFromTeam = useCallback(() => {
+    navigate(prevPageRef.current);
+  }, [navigate]);
 
   if (loading) {
     return (
@@ -73,18 +95,26 @@ export default function App() {
         <>
           <main className="app-main">
             <div className={`page-wrapper ${animClass}`}>
-              {page === 'schedule' && <Schedule />}
+              {page === 'schedule' && <Schedule onTeamClick={navigateToTeam} />}
               {page === 'my-matches' && (
-                <MyMatches favorites={favorites} onNavigate={navigate} />
+                <MyMatches favorites={favorites} onNavigate={navigate} onTeamClick={navigateToTeam} />
               )}
               {page === 'teams' && (
                 <Teams
                   favorites={favorites}
                   toggleFavorite={toggleFavorite}
                   isFavorite={isFavorite}
+                  onTeamClick={navigateToTeam}
                 />
               )}
-              {page === 'bets' && <Bets />}
+              {page === 'bets' && <Bets onTeamClick={navigateToTeam} />}
+              {page === 'team' && (
+                <TeamProfile
+                  iso={teamIso}
+                  onBack={navigateBackFromTeam}
+                  onTeamClick={navigateToTeam}
+                />
+              )}
               {page === 'pools' && <PoolManager />}
               {page === 'rules' && <Rules />}
               {page === 'missing' && <Missing />}
@@ -94,7 +124,7 @@ export default function App() {
           <InstallBanner />
 
           <BottomNav
-            active={page}
+            active={page === 'team' ? prevPageRef.current : page}
             onNavigate={navigate}
             favoriteCount={favorites.length}
           />

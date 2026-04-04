@@ -5,7 +5,7 @@ function getFlagUrl(iso) {
   return `https://flagcdn.com/w80/${iso}.png`;
 }
 
-export default function MatchCard({ match, isNext, showCalButton = false }) {
+export default function MatchCard({ match, isNext, showCalButton = false, onTeamClick }) {
   const { t } = useLanguage();
   const hasTeams = !!match.home_iso;
   const isKnockout = !hasTeams;
@@ -69,12 +69,12 @@ export default function MatchCard({ match, isNext, showCalButton = false }) {
       )}
 
       <div className="match-card__teams">
-        <div className="match-card__team">
+        <div className="match-card__team" onClick={() => hasTeams && onTeamClick?.(match.home_iso)} style={hasTeams && onTeamClick ? { cursor: 'pointer' } : undefined}>
           {hasTeams ? (
             <img
               src={getFlagUrl(match.home_iso)}
               alt={homeName}
-              className="match-card__flag"
+              className="match-card__flag match-card__flag--clickable"
               loading="lazy"
             />
           ) : (
@@ -85,12 +85,12 @@ export default function MatchCard({ match, isNext, showCalButton = false }) {
 
         <span className="match-card__vs">{t('vs')}</span>
 
-        <div className="match-card__team">
+        <div className="match-card__team" onClick={() => hasTeams && onTeamClick?.(match.away_iso)} style={hasTeams && onTeamClick ? { cursor: 'pointer' } : undefined}>
           {hasTeams ? (
             <img
               src={getFlagUrl(match.away_iso)}
               alt={awayName}
-              className="match-card__flag"
+              className="match-card__flag match-card__flag--clickable"
               loading="lazy"
             />
           ) : (

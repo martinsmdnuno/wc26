@@ -5,7 +5,7 @@ import MatchCard from '../components/MatchCard';
 import { useLanguage } from '../i18n/LanguageContext';
 import { downloadMultipleICS } from '../utils/calendar';
 
-export default function MyMatches({ favorites, onNavigate }) {
+export default function MyMatches({ favorites, onNavigate, onTeamClick }) {
   const [activePhase, setActivePhase] = useState('group');
   const { t } = useLanguage();
 
@@ -95,7 +95,7 @@ export default function MyMatches({ favorites, onNavigate }) {
               <div key={date} className="schedule__day">
                 <h3 className="schedule__day-label">{label}</h3>
                 {matches.map((match, i) => (
-                  <MatchCard key={match.id} match={match} index={i} />
+                  <MatchCard key={match.id} match={match} onTeamClick={onTeamClick} index={i} />
                 ))}
               </div>
             );

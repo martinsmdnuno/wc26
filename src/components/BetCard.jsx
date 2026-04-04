@@ -5,7 +5,7 @@ function getFlagUrl(iso) {
   return `https://flagcdn.com/w80/${iso}.png`;
 }
 
-export default function BetCard({ match, bet, onSave, matchScore }) {
+export default function BetCard({ match, bet, onSave, matchScore, onTeamClick }) {
   const { t } = useLanguage();
   const hasTeams = !!match.home_iso;
   const isKnockout = !hasTeams;
@@ -82,9 +82,9 @@ export default function BetCard({ match, bet, onSave, matchScore }) {
       )}
 
       <div className="bet-card__teams">
-        <div className="bet-card__team">
+        <div className="bet-card__team" onClick={() => hasTeams && onTeamClick?.(match.home_iso)} style={hasTeams && onTeamClick ? { cursor: 'pointer' } : undefined}>
           {hasTeams ? (
-            <img src={getFlagUrl(match.home_iso)} alt={homeName} className="match-card__flag" loading="lazy" />
+            <img src={getFlagUrl(match.home_iso)} alt={homeName} className="match-card__flag match-card__flag--clickable" loading="lazy" />
           ) : (
             <div className="match-card__flag-placeholder" />
           )}
@@ -113,10 +113,10 @@ export default function BetCard({ match, bet, onSave, matchScore }) {
           />
         </div>
 
-        <div className="bet-card__team bet-card__team--away">
+        <div className="bet-card__team bet-card__team--away" onClick={() => hasTeams && onTeamClick?.(match.away_iso)} style={hasTeams && onTeamClick ? { cursor: 'pointer' } : undefined}>
           <span className="match-card__name">{awayName}</span>
           {hasTeams ? (
-            <img src={getFlagUrl(match.away_iso)} alt={awayName} className="match-card__flag" loading="lazy" />
+            <img src={getFlagUrl(match.away_iso)} alt={awayName} className="match-card__flag match-card__flag--clickable" loading="lazy" />
           ) : (
             <div className="match-card__flag-placeholder" />
           )}
