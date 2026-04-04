@@ -862,6 +862,150 @@
   background: rgba(0, 99, 65, 0.12);
 }
 
+/* ===== RULES PAGE ===== */
+.rules {
+  padding: 24px 16px;
+}
+
+.rules__header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.rules__icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.rules__title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--dark);
+}
+
+.rules__section {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.rules__section-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.rules__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--dark);
+  line-height: 1.5;
+}
+
+.rules__list li::before {
+  content: '•';
+  color: var(--gold);
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+.rules__list--ordered {
+  list-style: none;
+  counter-reset: rules-counter;
+}
+
+.rules__list--ordered li {
+  counter-increment: rules-counter;
+}
+
+.rules__list--ordered li::before {
+  content: counter(rules-counter) '.';
+  color: var(--gold);
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+.rules__points {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rules__point-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--dark);
+  line-height: 1.4;
+}
+
+.rules__point-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 48px;
+  text-align: center;
+}
+
+.rules__point-badge--5 {
+  background: rgba(0, 166, 81, 0.12);
+  color: var(--green-dark);
+}
+
+.rules__point-badge--3 {
+  background: rgba(201, 168, 76, 0.15);
+  color: #8B7226;
+}
+
+.rules__point-badge--1 {
+  background: rgba(107, 114, 128, 0.1);
+  color: var(--gray);
+}
+
+.rules__point-badge--0 {
+  background: rgba(211, 47, 47, 0.08);
+  color: #D32F2F;
+}
+
+.rules__example {
+  background: var(--off-white);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.rules__example-header {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.rules__example-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--dark);
+  padding: 6px 0;
+}
+
 /* ===== NICKNAME MODAL ===== */
 .modal-overlay {
   position: fixed;

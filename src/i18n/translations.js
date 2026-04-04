@@ -153,6 +153,26 @@ export const translations = {
     inviteFriends: 'Convidar amigos',
     copiedToClipboard: 'Copiado!',
     shareMessage: 'Junta-te ao meu bolão do Mundial 2026! Código: {code} — {url}',
+
+    // Rules
+    navRules: 'Regras',
+    rulesTitle: 'Regras do Bolão',
+    rulesHowItWorks: 'Como funciona',
+    rulesHow1: 'Aposta no resultado exacto de cada jogo (golos equipa A × golos equipa B).',
+    rulesHow2: 'Podes apostar em qualquer jogo antes do seu início. Depois do apito inicial, a aposta fica bloqueada.',
+    rulesHow3: 'No final de cada jogo, os pontos são calculados automaticamente.',
+    rulesScoring: 'Pontuação',
+    rulesExact: 'Resultado exacto (ex: previste 2-1, foi 2-1)',
+    rulesOutcome: 'Desfecho correcto (acertaste quem ganha ou se é empate, mas não o resultado)',
+    rulesPartial: 'Acertaste os golos de uma das equipas (ex: previste 2-1, foi 2-3)',
+    rulesMiss: 'Não acertaste em nada',
+    rulesExamples: 'Exemplos',
+    rulesExResult: 'Resultado real',
+    rulesBet: 'Aposta',
+    rulesTiebreak: 'Desempate',
+    rulesTie1: 'Mais pontos totais',
+    rulesTie2: 'Mais resultados exactos',
+    rulesTie3: 'Mais desfechos correctos',
   },
 
   'en-GB': {
@@ -309,6 +329,26 @@ export const translations = {
     inviteFriends: 'Invite friends',
     copiedToClipboard: 'Copied!',
     shareMessage: 'Join my World Cup 2026 pool! Code: {code} — {url}',
+
+    // Rules
+    navRules: 'Rules',
+    rulesTitle: 'Pool Rules',
+    rulesHowItWorks: 'How it works',
+    rulesHow1: 'Predict the exact score of each match (team A goals × team B goals).',
+    rulesHow2: 'You can bet on any match before kick-off. After the match starts, your bet is locked.',
+    rulesHow3: 'Points are calculated automatically when each match ends.',
+    rulesScoring: 'Scoring',
+    rulesExact: 'Exact result (e.g.: predicted 2-1, it was 2-1)',
+    rulesOutcome: 'Correct outcome (got the winner or draw right, but not the exact score)',
+    rulesPartial: 'Got one team\'s goals right (e.g.: predicted 2-1, it was 2-3)',
+    rulesMiss: 'Nothing correct',
+    rulesExamples: 'Examples',
+    rulesExResult: 'Actual result',
+    rulesBet: 'Bet',
+    rulesTiebreak: 'Tiebreak',
+    rulesTie1: 'Most total points',
+    rulesTie2: 'Most exact results',
+    rulesTie3: 'Most correct outcomes',
   },
 };
 

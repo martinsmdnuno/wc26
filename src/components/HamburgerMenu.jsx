@@ -67,6 +67,9 @@ export default function HamburgerMenu({ onNavigate }) {
           <button className="hamburger-menu__item hamburger-menu__item--share" onClick={handleShare}>
             <span>📩</span> {copied ? t('copiedToClipboard') : t('inviteFriends')}
           </button>
+          <button className="hamburger-menu__item" onClick={() => handleNav('rules')}>
+            <span>📋</span> {t('navRules')}
+          </button>
           <button className="hamburger-menu__item" onClick={() => handleNav('missing')}>
             <span>👻</span> {t('navMissing')}
           </button>

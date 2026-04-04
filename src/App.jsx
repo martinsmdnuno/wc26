@@ -5,6 +5,7 @@ import MyMatches from './pages/MyMatches';
 import Teams from './pages/Teams';
 import Missing from './pages/Missing';
 import Bets from './pages/Bets';
+import Rules from './pages/Rules';
 import HamburgerMenu from './components/HamburgerMenu';
 import NicknameModal from './components/NicknameModal';
 import LanguageSwitcher from './components/LanguageSwitcher';
@@ -78,6 +79,7 @@ export default function App() {
                 />
               )}
               {page === 'bets' && <Bets />}
+              {page === 'rules' && <Rules />}
               {page === 'missing' && <Missing />}
             </div>
           </main>
