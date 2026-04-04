@@ -10,7 +10,7 @@ import TeamProfile from './pages/TeamProfile';
 import HamburgerMenu from './components/HamburgerMenu';
 import PoolSelector from './components/PoolSelector';
 import PoolManager from './components/PoolManager';
-import NicknameModal from './components/NicknameModal';
+import AuthScreen from './components/AuthScreen';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import InstallBanner from './components/InstallBanner';
 import { useFavorites } from './hooks/useFavorites';
@@ -90,7 +90,7 @@ export default function App() {
       </header>
 
       {!profile ? (
-        <NicknameModal />
+        <AuthScreen />
       ) : (
         <>
           <main className="app-main">

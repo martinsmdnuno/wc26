@@ -7,8 +7,9 @@ export default function HamburgerMenu({ onNavigate }) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const { t } = useLanguage();
-  const { profile } = useAuth();
+  const { profile, isAnonymous, signInWithGoogle, signOutUser } = useAuth();
   const { activePool } = usePools();
+  const [linkingAccount, setLinkingAccount] = useState(false);
 
   const handleNav = (page) => {
     setOpen(false);
@@ -83,6 +84,41 @@ export default function HamburgerMenu({ onNavigate }) {
             <span>👻</span> {t('navMissing')}
           </button>
         </nav>
+
+        <div className="hamburger-menu__account">
+          {isAnonymous ? (
+            <button
+              className="hamburger-menu__item hamburger-menu__item--link"
+              onClick={async () => {
+                setLinkingAccount(true);
+                try {
+                  await signInWithGoogle();
+                } catch (err) {
+                  console.error('Link error:', err);
+                }
+                setLinkingAccount(false);
+              }}
+              disabled={linkingAccount}
+            >
+              <span>🔗</span> {linkingAccount ? t('saving') : t('authLinkAccount')}
+            </button>
+          ) : (
+            <>
+              {profile?.email && (
+                <div className="hamburger-menu__email">{profile.email}</div>
+              )}
+              <button
+                className="hamburger-menu__item hamburger-menu__item--signout"
+                onClick={async () => {
+                  setOpen(false);
+                  await signOutUser();
+                }}
+              >
+                <span>🚪</span> {t('authSignOut')}
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </>
   );
