@@ -4,9 +4,13 @@ import Schedule from './pages/Schedule';
 import MyMatches from './pages/MyMatches';
 import Teams from './pages/Teams';
 import Missing from './pages/Missing';
+import Bets from './pages/Bets';
+import HamburgerMenu from './components/HamburgerMenu';
+import NicknameModal from './components/NicknameModal';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import { useFavorites } from './hooks/useFavorites';
 import { useLanguage } from './i18n/LanguageContext';
+import { useAuth } from './hooks/useAuth';
 import logo from './assets/logo.png';
 import './App.css';
 
@@ -15,6 +19,7 @@ export default function App() {
   const [animClass, setAnimClass] = useState('page-enter-done');
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
   const { t } = useLanguage();
+  const { profile, loading } = useAuth();
 
   const navigate = useCallback((newPage) => {
     if (newPage === page) return;
@@ -30,10 +35,22 @@ export default function App() {
     }, 150);
   }, [page]);
 
+  if (loading) {
+    return (
+      <div className="app">
+        <div className="app-loading">
+          <img src={logo} alt="Mundial 2026" className="app-header__logo" />
+          <span className="app-loading__text">⚽</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app">
       <header className="app-header">
         <div className="app-header__content">
+          <HamburgerMenu onNavigate={navigate} />
           <img src={logo} alt="Mundial 2026" className="app-header__logo" />
           <h1 className="app-header__title">
             <span className="app-header__mundial">{t('appTitle')}</span>{' '}
@@ -43,28 +60,35 @@ export default function App() {
         </div>
       </header>
 
-      <main className="app-main">
-        <div className={`page-wrapper ${animClass}`}>
-          {page === 'schedule' && <Schedule />}
-          {page === 'my-matches' && (
-            <MyMatches favorites={favorites} onNavigate={navigate} />
-          )}
-          {page === 'teams' && (
-            <Teams
-              favorites={favorites}
-              toggleFavorite={toggleFavorite}
-              isFavorite={isFavorite}
-            />
-          )}
-          {page === 'missing' && <Missing />}
-        </div>
-      </main>
+      {!profile ? (
+        <NicknameModal />
+      ) : (
+        <>
+          <main className="app-main">
+            <div className={`page-wrapper ${animClass}`}>
+              {page === 'schedule' && <Schedule />}
+              {page === 'my-matches' && (
+                <MyMatches favorites={favorites} onNavigate={navigate} />
+              )}
+              {page === 'teams' && (
+                <Teams
+                  favorites={favorites}
+                  toggleFavorite={toggleFavorite}
+                  isFavorite={isFavorite}
+                />
+              )}
+              {page === 'bets' && <Bets />}
+              {page === 'missing' && <Missing />}
+            </div>
+          </main>
 
-      <BottomNav
-        active={page}
-        onNavigate={navigate}
-        favoriteCount={favorites.length}
-      />
+          <BottomNav
+            active={page}
+            onNavigate={navigate}
+            favoriteCount={favorites.length}
+          />
+        </>
+      )}
     </div>
   );
 }

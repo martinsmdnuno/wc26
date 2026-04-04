@@ -1,0 +1,149 @@
+import { useState, useEffect, useCallback } from 'react';
+import {
+  doc,
+  setDoc,
+  getDoc,
+  getDocs,
+  collection,
+  query,
+  where,
+  serverTimestamp,
+  writeBatch,
+} from 'firebase/firestore';
+import { db } from '../firebase';
+import { useAuth } from './useAuth';
+import { calculatePoints } from '../utils/scoring';
+
+export function useBets() {
+  const { user, profile } = useAuth();
+  const groupCode = profile?.groupCode;
+
+  const saveBet = useCallback(
+    async (matchId, predictedScoreA, predictedScoreB) => {
+      if (!user || !groupCode) return;
+      const docId = `${user.uid}_${matchId}`;
+      const ref = doc(db, 'groups', groupCode, 'bets', docId);
+      const existing = await getDoc(ref);
+
+      const data = {
+        userId: user.uid,
+        matchId,
+        predictedScoreA,
+        predictedScoreB,
+        updatedAt: serverTimestamp(),
+      };
+
+      if (!existing.exists()) {
+        data.createdAt = serverTimestamp();
+        data.pointsAwarded = null;
+      }
+
+      await setDoc(ref, data, { merge: true });
+    },
+    [user, groupCode]
+  );
+
+  const getMyBets = useCallback(async () => {
+    if (!user || !groupCode) return [];
+    const q = query(
+      collection(db, 'groups', groupCode, 'bets'),
+      where('userId', '==', user.uid)
+    );
+    const snap = await getDocs(q);
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  }, [user, groupCode]);
+
+  const getMatchBets = useCallback(
+    async (matchId) => {
+      if (!groupCode) return [];
+      const q = query(
+        collection(db, 'groups', groupCode, 'bets'),
+        where('matchId', '==', matchId)
+      );
+      const snap = await getDocs(q);
+      return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    },
+    [groupCode]
+  );
+
+  const scoreMatch = useCallback(
+    async (matchId, actualScoreA, actualScoreB) => {
+      if (!groupCode) return;
+      const bets = await getMatchBets(matchId);
+      const batch = writeBatch(db);
+      const leaderboardUpdates = {};
+
+      for (const bet of bets) {
+        const result = calculatePoints(
+          bet.predictedScoreA,
+          bet.predictedScoreB,
+          actualScoreA,
+          actualScoreB
+        );
+        if (!result) continue;
+
+        const betRef = doc(db, 'groups', groupCode, 'bets', bet.id);
+        batch.update(betRef, { pointsAwarded: result.points });
+
+        if (!leaderboardUpdates[bet.userId]) {
+          leaderboardUpdates[bet.userId] = { points: 0, exact: 0, outcome: 0 };
+        }
+        leaderboardUpdates[bet.userId].points += result.points;
+        if (result.type === 'exact') leaderboardUpdates[bet.userId].exact += 1;
+        if (result.type === 'outcome') leaderboardUpdates[bet.userId].outcome += 1;
+      }
+
+      await batch.commit();
+
+      for (const [uid, delta] of Object.entries(leaderboardUpdates)) {
+        const lbRef = doc(db, 'groups', groupCode, 'leaderboard', uid);
+        const lbSnap = await getDoc(lbRef);
+        if (lbSnap.exists()) {
+          const current = lbSnap.data();
+          await setDoc(lbRef, {
+            ...current,
+            totalPoints: (current.totalPoints || 0) + delta.points,
+            exactResultsCount: (current.exactResultsCount || 0) + delta.exact,
+            correctOutcomeCount: (current.correctOutcomeCount || 0) + delta.outcome,
+          });
+        }
+      }
+    },
+    [groupCode, getMatchBets]
+  );
+
+  return { saveBet, getMyBets, getMatchBets, scoreMatch };
+}
+
+export function useMyBetsMap() {
+  const { user, profile } = useAuth();
+  const [betsMap, setBetsMap] = useState({});
+  const [loading, setLoading] = useState(true);
+  const groupCode = profile?.groupCode;
+
+  useEffect(() => {
+    if (!user || !groupCode) {
+      setLoading(false);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const q = query(
+        collection(db, 'groups', groupCode, 'bets'),
+        where('userId', '==', user.uid)
+      );
+      const snap = await getDocs(q);
+      if (cancelled) return;
+      const map = {};
+      snap.docs.forEach((d) => {
+        const data = d.data();
+        map[data.matchId] = data;
+      });
+      setBetsMap(map);
+      setLoading(false);
+    })();
+    return () => { cancelled = true; };
+  }, [user, groupCode]);
+
+  return { betsMap, setBetsMap, loading };
+}

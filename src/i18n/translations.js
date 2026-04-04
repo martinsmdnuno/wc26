@@ -123,6 +123,36 @@ export const translations = {
 
     // Language switcher
     language: 'Idioma',
+
+    // Bets / Bolão
+    navBets: 'Bolão',
+    betTab: 'Apostar',
+    rankingTab: 'Ranking',
+    goals: 'golos',
+    live: 'AO VIVO',
+    saving: 'A guardar...',
+    finalResult: 'Resultado',
+    pts: 'pts',
+    loading: 'A carregar...',
+    player: 'Jogador',
+    you: 'tu',
+    leaderboardEmpty: 'Ainda não há apostas no teu grupo.',
+
+    // Nickname modal
+    welcomeTitle: 'Bem-vindo ao Bolão!',
+    welcomeSubtitle: 'Escolhe um nome e junta-te a um grupo.',
+    nicknameLabel: 'O teu nome',
+    nicknamePlaceholder: 'Ex: Ronaldo',
+    groupCodeLabel: 'Código do grupo',
+    groupCodePlaceholder: 'Ex: AMIGOS2026',
+    groupCodeHint: 'Cria um novo ou usa um código existente.',
+    nicknameMinLength: 'O nome deve ter pelo menos 2 caracteres.',
+    groupCodeMinLength: 'O código deve ter pelo menos 3 caracteres.',
+    nicknameSaveError: 'Erro ao guardar. Tenta novamente.',
+    joinBtn: 'Entrar',
+    inviteFriends: 'Convidar amigos',
+    copiedToClipboard: 'Copiado!',
+    shareMessage: 'Junta-te ao meu bolão do Mundial 2026! Código: {code} — {url}',
   },
 
   'en-GB': {
@@ -249,6 +279,36 @@ export const translations = {
 
     // Language switcher
     language: 'Language',
+
+    // Bets / Pool
+    navBets: 'Pool',
+    betTab: 'Bet',
+    rankingTab: 'Ranking',
+    goals: 'goals',
+    live: 'LIVE',
+    saving: 'Saving...',
+    finalResult: 'Result',
+    pts: 'pts',
+    loading: 'Loading...',
+    player: 'Player',
+    you: 'you',
+    leaderboardEmpty: 'No bets in your group yet.',
+
+    // Nickname modal
+    welcomeTitle: 'Welcome to the Pool!',
+    welcomeSubtitle: 'Pick a name and join a group.',
+    nicknameLabel: 'Your name',
+    nicknamePlaceholder: 'E.g.: Ronaldo',
+    groupCodeLabel: 'Group code',
+    groupCodePlaceholder: 'E.g.: FRIENDS2026',
+    groupCodeHint: 'Create a new one or use an existing code.',
+    nicknameMinLength: 'Name must be at least 2 characters.',
+    groupCodeMinLength: 'Code must be at least 3 characters.',
+    nicknameSaveError: 'Error saving. Please try again.',
+    joinBtn: 'Join',
+    inviteFriends: 'Invite friends',
+    copiedToClipboard: 'Copied!',
+    shareMessage: 'Join my World Cup 2026 pool! Code: {code} — {url}',
   },
 };
 

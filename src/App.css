@@ -686,3 +686,579 @@
   letter-spacing: 0.3px;
   color: var(--dark);
 }
+
+/* ===== APP LOADING ===== */
+.app-loading {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.app-loading__text {
+  font-size: 32px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ===== HAMBURGER MENU ===== */
+.hamburger-btn {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 36px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 220;
+}
+
+.hamburger-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 18px;
+}
+
+.hamburger-icon span {
+  display: block;
+  height: 2px;
+  background: var(--white);
+  border-radius: 1px;
+  transition: all 0.3s;
+}
+
+.hamburger-icon--open span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.hamburger-icon--open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-icon--open span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.hamburger-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 200;
+}
+
+.hamburger-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  max-width: 80vw;
+  height: 100dvh;
+  background: var(--white);
+  z-index: 210;
+  padding: 24px 20px;
+  padding-top: calc(60px + env(safe-area-inset-top, 0px));
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+  transform: translateX(-100%);
+}
+
+.hamburger-menu--open {
+  transform: translateX(0);
+}
+
+.hamburger-menu__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--gray);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.05);
+  transition: background 0.2s;
+}
+
+.hamburger-menu__close:active {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.hamburger-menu__profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  margin-bottom: 16px;
+}
+
+.hamburger-menu__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--green-dark);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.hamburger-menu__nick {
+  display: block;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--dark);
+}
+
+.hamburger-menu__group {
+  display: block;
+  font-size: 12px;
+  color: var(--gray);
+  font-weight: 500;
+}
+
+.hamburger-menu__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hamburger-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 8px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--dark);
+  transition: background 0.2s;
+  text-align: left;
+}
+
+.hamburger-menu__item:active {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.hamburger-menu__item--share {
+  background: rgba(0, 99, 65, 0.06);
+  color: var(--green-dark);
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.hamburger-menu__item--share:active {
+  background: rgba(0, 99, 65, 0.12);
+}
+
+/* ===== NICKNAME MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  padding: 20px;
+}
+
+.modal {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.modal__icon {
+  font-size: 48px;
+  text-align: center;
+  display: block;
+}
+
+.modal__title {
+  font-size: 22px;
+  text-align: center;
+  color: var(--dark);
+}
+
+.modal__subtitle {
+  font-size: 14px;
+  text-align: center;
+  color: var(--gray);
+  margin-top: -8px;
+}
+
+.modal__label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal__input {
+  padding: 12px 14px;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--dark);
+  outline: none;
+  transition: border-color 0.2s;
+  min-height: 44px;
+  text-transform: none;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.modal__input:focus {
+  border-color: var(--gold);
+}
+
+.modal__hint {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--gray);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.modal__error {
+  font-size: 13px;
+  color: #D32F2F;
+  text-align: center;
+}
+
+.modal__btn {
+  background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+  color: var(--white);
+  font-weight: 700;
+  font-size: 15px;
+  padding: 14px;
+  border-radius: 10px;
+  min-height: 48px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: transform 0.2s;
+  margin-top: 4px;
+}
+
+.modal__btn:active {
+  transform: scale(0.97);
+}
+
+.modal__btn:disabled {
+  opacity: 0.6;
+}
+
+/* ===== BETS PAGE ===== */
+.bets {
+  padding: 0 0 16px;
+}
+
+.bets__view-toggle {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px 0;
+}
+
+.bets__list {
+  padding: 0 16px 16px;
+}
+
+.bets__loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--gray);
+}
+
+/* ===== BET CARD ===== */
+.bet-card {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  border-left: 3px solid var(--gold);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  animation: cardIn 0.3s ease both;
+}
+
+.bet-card--live {
+  border-left-color: #D32F2F;
+}
+
+.bet-card--finished {
+  border-left-color: var(--gray);
+  opacity: 0.85;
+}
+
+.bet-card__date {
+  font-size: 12px;
+  color: var(--gray);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bet-card__live-badge {
+  background: #D32F2F;
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.bet-card__status {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--gray);
+}
+
+.bet-card__status--saved {
+  color: var(--green-mid);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.bet-card__teams {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bet-card__team {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.bet-card__team--away {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.bet-card__team .match-card__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bet-card__scores {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.bet-card__input {
+  width: 38px;
+  height: 38px;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Oswald', sans-serif;
+  color: var(--dark);
+  outline: none;
+  transition: border-color 0.2s;
+  -moz-appearance: textfield;
+  background: var(--off-white);
+}
+
+.bet-card__input::-webkit-inner-spin-button,
+.bet-card__input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.bet-card__input:focus {
+  border-color: var(--gold);
+  background: var(--white);
+}
+
+.bet-card__input:disabled {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--gray);
+  border-color: transparent;
+}
+
+.bet-card__separator {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gray);
+}
+
+.bet-card__result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.bet-card__actual {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.bet-card__points {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+.bet-card__points--5 {
+  background: rgba(0, 166, 81, 0.12);
+  color: var(--green-dark);
+}
+
+.bet-card__points--3 {
+  background: rgba(201, 168, 76, 0.15);
+  color: #8B7226;
+}
+
+.bet-card__points--1 {
+  background: rgba(107, 114, 128, 0.1);
+  color: var(--gray);
+}
+
+.bet-card__points--0 {
+  background: rgba(211, 47, 47, 0.08);
+  color: #D32F2F;
+}
+
+/* ===== LEADERBOARD ===== */
+.leaderboard {
+  padding: 16px;
+}
+
+.leaderboard__loading,
+.leaderboard__empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--gray);
+}
+
+.leaderboard__empty-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.leaderboard__header {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.leaderboard__row {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 4px;
+  transition: background 0.2s;
+}
+
+.leaderboard__row--me {
+  background: rgba(0, 99, 65, 0.06);
+  border: 1px solid rgba(0, 99, 65, 0.12);
+}
+
+.leaderboard__row--top {
+  font-weight: 600;
+}
+
+.leaderboard__col {
+  display: flex;
+  align-items: center;
+}
+
+.leaderboard__col--pos {
+  width: 32px;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.leaderboard__col--name {
+  flex: 1;
+  gap: 8px;
+  min-width: 0;
+  font-size: 14px;
+}
+
+.leaderboard__col--exact {
+  width: 36px;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--gray);
+}
+
+.leaderboard__col--pts {
+  width: 48px;
+  justify-content: flex-end;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Oswald', sans-serif;
+  color: var(--green-dark);
+}
+
+.leaderboard__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--green-dark);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.leaderboard__me-badge {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--green-dark);
+  background: rgba(0, 99, 65, 0.1);
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-left: 4px;
+}
