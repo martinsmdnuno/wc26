@@ -93,13 +93,19 @@ export default function TeamProfile({ iso, onBack, onTeamClick }) {
       <button className="team-profile__back" onClick={onBack}>← {t('back')}</button>
 
       {/* Hero */}
-      <div className="team-profile__hero" style={{
-        background: `linear-gradient(135deg, ${data.colors[0]}18, ${data.colors[1]}12)`,
-      }}>
-        <img src={getFlagUrl(iso)} alt={teamName} className="team-profile__hero-flag" />
-        <h1 className="team-profile__hero-name">{teamName}</h1>
-        <span className="team-profile__hero-group">{t('group')} {teamInfo.group}</span>
-        <span className="team-profile__hero-coach">{t('coach')}: {data.coach}</span>
+      <div className="team-profile__hero">
+        <div className="team-profile__hero-bg" style={{
+          backgroundImage: `url(https://flagcdn.com/w640/${iso}.png)`,
+        }} />
+        <div className="team-profile__hero-overlay" style={{
+          background: `linear-gradient(180deg, ${data.colors[0]}CC 0%, ${data.colors[1]}AA 100%)`,
+        }} />
+        <div className="team-profile__hero-content">
+          <img src={getFlagUrl(iso)} alt={teamName} className="team-profile__hero-flag" />
+          <h1 className="team-profile__hero-name">{teamName}</h1>
+          <span className="team-profile__hero-group">{t('group')} {teamInfo.group}</span>
+          <span className="team-profile__hero-coach">{t('coach')}: {data.coach}</span>
+        </div>
       </div>
 
       {/* Quick stats */}

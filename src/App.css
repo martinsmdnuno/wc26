@@ -1635,37 +1635,62 @@
 }
 
 .team-profile__hero {
-  text-align: center;
-  padding: 24px 16px 20px;
+  position: relative;
+  overflow: hidden;
   border-radius: 0 0 20px 20px;
   margin-bottom: 16px;
+  min-height: 200px;
+}
+
+.team-profile__hero-bg {
+  position: absolute;
+  inset: -20px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(25px) saturate(1.2);
+  opacity: 0.4;
+}
+
+.team-profile__hero-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.7;
+}
+
+.team-profile__hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 32px 16px 24px;
 }
 
 .team-profile__hero-flag {
-  width: 80px;
-  height: 53px;
+  width: 88px;
+  height: 59px;
   object-fit: cover;
   border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  margin: 0 auto 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  margin: 0 auto 14px;
   display: block;
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .team-profile__hero-name {
   font-family: 'Oswald', sans-serif;
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 700;
-  color: var(--dark);
-  letter-spacing: 1px;
+  color: var(--white);
+  letter-spacing: 1.5px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .team-profile__hero-group {
   display: inline-block;
   font-size: 12px;
   font-weight: 700;
-  color: var(--gold);
-  background: rgba(201, 168, 76, 0.12);
-  padding: 3px 10px;
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.2);
+  padding: 3px 12px;
   border-radius: 4px;
   margin-top: 6px;
 }
@@ -1673,7 +1698,7 @@
 .team-profile__hero-coach {
   display: block;
   font-size: 13px;
-  color: var(--gray);
+  color: rgba(255, 255, 255, 0.85);
   margin-top: 8px;
 }
 
