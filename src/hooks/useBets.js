@@ -117,10 +117,10 @@ export function useBets() {
 }
 
 export function useMyBetsMap() {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
+  const { activePoolId } = usePools();
   const [betsMap, setBetsMap] = useState({});
   const [loading, setLoading] = useState(true);
-  const activePoolId = profile?.activePoolId;
 
   useEffect(() => {
     if (!user || !activePoolId) {

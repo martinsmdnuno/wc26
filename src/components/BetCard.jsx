@@ -49,8 +49,9 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
             await onSave(match.id, Number(newA), Number(newB));
             setSaved(true);
             setTimeout(() => setSaved(false), 2000);
-          } catch {
-            // error handled silently
+          } catch (err) {
+            console.error('Failed to save bet:', err);
+            setSaved(false);
           }
           setSaving(false);
         }, 800);
