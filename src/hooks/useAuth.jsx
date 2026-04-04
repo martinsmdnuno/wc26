@@ -79,22 +79,26 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        setUser(firebaseUser);
-        const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
-        if (snap.exists()) {
-          const data = snap.data();
+      try {
+        if (firebaseUser) {
+          setUser(firebaseUser);
+          const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
+          if (snap.exists()) {
+            const data = snap.data();
 
-          if (data.groupCode && (!data.pools || data.pools.length === 0)) {
-            await migrateGroupToPool(firebaseUser.uid, data.groupCode, data.nickname);
-            const updated = await getDoc(doc(db, 'users', firebaseUser.uid));
-            setProfile(updated.data());
-          } else {
-            setProfile(data);
+            if (data.groupCode && (!data.pools || data.pools.length === 0)) {
+              await migrateGroupToPool(firebaseUser.uid, data.groupCode, data.nickname);
+              const updated = await getDoc(doc(db, 'users', firebaseUser.uid));
+              setProfile(updated.data());
+            } else {
+              setProfile(data);
+            }
           }
+        } else {
+          await signInAnonymously(auth);
         }
-      } else {
-        await signInAnonymously(auth);
+      } catch (err) {
+        console.error('Auth error:', err);
       }
       setLoading(false);
     });
