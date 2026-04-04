@@ -1,16 +1,115 @@
-# React + Vite
+# FIFA World Cup 2026
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Mobile-first web app for the FIFA World Cup 2026 (USA, Canada & Mexico). Browse the full tournament schedule, follow your favourite teams, run a betting pool with friends, and track live scores.
 
-Currently, two official plugins are available:
+**[Open the app](https://martinsmdnuno.github.io/wc26/)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **Schedule** — All 104 matches across 7 phases, with venues and kick-off times (BST)
+- **Teams** — 48 qualified teams browsable A-Z, by group, or by confederation
+- **Favourites** — Star teams to filter their matches in "My Matches"
+- **Calendar export** — Add single or bulk matches to your device calendar (ICS)
+- **Betting pool** — Predict match scores and compete with friends in a private group
+- **Leaderboard** — Live ranking with points (5 exact / 3 outcome / 1 partial / 0 miss)
+- **Live scores** — Automatic results via football-data.org API
+- **Bilingual** — Full Portuguese (PT) and English (EN) support
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech stack
 
-## Expanding the ESLint configuration
+| Layer | Technology |
+|-------|-----------|
+| Framework | React 19 |
+| Build | Vite 8 |
+| Styling | Vanilla CSS with custom properties |
+| Auth | Firebase Anonymous Auth |
+| Database | Cloud Firestore |
+| Live scores | football-data.org API |
+| Deploy | GitHub Pages (GitHub Actions) |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Getting started
+
+```bash
+# Clone
+git clone https://github.com/martinsmdnuno/wc26.git
+cd wc26
+
+# Install
+npm install
+
+# Configure Firebase — copy and fill in your credentials
+cp .env.example .env
+
+# Run
+npm run dev
+```
+
+### Environment variables
+
+| Variable | Description |
+|----------|------------|
+| `VITE_FIREBASE_API_KEY` | Firebase API key |
+| `VITE_FIREBASE_AUTH_DOMAIN` | Firebase auth domain |
+| `VITE_FIREBASE_PROJECT_ID` | Firebase project ID |
+| `VITE_FIREBASE_STORAGE_BUCKET` | Firebase storage bucket |
+| `VITE_FIREBASE_MESSAGING_SENDER_ID` | Firebase messaging sender ID |
+| `VITE_FIREBASE_APP_ID` | Firebase app ID |
+| `VITE_FOOTBALL_DATA_API_KEY` | football-data.org API key (free tier) |
+
+## Project structure
+
+```
+src/
+├── components/        # Reusable UI components
+│   ├── BetCard.jsx        # Match card with score prediction inputs
+│   ├── BottomNav.jsx      # Tab navigation bar
+│   ├── HamburgerMenu.jsx  # Slide-out menu (profile, invite, rules)
+│   ├── LanguageSwitcher.jsx
+│   ├── Leaderboard.jsx    # Group ranking table
+│   ├── MatchCard.jsx      # Match display card (schedule view)
+│   ├── NicknameModal.jsx  # First-use onboarding modal
+│   ├── PhaseFilter.jsx    # Phase selection chips
+│   └── TeamCard.jsx       # Team card with favourite toggle
+├── data/
+│   ├── schedule.json      # All 104 matches with venues
+│   └── confederations.js  # Team-to-confederation mapping
+├── hooks/
+│   ├── useAuth.jsx        # Firebase anonymous auth + profile
+│   ├── useBets.js         # Bet CRUD + scoring
+│   ├── useFavorites.js    # localStorage favourites
+│   └── useLiveScores.js   # football-data.org polling
+├── i18n/
+│   ├── LanguageContext.jsx
+│   └── translations.js   # PT-PT & EN-GB translations
+├── pages/
+│   ├── Bets.jsx           # Betting pool (predict + ranking)
+│   ├── Missing.jsx        # Teams that didn't qualify
+│   ├── MyMatches.jsx      # Filtered schedule for favourite teams
+│   ├── Rules.jsx          # Pool scoring rules
+│   ├── Schedule.jsx       # Full tournament schedule
+│   └── Teams.jsx          # Team directory
+├── utils/
+│   ├── calendar.js        # ICS file generation
+│   ├── footballApi.js     # football-data.org wrapper
+│   └── scoring.js         # Points calculation (5/3/1/0)
+├── firebase.js            # Firebase config & init
+├── App.jsx
+├── App.css
+├── index.css
+└── main.jsx
+```
+
+## Scoring rules
+
+| Points | Condition | Example |
+|--------|-----------|---------|
+| **5** | Exact result | Predicted 2-1, result 2-1 |
+| **3** | Correct outcome | Predicted 1-0, result 2-1 (home win) |
+| **1** | One team's goals correct | Predicted 2-1, result 2-3 |
+| **0** | Nothing correct | Predicted 0-0, result 2-1 |
+
+Tiebreak: total points > exact results > correct outcomes.
+
+## License
+
+MIT
