@@ -62,6 +62,12 @@ export default function MatchCard({ match, isNext, showCalButton = false }) {
         )}
       </div>
 
+      {match.venue && match.venue !== 'TBD' && (
+        <div className={`match-card__venue ${isNext ? 'match-card__venue--next' : ''}`}>
+          📍 {match.venue} · {match.city}
+        </div>
+      )}
+
       <div className="match-card__teams">
         <div className="match-card__team">
           {hasTeams ? (

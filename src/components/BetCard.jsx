@@ -75,6 +75,12 @@ export default function BetCard({ match, bet, onSave, matchScore }) {
         {saved && <span className="bet-card__status bet-card__status--saved">✓</span>}
       </div>
 
+      {match.venue && match.venue !== 'TBD' && (
+        <div className="match-card__venue">
+          📍 {match.venue} · {match.city}
+        </div>
+      )}
+
       <div className="bet-card__teams">
         <div className="bet-card__team">
           {hasTeams ? (

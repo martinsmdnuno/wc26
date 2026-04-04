@@ -350,6 +350,17 @@
   line-height: 1;
 }
 
+.match-card__venue {
+  font-size: 11px;
+  color: var(--gray);
+  margin-bottom: 8px;
+  opacity: 0.8;
+}
+
+.match-card__venue--next {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .match-card__teams {
   display: flex;
   align-items: center;
