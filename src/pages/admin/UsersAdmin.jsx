@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  collection, getDocs, doc, deleteDoc, updateDoc, arrayRemove, writeBatch,
+  collection, getDocs, getDoc, doc, deleteDoc, updateDoc, arrayRemove, writeBatch,
 } from 'firebase/firestore';
 import { db } from '../../firebase';
 import ConfirmModal from '../../components/ConfirmModal';
@@ -12,6 +12,7 @@ export default function UsersAdmin() {
   const [loading, setLoading] = useState(true);
   const [confirm, setConfirm] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -36,31 +37,44 @@ export default function UsersAdmin() {
 
   const handleDelete = async (uid) => {
     setConfirm(null);
-    setDeleting(true);
+    setDeleting(uid);
+    setError('');
     try {
       const userDoc = users.find((u) => u.uid === uid);
       const poolIds = userDoc?.pools || [];
 
       // Remove user from all pools (members, leaderboard, bets)
       for (const poolId of poolIds) {
-        await updateDoc(doc(db, 'pools', poolId), {
-          members: arrayRemove(uid),
-        });
+        // Check if pool still exists before updating
+        try {
+          const poolSnap = await getDoc(doc(db, 'pools', poolId));
+          if (poolSnap.exists()) {
+            await updateDoc(doc(db, 'pools', poolId), {
+              members: arrayRemove(uid),
+            });
+          }
+        } catch (e) {
+          console.warn(`Skip pool ${poolId}:`, e.message);
+        }
 
         // Delete leaderboard entry
         try { await deleteDoc(doc(db, 'pools', poolId, 'leaderboard', uid)); } catch {}
 
         // Delete user's bets in this pool
-        const betsSnap = await getDocs(collection(db, 'pools', poolId, 'bets'));
-        const batch = writeBatch(db);
-        let count = 0;
-        betsSnap.docs.forEach((d) => {
-          if (d.data().userId === uid) {
-            batch.delete(d.ref);
-            count++;
-          }
-        });
-        if (count > 0) await batch.commit();
+        try {
+          const betsSnap = await getDocs(collection(db, 'pools', poolId, 'bets'));
+          const batch = writeBatch(db);
+          let count = 0;
+          betsSnap.docs.forEach((d) => {
+            if (d.data().userId === uid) {
+              batch.delete(d.ref);
+              count++;
+            }
+          });
+          if (count > 0) await batch.commit();
+        } catch (e) {
+          console.warn(`Skip bets cleanup for pool ${poolId}:`, e.message);
+        }
       }
 
       // Delete user doc
@@ -68,6 +82,7 @@ export default function UsersAdmin() {
       setUsers((prev) => prev.filter((u) => u.uid !== uid));
     } catch (err) {
       console.error('Failed to delete user:', err);
+      setError(`Erro ao apagar: ${err.message}`);
     }
     setDeleting(false);
   };
@@ -77,6 +92,7 @@ export default function UsersAdmin() {
   return (
     <div className="admin__section">
       <h3>Utilizadores ({users.length})</h3>
+      {error && <p className="modal__error" style={{ marginBottom: 12 }}>{error}</p>}
       <table className="admin__table">
         <thead>
           <tr>
@@ -112,9 +128,9 @@ export default function UsersAdmin() {
                   <button
                     className="admin__btn admin__btn--danger admin__btn--small"
                     onClick={() => setConfirm(u)}
-                    disabled={deleting}
+                    disabled={!!deleting}
                   >
-                    Apagar
+                    {deleting === u.uid ? '...' : 'Apagar'}
                   </button>
                 )}
               </td>
