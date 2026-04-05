@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, createContext, useContext } from 'react';
+import { useState, useEffect, useCallback, createContext, useContext, useRef } from 'react';
 import {
   signInAnonymously,
   onAuthStateChanged,
@@ -28,17 +28,60 @@ import {
   arrayUnion,
   writeBatch,
   deleteDoc,
+  increment,
 } from 'firebase/firestore';
 import { auth, db, googleProvider } from '../firebase';
 import * as Sentry from '@sentry/react';
-import { increment } from 'firebase/firestore';
 
 const AuthContext = createContext(null);
+
+const APP_VERSION = import.meta.env.VITE_APP_VERSION || '0.0.0';
 
 const isMobileSafari = () => {
   const ua = navigator.userAgent;
   return /iP(ad|hone|od)/.test(ua) && /WebKit/.test(ua) && !/CriOS|FxiOS|OPiOS/.test(ua);
 };
+
+// ── Helpers ──────────────────────────────────────────────
+
+async function ensureUserDoc(firebaseUser) {
+  const ref = doc(db, 'users', firebaseUser.uid);
+  const snap = await getDoc(ref);
+
+  if (snap.exists()) {
+    // Update login analytics + merge any new auth info
+    const updates = {
+      lastLoginAt: serverTimestamp(),
+      loginCount: increment(1),
+      appVersion: APP_VERSION,
+    };
+    if (firebaseUser.email) updates.email = firebaseUser.email;
+    if (firebaseUser.photoURL) updates.photoURL = firebaseUser.photoURL;
+    try { await updateDoc(ref, updates); } catch {}
+
+    const data = snap.data();
+    // Return fresh data with merged fields
+    return {
+      ...data,
+      email: firebaseUser.email || data.email || '',
+      photoURL: firebaseUser.photoURL || data.photoURL || '',
+    };
+  }
+
+  // No doc yet — create one
+  const data = {
+    nickname: firebaseUser.displayName || '',
+    email: firebaseUser.email || '',
+    photoURL: firebaseUser.photoURL || '',
+    pools: [],
+    createdAt: serverTimestamp(),
+    lastLoginAt: serverTimestamp(),
+    loginCount: 1,
+    appVersion: APP_VERSION,
+  };
+  await setDoc(ref, data);
+  return data;
+}
 
 async function migrateGroupToPool(uid, groupCode, nickname) {
   const q = query(collection(db, 'pools'), where('inviteCode', '==', groupCode));
@@ -68,8 +111,7 @@ async function migrateGroupToPool(uid, groupCode, nickname) {
       members: [uid],
     });
 
-    const subs = ['bets', 'leaderboard', 'matches'];
-    for (const sub of subs) {
+    for (const sub of ['bets', 'leaderboard', 'matches']) {
       const subSnap = await getDocs(collection(db, 'groups', groupCode, sub));
       for (const d of subSnap.docs) {
         await setDoc(doc(db, 'pools', poolId, sub, d.id), d.data());
@@ -88,10 +130,7 @@ async function migrateGroupToPool(uid, groupCode, nickname) {
     });
   }
 
-  await updateDoc(doc(db, 'users', uid), {
-    pools: arrayUnion(poolId),
-  });
-
+  await updateDoc(doc(db, 'users', uid), { pools: arrayUnion(poolId) });
   return poolId;
 }
 
@@ -99,105 +138,88 @@ async function mergeAnonymousData(oldUid, newUid) {
   const oldUserSnap = await getDoc(doc(db, 'users', oldUid));
   if (!oldUserSnap.exists()) return;
 
-  const oldData = oldUserSnap.data();
-  const poolIds = oldData.pools || [];
-
+  const poolIds = oldUserSnap.data().pools || [];
   for (const poolId of poolIds) {
-    const betsSnap = await getDocs(
-      query(collection(db, 'pools', poolId, 'bets'), where('userId', '==', oldUid))
-    );
-
-    const batch = writeBatch(db);
-    for (const betDoc of betsSnap.docs) {
-      const betData = betDoc.data();
-      const newDocId = `${newUid}_${betData.matchId}`;
-      const newBetRef = doc(db, 'pools', poolId, 'bets', newDocId);
-      const existingBet = await getDoc(newBetRef);
-      if (!existingBet.exists()) {
-        batch.set(newBetRef, { ...betData, userId: newUid });
+    try {
+      const betsSnap = await getDocs(
+        query(collection(db, 'pools', poolId, 'bets'), where('userId', '==', oldUid))
+      );
+      const batch = writeBatch(db);
+      for (const betDoc of betsSnap.docs) {
+        const betData = betDoc.data();
+        const newBetRef = doc(db, 'pools', poolId, 'bets', `${newUid}_${betData.matchId}`);
+        const existing = await getDoc(newBetRef);
+        if (!existing.exists()) batch.set(newBetRef, { ...betData, userId: newUid });
+        batch.delete(betDoc.ref);
       }
-      batch.delete(betDoc.ref);
-    }
-    await batch.commit();
+      await batch.commit();
 
-    const oldLbRef = doc(db, 'pools', poolId, 'leaderboard', oldUid);
-    const oldLbSnap = await getDoc(oldLbRef);
-    if (oldLbSnap.exists()) {
-      const newLbRef = doc(db, 'pools', poolId, 'leaderboard', newUid);
-      const newLbSnap = await getDoc(newLbRef);
-      if (!newLbSnap.exists()) {
-        await setDoc(newLbRef, oldLbSnap.data());
+      const oldLbRef = doc(db, 'pools', poolId, 'leaderboard', oldUid);
+      const oldLbSnap = await getDoc(oldLbRef);
+      if (oldLbSnap.exists()) {
+        const newLbRef = doc(db, 'pools', poolId, 'leaderboard', newUid);
+        if (!(await getDoc(newLbRef)).exists()) await setDoc(newLbRef, oldLbSnap.data());
+        await deleteDoc(oldLbRef);
       }
-      await deleteDoc(oldLbRef);
-    }
 
-    // Update pool members
-    const poolSnap = await getDoc(doc(db, 'pools', poolId));
-    if (poolSnap.exists()) {
-      const members = poolSnap.data().members || [];
-      const updated = members.filter((m) => m !== oldUid);
-      if (!updated.includes(newUid)) updated.push(newUid);
-      await updateDoc(doc(db, 'pools', poolId), { members: updated });
+      const poolSnap = await getDoc(doc(db, 'pools', poolId));
+      if (poolSnap.exists()) {
+        const members = (poolSnap.data().members || []).filter((m) => m !== oldUid);
+        if (!members.includes(newUid)) members.push(newUid);
+        await updateDoc(doc(db, 'pools', poolId), { members });
+      }
+      await updateDoc(doc(db, 'users', newUid), { pools: arrayUnion(poolId) });
+    } catch (e) {
+      console.warn(`Merge skip pool ${poolId}:`, e.message);
     }
-
-    // Add pool to new user
-    await updateDoc(doc(db, 'users', newUid), {
-      pools: arrayUnion(poolId),
-    });
   }
 }
+
+// ── Provider ─────────────────────────────────────────────
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  // Prevent onAuthStateChanged from overwriting profile while signIn is in progress
+  const signInInProgress = useRef(false);
 
+  // Single source of truth: onAuthStateChanged
   useEffect(() => {
-    let handled = false;
-
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
       try {
-        if (firebaseUser) {
-          setUser(firebaseUser);
-          Sentry.setUser({ id: firebaseUser.uid, email: firebaseUser.email || undefined });
-          const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
-          if (snap.exists()) {
-            const data = snap.data();
+        if (!firebaseUser) {
+          // No user at all — create anonymous session
+          setUser(null);
+          setProfile(null);
+          await signInAnonymously(auth);
+          return;
+        }
 
-            if (data.groupCode && (!data.pools || data.pools.length === 0)) {
-              await migrateGroupToPool(firebaseUser.uid, data.groupCode, data.nickname);
-              const updated = await getDoc(doc(db, 'users', firebaseUser.uid));
-              setProfile(updated.data());
-            } else {
-              setProfile(data);
-            }
+        setUser(firebaseUser);
+        Sentry.setUser({ id: firebaseUser.uid, email: firebaseUser.email || undefined });
 
-            // Analytics: track login
-            try {
-              await updateDoc(doc(db, 'users', firebaseUser.uid), {
-                lastLoginAt: serverTimestamp(),
-                loginCount: increment(1),
-                appVersion: import.meta.env.VITE_APP_VERSION || '0.0.0',
-              });
-            } catch {}
-          } else if (!firebaseUser.isAnonymous) {
-            // New user via Google/Email — create profile stub with email
-            const data = {
-              nickname: firebaseUser.displayName || '',
-              email: firebaseUser.email || '',
-              photoURL: firebaseUser.photoURL || '',
-              pools: [],
-              createdAt: serverTimestamp(),
-              lastLoginAt: serverTimestamp(),
-              loginCount: 1,
-              appVersion: import.meta.env.VITE_APP_VERSION || '0.0.0',
-            };
-            await setDoc(doc(db, 'users', firebaseUser.uid), data);
-            // Always set profile — AuthScreen will handle empty nickname
+        // If a signIn function is handling the profile, let it finish
+        if (signInInProgress.current) {
+          setLoading(false);
+          return;
+        }
+
+        if (firebaseUser.isAnonymous) {
+          // Anonymous users don't get a profile until they pick a nickname
+          setProfile(null);
+        } else {
+          // Real user — ensure doc exists, load profile
+          const data = await ensureUserDoc(firebaseUser);
+
+          // Legacy migration
+          if (data.groupCode && (!data.pools || data.pools.length === 0)) {
+            await migrateGroupToPool(firebaseUser.uid, data.groupCode, data.nickname);
+            const updated = await getDoc(doc(db, 'users', firebaseUser.uid));
+            setProfile(updated.data());
+          } else {
             setProfile(data);
           }
-        } else {
-          await signInAnonymously(auth);
         }
       } catch (err) {
         console.error('Auth error:', err);
@@ -205,12 +227,8 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
 
-    // Handle redirect result (for mobile Safari)
-    getRedirectResult(auth).then(async (result) => {
-      if (result && !handled) {
-        handled = true;
-      }
-    }).catch((err) => {
+    // Handle redirect result (mobile Safari)
+    getRedirectResult(auth).catch((err) => {
       console.error('Redirect result error:', err);
     });
 
@@ -222,48 +240,33 @@ export function AuthProvider({ children }) {
     const wasAnonymous = currentUser?.isAnonymous;
     const oldUid = currentUser?.uid;
 
+    signInInProgress.current = true;
+
     try {
+      let resultUser;
+
       if (wasAnonymous) {
         if (isMobileSafari()) {
           await linkWithRedirect(currentUser, googleProvider);
-          return; // page will reload
+          return; // page reloads
         }
         const result = await linkWithPopup(currentUser, googleProvider);
-        setUser(result.user);
-
-        // Ensure user doc exists and has email
-        const snap = await getDoc(doc(db, 'users', result.user.uid));
-        if (snap.exists()) {
-          await updateDoc(doc(db, 'users', result.user.uid), {
-            email: result.user.email || '',
-            photoURL: result.user.photoURL || '',
-          });
-          setProfile({ ...snap.data(), email: result.user.email || '' });
-        } else {
-          // Anonymous user had no profile yet — create one now
-          const data = {
-            nickname: result.user.displayName || '',
-            email: result.user.email || '',
-            photoURL: result.user.photoURL || '',
-            pools: [],
-            createdAt: serverTimestamp(),
-          };
-          await setDoc(doc(db, 'users', result.user.uid), data);
-          setProfile(data);
-        }
-        return result.user;
+        resultUser = result.user;
       } else {
         if (isMobileSafari()) {
           await signInWithRedirect(auth, googleProvider);
           return;
         }
         const result = await signInWithPopup(auth, googleProvider);
-        setUser(result.user);
-        return result.user;
+        resultUser = result.user;
       }
+
+      setUser(resultUser);
+      const data = await ensureUserDoc(resultUser);
+      setProfile(data);
+      return resultUser;
     } catch (err) {
       if (err.code === 'auth/credential-already-in-use') {
-        // Google account already linked to different uid — sign in and merge
         const credential = GoogleAuthProvider.credentialFromError(err);
         if (credential) {
           const result = await signInWithCredential(auth, credential);
@@ -271,10 +274,14 @@ export function AuthProvider({ children }) {
             await mergeAnonymousData(oldUid, result.user.uid);
           }
           setUser(result.user);
+          const data = await ensureUserDoc(result.user);
+          setProfile(data);
           return result.user;
         }
       }
       throw err;
+    } finally {
+      signInInProgress.current = false;
     }
   }, []);
 
@@ -283,38 +290,41 @@ export function AuthProvider({ children }) {
     const wasAnonymous = currentUser?.isAnonymous;
     const oldUid = currentUser?.uid;
 
+    signInInProgress.current = true;
+
     try {
+      let resultUser;
+
       if (wasAnonymous) {
         const credential = EmailAuthProvider.credential(email, password);
         const result = await linkWithCredential(currentUser, credential);
-        setUser(result.user);
-
-        const snap = await getDoc(doc(db, 'users', result.user.uid));
-        if (snap.exists()) {
-          await updateDoc(doc(db, 'users', result.user.uid), { email });
-          setProfile({ ...snap.data(), email });
-        }
-        return result.user;
+        resultUser = result.user;
       } else if (isSignUp) {
         const result = await createUserWithEmailAndPassword(auth, email, password);
-        setUser(result.user);
-        return result.user;
+        resultUser = result.user;
       } else {
         const result = await signInWithEmailAndPassword(auth, email, password);
-        setUser(result.user);
-        return result.user;
+        resultUser = result.user;
       }
+
+      setUser(resultUser);
+      const data = await ensureUserDoc(resultUser);
+      setProfile(data);
+      return resultUser;
     } catch (err) {
       if (err.code === 'auth/credential-already-in-use' || err.code === 'auth/email-already-in-use') {
-        // Email already linked — try signing in
         const result = await signInWithEmailAndPassword(auth, email, password);
         if (wasAnonymous && oldUid && oldUid !== result.user.uid) {
           await mergeAnonymousData(oldUid, result.user.uid);
         }
         setUser(result.user);
+        const data = await ensureUserDoc(result.user);
+        setProfile(data);
         return result.user;
       }
       throw err;
+    } finally {
+      signInInProgress.current = false;
     }
   }, []);
 
@@ -322,23 +332,27 @@ export function AuthProvider({ children }) {
     await signOut(auth);
     setUser(null);
     setProfile(null);
-    try {
-      localStorage.removeItem('wc26-active-pool');
-    } catch {}
-    // Re-create anonymous session
+    try { localStorage.removeItem('wc26-active-pool'); } catch {}
     await signInAnonymously(auth);
   }, []);
 
   const saveProfile = useCallback(async (nickname) => {
     if (!user) return;
-    const data = {
-      nickname,
-      pools: [],
-      createdAt: serverTimestamp(),
-    };
-    if (user.email) data.email = user.email;
-    await setDoc(doc(db, 'users', user.uid), data, { merge: true });
-    setProfile((prev) => ({ ...prev, ...data }));
+    // Only update nickname — never overwrite pools or other fields
+    await updateDoc(doc(db, 'users', user.uid), { nickname }).catch(async () => {
+      // Doc might not exist yet (guest flow)
+      await setDoc(doc(db, 'users', user.uid), {
+        nickname,
+        email: user.email || '',
+        photoURL: user.photoURL || '',
+        pools: [],
+        createdAt: serverTimestamp(),
+        lastLoginAt: serverTimestamp(),
+        loginCount: 1,
+        appVersion: APP_VERSION,
+      });
+    });
+    setProfile((prev) => ({ ...prev, nickname }));
   }, [user]);
 
   const isAnonymous = user?.isAnonymous ?? true;

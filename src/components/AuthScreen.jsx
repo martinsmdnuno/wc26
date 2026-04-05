@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useLanguage } from '../i18n/LanguageContext';
 
@@ -6,22 +6,42 @@ export default function AuthScreen() {
   const { saveProfile, signInWithGoogle, signInWithEmail, user, profile } = useAuth();
   const { t } = useLanguage();
 
-  // If profile exists but no nickname, go straight to nickname step
-  const needsNickname = profile && !profile.nickname;
-  const [step, setStep] = useState(needsNickname ? 'nickname' : 'choose'); // 'choose' | 'email' | 'nickname'
+  // Determine initial step:
+  // - profile exists but no nickname → straight to nickname (Google/Email already done)
+  // - user is not anonymous (already authenticated) → straight to nickname
+  // - otherwise → choose auth method
+  const alreadyAuthenticated = profile || (user && !user.isAnonymous);
+  const [step, setStep] = useState(alreadyAuthenticated ? 'nickname' : 'choose');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [nickname, setNickname] = useState(user?.displayName || profile?.nickname || '');
+  const [nickname, setNickname] = useState('');
   const [isSignUp, setIsSignUp] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+
+  // Update nickname default when user/profile changes (e.g., after Google sign-in)
+  useEffect(() => {
+    if (!nickname) {
+      setNickname(user?.displayName || profile?.nickname || '');
+    }
+  }, [user, profile]);
+
+  // If auth state changes to authenticated, move to nickname step
+  useEffect(() => {
+    if (step === 'choose' && user && !user.isAnonymous) {
+      setStep('nickname');
+    }
+  }, [user, step]);
 
   const handleGoogle = async () => {
     setSaving(true);
     setError('');
     try {
-      await signInWithGoogle();
-      setStep('nickname');
+      const result = await signInWithGoogle();
+      if (result) {
+        setNickname(result.displayName || '');
+        setStep('nickname');
+      }
     } catch (err) {
       console.error('Google sign-in error:', err);
       setError(t('authGoogleError'));
