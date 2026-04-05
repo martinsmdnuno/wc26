@@ -1,10 +1,17 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import {
+  collection, getDocs, doc, deleteDoc, updateDoc, arrayRemove, writeBatch,
+} from 'firebase/firestore';
 import { db } from '../../firebase';
+import ConfirmModal from '../../components/ConfirmModal';
+
+const ADMIN_UID = import.meta.env.VITE_ADMIN_UID;
 
 export default function UsersAdmin() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [confirm, setConfirm] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -27,6 +34,44 @@ export default function UsersAdmin() {
     })();
   }, []);
 
+  const handleDelete = async (uid) => {
+    setConfirm(null);
+    setDeleting(true);
+    try {
+      const userDoc = users.find((u) => u.uid === uid);
+      const poolIds = userDoc?.pools || [];
+
+      // Remove user from all pools (members, leaderboard, bets)
+      for (const poolId of poolIds) {
+        await updateDoc(doc(db, 'pools', poolId), {
+          members: arrayRemove(uid),
+        });
+
+        // Delete leaderboard entry
+        try { await deleteDoc(doc(db, 'pools', poolId, 'leaderboard', uid)); } catch {}
+
+        // Delete user's bets in this pool
+        const betsSnap = await getDocs(collection(db, 'pools', poolId, 'bets'));
+        const batch = writeBatch(db);
+        let count = 0;
+        betsSnap.docs.forEach((d) => {
+          if (d.data().userId === uid) {
+            batch.delete(d.ref);
+            count++;
+          }
+        });
+        if (count > 0) await batch.commit();
+      }
+
+      // Delete user doc
+      await deleteDoc(doc(db, 'users', uid));
+      setUsers((prev) => prev.filter((u) => u.uid !== uid));
+    } catch (err) {
+      console.error('Failed to delete user:', err);
+    }
+    setDeleting(false);
+  };
+
   if (loading) return <div className="admin__section"><p className="admin__empty">A carregar...</p></div>;
 
   return (
@@ -41,6 +86,7 @@ export default function UsersAdmin() {
             <th>Logins</th>
             <th>Primeiro login</th>
             <th>Último login</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -61,10 +107,32 @@ export default function UsersAdmin() {
               <td>{u.loginCount}</td>
               <td>{u.createdAt?.toDate?.()?.toLocaleDateString('pt-PT') || '—'}</td>
               <td>{u.lastLoginAt?.toDate?.()?.toLocaleDateString('pt-PT') || '—'}</td>
+              <td>
+                {u.uid !== ADMIN_UID && (
+                  <button
+                    className="admin__btn admin__btn--danger admin__btn--small"
+                    onClick={() => setConfirm(u)}
+                    disabled={deleting}
+                  >
+                    Apagar
+                  </button>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {confirm && (
+        <ConfirmModal
+          title="Apagar utilizador"
+          message={`Apagar "${confirm.nickname}" (${confirm.email})? Remove o utilizador de todos os bolões e apaga as suas apostas. Não pode ser desfeito.`}
+          confirmLabel="Apagar"
+          onConfirm={() => handleDelete(confirm.uid)}
+          onCancel={() => setConfirm(null)}
+          danger
+        />
+      )}
     </div>
   );
 }

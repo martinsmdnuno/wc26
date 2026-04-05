@@ -5,10 +5,11 @@ service cloud.firestore {
       return request.auth != null && request.auth.uid == 'UKfTa82FSHaj72HsyjB4oGzL9Rg1';
     }
 
-    // Users: self read/write, admin can read all
+    // Users: self read/write, admin can read/delete all
     match /users/{userId} {
       allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
       allow write: if request.auth != null && request.auth.uid == userId;
+      allow delete: if isAdmin();
     }
 
     // Pools
