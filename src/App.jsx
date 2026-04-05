@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import BottomNav from './components/BottomNav';
 import Schedule from './pages/Schedule';
 import MyMatches from './pages/MyMatches';
@@ -16,8 +16,11 @@ import InstallBanner from './components/InstallBanner';
 import { useFavorites } from './hooks/useFavorites';
 import { useLanguage } from './i18n/LanguageContext';
 import { useAuth } from './hooks/useAuth';
+import Admin from './pages/Admin';
 import logo from './assets/logo.png';
 import './App.css';
+
+const ADMIN_UID = import.meta.env.VITE_ADMIN_UID;
 
 export default function App() {
   const [page, setPage] = useState('schedule');
@@ -26,10 +29,15 @@ export default function App() {
   const prevPageRef = useRef('schedule');
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
   const { t } = useLanguage();
-  const { profile, loading } = useAuth();
+  const { user, profile, loading } = useAuth();
+  const isAdmin = user?.uid && user.uid === ADMIN_UID;
 
   const navigate = useCallback((newPage) => {
     if (newPage === page) return;
+    // Silent redirect for non-admin trying to access admin
+    if (newPage === 'admin' && !isAdmin) {
+      return;
+    }
     setAnimClass('page-exit');
     setTimeout(() => {
       setPage(newPage);
@@ -40,7 +48,7 @@ export default function App() {
         });
       });
     }, 150);
-  }, [page]);
+  }, [page, isAdmin]);
 
   const navigateToTeam = useCallback((iso) => {
     prevPageRef.current = page;
@@ -60,6 +68,18 @@ export default function App() {
   const navigateBackFromTeam = useCallback(() => {
     navigate(prevPageRef.current);
   }, [navigate]);
+
+  // Handle #admin hash navigation
+  useEffect(() => {
+    const handleHash = () => {
+      if (window.location.hash === '#admin' && isAdmin) {
+        setPage('admin');
+      }
+    };
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, [isAdmin]);
 
   if (loading) {
     return (
@@ -118,6 +138,7 @@ export default function App() {
               {page === 'pools' && <PoolManager />}
               {page === 'rules' && <Rules />}
               {page === 'missing' && <Missing />}
+              {page === 'admin' && isAdmin && <Admin />}
             </div>
           </main>
 
