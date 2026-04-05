@@ -30,6 +30,7 @@ import {
   deleteDoc,
 } from 'firebase/firestore';
 import { auth, db, googleProvider } from '../firebase';
+import * as Sentry from '@sentry/react';
 
 const AuthContext = createContext(null);
 
@@ -157,6 +158,7 @@ export function AuthProvider({ children }) {
       try {
         if (firebaseUser) {
           setUser(firebaseUser);
+          Sentry.setUser({ id: firebaseUser.uid, email: firebaseUser.email || undefined });
           const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
           if (snap.exists()) {
             const data = snap.data();
