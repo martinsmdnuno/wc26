@@ -4,6 +4,7 @@ import {
   setDoc,
   getDoc,
   getDocs,
+  addDoc,
   collection,
   query,
   where,
@@ -14,6 +15,7 @@ import { db } from '../firebase';
 import { useAuth } from './useAuth';
 import { usePools } from './usePools';
 import { calculatePoints } from '../utils/scoring';
+import { logError } from '../utils/logError';
 
 export function useBets() {
   const { user } = useAuth();
@@ -22,6 +24,10 @@ export function useBets() {
   const saveBet = useCallback(
     async (matchId, predictedScoreA, predictedScoreB) => {
       if (!user || !activePoolId) {
+        logError('NO_POOL', 'Tentativa de guardar aposta sem pool activo', {
+          userId: user?.uid,
+          matchId,
+        });
         throw new Error('NO_POOL');
       }
       const docId = `${user.uid}_${matchId}`;
@@ -42,6 +48,17 @@ export function useBets() {
       }
 
       await setDoc(ref, data, { merge: true });
+
+      // Analytics: track bet submission
+      try {
+        await addDoc(collection(db, 'analytics'), {
+          type: 'bet',
+          userId: user.uid,
+          matchId,
+          poolId: activePoolId,
+          submittedAt: serverTimestamp(),
+        });
+      } catch {}
     },
     [user, activePoolId]
   );

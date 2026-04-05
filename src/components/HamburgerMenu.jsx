@@ -7,9 +7,10 @@ export default function HamburgerMenu({ onNavigate }) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const { t } = useLanguage();
-  const { profile, isAnonymous, signInWithGoogle, signOutUser } = useAuth();
+  const { user, profile, isAnonymous, signInWithGoogle, signOutUser } = useAuth();
   const { activePool } = usePools();
   const [linkingAccount, setLinkingAccount] = useState(false);
+  const isAdmin = user?.uid && user.uid === import.meta.env.VITE_ADMIN_UID;
 
   const handleNav = (page) => {
     setOpen(false);
@@ -83,6 +84,11 @@ export default function HamburgerMenu({ onNavigate }) {
           <button className="hamburger-menu__item" onClick={() => handleNav('missing')}>
             <span>👻</span> {t('navMissing')}
           </button>
+          {isAdmin && (
+            <button className="hamburger-menu__item" onClick={() => handleNav('admin')}>
+              <span>🔧</span> Admin
+            </button>
+          )}
         </nav>
 
         <div className="hamburger-menu__account">

@@ -1,0 +1,13 @@
+name: Health Check
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check app is accessible
+        run: curl -f https://martinsmdnuno.github.io/wc26/

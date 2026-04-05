@@ -30,6 +30,8 @@ import {
   deleteDoc,
 } from 'firebase/firestore';
 import { auth, db, googleProvider } from '../firebase';
+import * as Sentry from '@sentry/react';
+import { increment } from 'firebase/firestore';
 
 const AuthContext = createContext(null);
 
@@ -157,6 +159,7 @@ export function AuthProvider({ children }) {
       try {
         if (firebaseUser) {
           setUser(firebaseUser);
+          Sentry.setUser({ id: firebaseUser.uid, email: firebaseUser.email || undefined });
           const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
           if (snap.exists()) {
             const data = snap.data();
@@ -168,6 +171,15 @@ export function AuthProvider({ children }) {
             } else {
               setProfile(data);
             }
+
+            // Analytics: track login
+            try {
+              await updateDoc(doc(db, 'users', firebaseUser.uid), {
+                lastLoginAt: serverTimestamp(),
+                loginCount: increment(1),
+                appVersion: import.meta.env.VITE_APP_VERSION || '0.0.0',
+              });
+            } catch {}
           } else if (!firebaseUser.isAnonymous) {
             // New user via Google/Email — create profile stub with email
             const data = {
