@@ -96,7 +96,7 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         <div className="app-header__content">
-          {profile && <HamburgerMenu onNavigate={navigate} />}
+          {profile?.nickname && <HamburgerMenu onNavigate={navigate} />}
           <img src={logo} alt="Mundial 2026" className="app-header__logo" />
           <h1 className="app-header__title">
             <span className="app-header__mundial">{t('appTitle')}</span>{' '}
@@ -104,12 +104,12 @@ export default function App() {
           </h1>
           <LanguageSwitcher />
         </div>
-        {profile && (
+        {profile?.nickname && (
           <PoolSelector onManagePools={() => navigate('pools')} />
         )}
       </header>
 
-      {!profile ? (
+      {!profile || !profile.nickname ? (
         <AuthScreen />
       ) : (
         <>

@@ -185,11 +185,16 @@ export function AuthProvider({ children }) {
             const data = {
               nickname: firebaseUser.displayName || '',
               email: firebaseUser.email || '',
+              photoURL: firebaseUser.photoURL || '',
               pools: [],
               createdAt: serverTimestamp(),
+              lastLoginAt: serverTimestamp(),
+              loginCount: 1,
+              appVersion: import.meta.env.VITE_APP_VERSION || '0.0.0',
             };
             await setDoc(doc(db, 'users', firebaseUser.uid), data);
-            setProfile(firebaseUser.displayName ? data : null);
+            // Always set profile — AuthScreen will handle empty nickname
+            setProfile(data);
           }
         } else {
           await signInAnonymously(auth);
@@ -226,13 +231,25 @@ export function AuthProvider({ children }) {
         const result = await linkWithPopup(currentUser, googleProvider);
         setUser(result.user);
 
-        // Update profile with email
+        // Ensure user doc exists and has email
         const snap = await getDoc(doc(db, 'users', result.user.uid));
         if (snap.exists()) {
           await updateDoc(doc(db, 'users', result.user.uid), {
             email: result.user.email || '',
+            photoURL: result.user.photoURL || '',
           });
           setProfile({ ...snap.data(), email: result.user.email || '' });
+        } else {
+          // Anonymous user had no profile yet — create one now
+          const data = {
+            nickname: result.user.displayName || '',
+            email: result.user.email || '',
+            photoURL: result.user.photoURL || '',
+            pools: [],
+            createdAt: serverTimestamp(),
+          };
+          await setDoc(doc(db, 'users', result.user.uid), data);
+          setProfile(data);
         }
         return result.user;
       } else {

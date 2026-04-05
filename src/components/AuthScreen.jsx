@@ -3,13 +3,15 @@ import { useAuth } from '../hooks/useAuth';
 import { useLanguage } from '../i18n/LanguageContext';
 
 export default function AuthScreen() {
-  const { saveProfile, signInWithGoogle, signInWithEmail, user } = useAuth();
+  const { saveProfile, signInWithGoogle, signInWithEmail, user, profile } = useAuth();
   const { t } = useLanguage();
 
-  const [step, setStep] = useState('choose'); // 'choose' | 'email' | 'nickname'
+  // If profile exists but no nickname, go straight to nickname step
+  const needsNickname = profile && !profile.nickname;
+  const [step, setStep] = useState(needsNickname ? 'nickname' : 'choose'); // 'choose' | 'email' | 'nickname'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [nickname, setNickname] = useState('');
+  const [nickname, setNickname] = useState(user?.displayName || profile?.nickname || '');
   const [isSignUp, setIsSignUp] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
