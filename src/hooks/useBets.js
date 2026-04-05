@@ -4,6 +4,7 @@ import {
   setDoc,
   getDoc,
   getDocs,
+  addDoc,
   collection,
   query,
   where,
@@ -47,6 +48,17 @@ export function useBets() {
       }
 
       await setDoc(ref, data, { merge: true });
+
+      // Analytics: track bet submission
+      try {
+        await addDoc(collection(db, 'analytics'), {
+          type: 'bet',
+          userId: user.uid,
+          matchId,
+          poolId: activePoolId,
+          submittedAt: serverTimestamp(),
+        });
+      } catch {}
     },
     [user, activePoolId]
   );
