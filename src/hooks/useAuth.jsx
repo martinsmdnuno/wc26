@@ -3,10 +3,7 @@ import {
   signInAnonymously,
   onAuthStateChanged,
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
   linkWithPopup,
-  linkWithRedirect,
   linkWithCredential,
   EmailAuthProvider,
   createUserWithEmailAndPassword,
@@ -36,11 +33,6 @@ import * as Sentry from '@sentry/react';
 const AuthContext = createContext(null);
 
 const APP_VERSION = import.meta.env.VITE_APP_VERSION || '0.0.0';
-
-const isMobileSafari = () => {
-  const ua = navigator.userAgent;
-  return /iP(ad|hone|od)/.test(ua) && /WebKit/.test(ua) && !/CriOS|FxiOS|OPiOS/.test(ua);
-};
 
 // ── Helpers ──────────────────────────────────────────────
 
@@ -227,11 +219,6 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
 
-    // Handle redirect result (mobile Safari)
-    getRedirectResult(auth).catch((err) => {
-      console.error('Redirect result error:', err);
-    });
-
     return unsub;
   }, []);
 
@@ -246,17 +233,9 @@ export function AuthProvider({ children }) {
       let resultUser;
 
       if (wasAnonymous) {
-        if (isMobileSafari()) {
-          await linkWithRedirect(currentUser, googleProvider);
-          return; // page reloads
-        }
         const result = await linkWithPopup(currentUser, googleProvider);
         resultUser = result.user;
       } else {
-        if (isMobileSafari()) {
-          await signInWithRedirect(auth, googleProvider);
-          return;
-        }
         const result = await signInWithPopup(auth, googleProvider);
         resultUser = result.user;
       }

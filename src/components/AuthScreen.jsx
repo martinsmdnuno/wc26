@@ -44,7 +44,15 @@ export default function AuthScreen() {
       }
     } catch (err) {
       console.error('Google sign-in error:', err);
-      setError(t('authGoogleError'));
+      if (err.code === 'auth/popup-blocked') {
+        setError(t('authPopupBlocked'));
+      } else if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+        setError(''); // user-initiated cancel; no error shown
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setError(t('authUnauthorizedDomain'));
+      } else {
+        setError(t('authGoogleError'));
+      }
     }
     setSaving(false);
   };
