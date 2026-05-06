@@ -2,7 +2,14 @@
 
 Mobile-first web app for the FIFA World Cup 2026 (USA, Canada & Mexico). Browse the full tournament schedule, follow your favourite teams, run a betting pool with friends, and track live scores.
 
-**[Open the app](https://martinsmdnuno.github.io/wc26/)**
+**[Open the app →](https://martinsmdnuno.github.io/wc26/)** &nbsp;·&nbsp; **[View the landing page →](https://martinsmdnuno.github.io/wc26/landing.html)**
+
+<p align="center">
+  <img src="designs/calend_rio_main_screen/screen.png" alt="Schedule" width="22%" />
+  <img src="designs/selecione_sua_equipa_onboarding/screen.png" alt="Onboarding" width="22%" />
+  <img src="designs/minha_equipa_brasil/screen.png" alt="My team" width="22%" />
+  <img src="designs/tabela_eliminar_rias/screen.png" alt="Standings" width="22%" />
+</p>
 
 ## Features
 
@@ -109,6 +116,16 @@ src/
 | **0** | Nothing correct | Predicted 0-0, result 2-1 |
 
 Tiebreak: total points > exact results > correct outcomes.
+
+## Screens
+
+| Schedule | Onboarding | My team | Standings |
+| :---: | :---: | :---: | :---: |
+| ![Schedule](designs/calend_rio_main_screen/screen.png) | ![Onboarding](designs/selecione_sua_equipa_onboarding/screen.png) | ![My team](designs/minha_equipa_brasil/screen.png) | ![Standings](designs/tabela_eliminar_rias/screen.png) |
+
+## Design system
+
+Visual style is documented in [`designs/campeonato_prestige/DESIGN.md`](designs/campeonato_prestige/DESIGN.md) — a "championship prestige" theme with serif headings (Oswald), DM Sans body, dark green and gold accents.
 
 ## License
 
