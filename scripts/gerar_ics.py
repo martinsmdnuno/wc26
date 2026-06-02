@@ -6,7 +6,7 @@ qualquer fuso). Fontes cruzadas: A Bola + Sky Sports (UK == Lisboa no verão).
 """
 from datetime import datetime, timedelta
 
-BOLAO = "https://martinsmdnuno.github.io/wc26/"
+BOLAO = "https://wc26.martinsnuno.com/"
 
 # cidade -> (estádio, país)
 STADIUMS = {
