@@ -312,6 +312,7 @@ export function AuthProvider({ children }) {
     setUser(null);
     setProfile(null);
     try { localStorage.removeItem('wc26-active-pool'); } catch {}
+    try { localStorage.removeItem('wc26-favorites'); } catch {}
     await signInAnonymously(auth);
   }, []);
 
