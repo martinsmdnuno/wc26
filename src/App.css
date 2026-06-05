@@ -429,7 +429,7 @@
   border-radius: 8px;
   border: none;
   background: var(--white);
-  font-size: 14px;
+  font-size: 16px; /* >=16px avoids iOS focus-zoom */
   font-family: 'DM Sans', sans-serif;
   color: var(--dark);
   box-shadow: 0 1px 4px rgba(0,0,0,0.05);
@@ -3048,7 +3048,7 @@
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.12);
   background: var(--off-white);
-  font-size: 14px;
+  font-size: 16px; /* >=16px avoids iOS focus-zoom */
   font-family: inherit;
   color: var(--dark);
 }
