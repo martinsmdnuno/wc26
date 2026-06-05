@@ -23,8 +23,8 @@ export default {
   probableSquad: {
     goalkeepers: [
       { name: 'Sergio Rochet', club: 'Internacional', caps: 34 },
+      { name: 'Fernando Muslera', club: 'Estudiantes de La Plata', caps: 138 },
       { name: 'Santiago Mele', club: 'Monterrey', caps: 8 },
-      { name: 'Franco Israel', club: 'Torino', caps: 4 },
     ],
     defenders: [
       { name: 'Jose Gimenez', club: 'Atletico Madrid', caps: 97 },
@@ -32,7 +32,8 @@ export default {
       { name: 'Mathias Olivera', club: 'Napoli', caps: 32 },
       { name: 'Guillermo Varela', club: 'Flamengo', caps: 22 },
       { name: 'Santiago Bueno', club: 'Wolverhampton', caps: 11 },
-      { name: 'Nicolas Marichal', club: 'Dynamo Moscow', caps: 8 },
+      { name: 'Sebastian Caceres', club: 'America', caps: 18 },
+      { name: 'Matias Viña', club: 'River Plate', caps: 47 },
       { name: 'Joaquin Piquerez', club: 'Palmeiras', caps: 12 },
     ],
     midfielders: [
@@ -42,15 +43,17 @@ export default {
       { name: 'Giorgian De Arrascaeta', club: 'Flamengo', caps: 42 },
       { name: 'Rodrigo Bentancur', club: 'Tottenham Hotspur', caps: 62 },
       { name: 'Agustin Canobbio', club: 'Fluminense', caps: 3 },
+      { name: 'Juan Manuel Sanabria', club: 'Atletico San Luis', caps: 9 },
+      { name: 'Emiliano Martinez', club: 'Palmeiras', caps: 5 },
+      { name: 'Rodrigo Zalazar', club: 'Braga', caps: 6 },
     ],
     forwards: [
       { name: 'Darwin Nunez', club: 'Al-Hilal', caps: 36 },
       { name: 'Facundo Pellistri', club: 'Panathinaikos', caps: 37 },
       { name: 'Maximiliano Araujo', club: 'Sporting CP', caps: 26 },
-      { name: 'Facundo Torres', club: 'Austin FC', caps: 19 },
-      { name: 'Cristian Olivera', club: 'Los Angeles FC', caps: 8 },
+      { name: 'Brian Rodriguez', club: 'America', caps: 30 },
       { name: 'Rodrigo Aguirre', club: 'America', caps: 7 },
-      { name: 'Luciano Rodriguez', club: 'Bahia', caps: 1 },
+      { name: 'Federico Viñas', club: 'Real Oviedo', caps: 8 },
     ],
   },
   funFacts: [

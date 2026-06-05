@@ -19,7 +19,7 @@ export default {
     goalkeepers: [
       { name: 'Orjan Nyland', club: 'Sevilla', caps: 55 },
       { name: 'Egil Selvik', club: 'Watford', caps: 8 },
-      { name: 'Viljar Myhra', club: 'OB', caps: 3 },
+      { name: 'Sander Tangvik', club: 'Hamburger SV', caps: 0 },
     ],
     defenders: [
       { name: 'Kristoffer Ajer', club: 'Brentford', caps: 45 },
@@ -29,20 +29,26 @@ export default {
       { name: 'David Moller Wolfe', club: 'Wolverhampton Wanderers', caps: 12 },
       { name: 'Torbjorn Heggem', club: 'Bologna', caps: 10 },
       { name: 'Fredrik Andre Bjorkan', club: 'Bodo/Glimt', caps: 8 },
+      { name: 'Sondre Langas', club: 'Derby County', caps: 4 },
+      { name: 'Henrik Falchener', club: 'Viking', caps: 2 },
     ],
     midfielders: [
       { name: 'Martin Odegaard', club: 'Arsenal', caps: 65 },
       { name: 'Sander Berge', club: 'Fulham', caps: 60 },
-      { name: 'Antonio Nusa', club: 'RB Leipzig', caps: 22 },
-      { name: 'Oscar Bobb', club: 'Fulham', caps: 15 },
+      { name: 'Fredrik Aursnes', club: 'Benfica', caps: 28 },
+      { name: 'Patrick Berg', club: 'Bodo/Glimt', caps: 25 },
       { name: 'Kristian Thorstvedt', club: 'Sassuolo', caps: 20 },
       { name: 'Morten Thorsby', club: 'Cremonese', caps: 30 },
-      { name: 'Andreas Schjelderup', club: 'Benfica', caps: 10 },
+      { name: 'Thelo Aasgaard', club: 'Rangers', caps: 6 },
     ],
     forwards: [
       { name: 'Erling Haaland', club: 'Manchester City', caps: 48 },
       { name: 'Alexander Sorloth', club: 'Atletico Madrid', caps: 55 },
       { name: 'Jorgen Strand Larsen', club: 'Crystal Palace', caps: 20 },
+      { name: 'Antonio Nusa', club: 'RB Leipzig', caps: 22 },
+      { name: 'Oscar Bobb', club: 'Fulham', caps: 15 },
+      { name: 'Andreas Schjelderup', club: 'Benfica', caps: 10 },
+      { name: 'Jens Petter Hauge', club: 'Bodo/Glimt', caps: 14 },
     ],
   },
   funFacts: [

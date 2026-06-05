@@ -20,8 +20,8 @@ export default {
   probableSquad: {
     goalkeepers: [
       { name: 'Nikola Vasilj', club: 'St. Pauli', caps: 28 },
-      { name: 'Osman Hadžikadunić', club: 'Slaven Belupo', caps: 5 },
       { name: 'Martin Zlomislić', club: 'Rijeka', caps: 4 },
+      { name: 'Osman Hadžikić', club: 'Slaven Belupo', caps: 5 },
     ],
     defenders: [
       { name: 'Sead Kolašinac', club: 'Atalanta', caps: 55 },
@@ -31,6 +31,7 @@ export default {
       { name: 'Nihad Mujakić', club: 'Gaziantep FK', caps: 10 },
       { name: 'Nidal Čelik', club: 'Lens', caps: 6 },
       { name: 'Nikola Katić', club: 'Schalke 04', caps: 8 },
+      { name: 'Stjepan Radeljić', club: 'Rijeka', caps: 4 },
     ],
     midfielders: [
       { name: 'Benjamin Tahirović', club: 'Brondby IF', caps: 20 },
@@ -39,14 +40,17 @@ export default {
       { name: 'Ivan Šunjić', club: 'Pafos FC', caps: 12 },
       { name: 'Amar Memić', club: 'Viktoria Plzeň', caps: 8 },
       { name: 'Dženis Burnić', club: 'Karlsruher SC', caps: 10 },
+      { name: 'Esmir Bajraktarević', club: 'PSV Eindhoven', caps: 8 },
+      { name: 'Kerim Alajbegović', club: 'RB Salzburg', caps: 5 },
+      { name: 'Ivan Bašić', club: 'Astana', caps: 3 },
+      { name: 'Ermin Mahmić', club: 'Slovan Liberec', caps: 2 },
     ],
     forwards: [
       { name: 'Edin Džeko', club: 'Schalke 04', caps: 136 },
       { name: 'Ermedin Demirović', club: 'VfB Stuttgart', caps: 32 },
       { name: 'Haris Tabaković', club: 'Borussia M\'gladbach', caps: 14 },
-      { name: 'Esmir Bajraktarević', club: 'PSV Eindhoven', caps: 8 },
-      { name: 'Kerim Alajbegović', club: 'RB Salzburg', caps: 5 },
       { name: 'Samed Bazdar', club: 'Jagiellonia', caps: 6 },
+      { name: 'Jovo Lukić', club: 'Universitatea Cluj', caps: 2 },
     ],
   },
   funFacts: [

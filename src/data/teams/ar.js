@@ -32,9 +32,10 @@ export default {
       { name: 'Cristian Romero', club: 'Tottenham Hotspur', caps: 48 },
       { name: 'Lisandro Martinez', club: 'Manchester United', caps: 28 },
       { name: 'Nicolas Otamendi', club: 'Benfica', caps: 109 },
+      { name: 'Leonardo Balerdi', club: 'Olympique Marseille', caps: 12 },
+      { name: 'Facundo Medina', club: 'Olympique Marseille', caps: 8 },
       { name: 'Nahuel Molina', club: 'Atletico Madrid', caps: 34 },
       { name: 'Nicolas Tagliafico', club: 'Olympique Lyon', caps: 53 },
-      { name: 'Marcos Acuna', club: 'River Plate', caps: 55 },
       { name: 'Gonzalo Montiel', club: 'River Plate', caps: 28 },
     ],
     midfielders: [
@@ -44,6 +45,7 @@ export default {
       { name: 'Leandro Paredes', club: 'Boca Juniors', caps: 76 },
       { name: 'Exequiel Palacios', club: 'Bayer Leverkusen', caps: 37 },
       { name: 'Giovani Lo Celso', club: 'Real Betis', caps: 52 },
+      { name: 'Valentin Barco', club: 'RC Strasbourg', caps: 4 },
     ],
     forwards: [
       { name: 'Lionel Messi', club: 'Inter Miami', caps: 198 },
@@ -53,6 +55,7 @@ export default {
       { name: 'Giuliano Simeone', club: 'Atletico Madrid', caps: 6 },
       { name: 'Thiago Almada', club: 'Atletico Madrid', caps: 12 },
       { name: 'Nico Paz', club: 'Como', caps: 5 },
+      { name: 'Jose Manuel Lopez', club: 'Palmeiras', caps: 3 },
     ],
   },
   funFacts: [

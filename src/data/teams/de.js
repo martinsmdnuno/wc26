@@ -26,9 +26,9 @@ export default {
   },
   probableSquad: {
     goalkeepers: [
+      { name: 'Manuel Neuer', club: 'Bayern Munich', caps: 124 },
       { name: 'Oliver Baumann', club: 'TSG Hoffenheim', caps: 14 },
       { name: 'Alexander Nübel', club: 'VfB Stuttgart', caps: 3 },
-      { name: 'Jonas Urbig', club: 'Bayern Munich', caps: 1 },
     ],
     defenders: [
       { name: 'Antonio Rüdiger', club: 'Real Madrid', caps: 78 },
@@ -37,7 +37,7 @@ export default {
       { name: 'Waldemar Anton', club: 'Borussia Dortmund', caps: 16 },
       { name: 'David Raum', club: 'RB Leipzig', caps: 26 },
       { name: 'Nathaniel Brown', club: 'Eintracht Frankfurt', caps: 4 },
-      { name: 'Malick Thiaw', club: 'AC Milan', caps: 6 },
+      { name: 'Malick Thiaw', club: 'Newcastle United', caps: 6 },
     ],
     midfielders: [
       { name: 'Joshua Kimmich', club: 'Bayern Munich', caps: 98 },
@@ -46,14 +46,18 @@ export default {
       { name: 'Pascal Groß', club: 'Brighton', caps: 12 },
       { name: 'Aleksandar Pavlović', club: 'Bayern Munich', caps: 8 },
       { name: 'Leon Goretzka', club: 'Bayern Munich', caps: 62 },
+      { name: 'Angelo Stiller', club: 'VfB Stuttgart', caps: 6 },
+      { name: 'Felix Nmecha', club: 'Borussia Dortmund', caps: 4 },
+      { name: 'Lennart Karl', club: 'Bayern Munich', caps: 1 },
+      { name: 'Nadiem Amiri', club: 'Mainz 05', caps: 8 },
     ],
     forwards: [
       { name: 'Kai Havertz', club: 'Arsenal', caps: 56 },
       { name: 'Leroy Sané', club: 'Galatasaray', caps: 70 },
-      { name: 'Serge Gnabry', club: 'Bayern Munich', caps: 48 },
       { name: 'Nick Woltemade', club: 'Newcastle United', caps: 12 },
       { name: 'Deniz Undav', club: 'VfB Stuttgart', caps: 10 },
-      { name: 'Kevin Schade', club: 'Brentford', caps: 8 },
+      { name: 'Jamie Leweling', club: 'VfB Stuttgart', caps: 4 },
+      { name: 'Maximilian Beier', club: 'Borussia Dortmund', caps: 6 },
     ],
   },
   funFacts: [

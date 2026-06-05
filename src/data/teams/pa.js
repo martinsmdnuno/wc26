@@ -18,8 +18,8 @@ export default {
   probableSquad: {
     goalkeepers: [
       { name: 'Luis Mejia', club: 'Nacional', caps: 40 },
-      { name: 'Orlando Mosquera', club: 'Al-Fahya', caps: 15 },
-      { name: 'Cesar Samudio', club: 'Maraton', caps: 8 },
+      { name: 'Orlando Mosquera', club: 'Al-Fayha', caps: 15 },
+      { name: 'Cesar Samudio', club: 'Marathon', caps: 8 },
     ],
     defenders: [
       { name: 'Amir Murillo', club: 'Besiktas', caps: 70 },
@@ -28,22 +28,27 @@ export default {
       { name: 'Eric Davis', club: 'CD Plaza Amador', caps: 75 },
       { name: 'Roderick Miller', club: 'Turan Tovuz', caps: 55 },
       { name: 'Cesar Blackman', club: 'Slovan Bratislava', caps: 20 },
-      { name: 'Martin Krug', club: 'Levante', caps: 10 },
+      { name: 'Fidel Escobar', club: 'Saprissa', caps: 55 },
+      { name: 'Jiovany Ramos', club: 'Academia Puerto Cabello', caps: 20 },
+      { name: 'Jorge Gutierrez', club: 'Deportivo La Guaira', caps: 12 },
+      { name: 'Edgardo Farina', club: 'Pari Nizhny Novgorod', caps: 8 },
     ],
     midfielders: [
-      { name: 'Anibal Godoy', club: 'San Diego FC', caps: 155 },
+      { name: 'Anibal Godoy', club: 'San Diego FC', caps: 157 },
       { name: 'Adalberto Carrasquilla', club: 'Pumas UNAM', caps: 55 },
       { name: 'Carlos Harvey', club: 'Minnesota United', caps: 30 },
       { name: 'Jose Luis Rodriguez', club: 'FC Juarez', caps: 40 },
-      { name: 'Cristian Martinez', club: 'Kiryat Shmona', caps: 20 },
+      { name: 'Cristian Martinez', club: 'Ironi Kiryat Shmona', caps: 20 },
       { name: 'Cesar Yanis', club: 'CD Cobresal', caps: 15 },
+      { name: 'Yoel Barcenas', club: 'Mazatlan FC', caps: 50 },
+      { name: 'Alberto Quintero', club: 'CD Plaza Amador', caps: 140 },
+      { name: 'Azarias Londono', club: 'Universidad Catolica', caps: 15 },
     ],
     forwards: [
       { name: 'Jose Fajardo', club: 'Universidad Catolica', caps: 35 },
       { name: 'Cecilio Waterman', club: 'Universidad de Concepcion', caps: 25 },
       { name: 'Ismael Diaz', club: 'Leon', caps: 30 },
-      { name: 'Yoel Barcenas', club: 'Mazatlan FC', caps: 50 },
-      { name: 'Alberto Quintero', club: 'Universitario', caps: 140 },
+      { name: 'Tomas Rodriguez', club: 'Saprissa', caps: 10 },
     ],
   },
   funFacts: [

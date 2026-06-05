@@ -32,13 +32,11 @@ export default {
       { name: 'Marin Pongračić', club: 'Fiorentina', caps: 20 },
       { name: 'Josip Stanišić', club: 'Bayern Munich', caps: 22 },
       { name: 'Martin Erlić', club: 'Midtjylland', caps: 18 },
-      { name: 'Luka Vušković', club: 'Tottenham', caps: 4 },
-      { name: 'Ivan Smolčić', club: 'Rijeka', caps: 3 },
+      { name: 'Luka Vušković', club: 'Hamburger SV', caps: 4 },
     ],
     midfielders: [
       { name: 'Luka Modrić', club: 'AC Milan', caps: 188 },
       { name: 'Mateo Kovačić', club: 'Manchester City', caps: 111 },
-      { name: 'Lovro Majer', club: 'VfL Wolfsburg', caps: 35 },
       { name: 'Luka Sučić', club: 'Real Sociedad', caps: 28 },
       { name: 'Martin Baturina', club: 'Como', caps: 22 },
       { name: 'Mario Pašalić', club: 'Atalanta', caps: 45 },
@@ -46,6 +44,7 @@ export default {
       { name: 'Petar Sučić', club: 'Inter Milan', caps: 10 },
       { name: 'Kristijan Jakić', club: 'FC Augsburg', caps: 15 },
       { name: 'Nikola Moro', club: 'Bologna', caps: 8 },
+      { name: 'Toni Fruk', club: 'Rijeka', caps: 6 },
     ],
     forwards: [
       { name: 'Andrej Kramarić', club: 'Hoffenheim', caps: 100 },

@@ -26,8 +26,8 @@ export default {
   probableSquad: {
     goalkeepers: [
       { name: 'Mike Maignan', club: 'AC Milan', caps: 35 },
-      { name: 'Lucas Chevalier', club: 'PSG', caps: 8 },
       { name: 'Brice Samba', club: 'Rennes', caps: 10 },
+      { name: 'Robin Risser', club: 'Lens', caps: 1 },
     ],
     defenders: [
       { name: 'William Saliba', club: 'Arsenal', caps: 30 },
@@ -37,13 +37,12 @@ export default {
       { name: 'Theo Hernández', club: 'Al-Hilal', caps: 30 },
       { name: 'Jules Koundé', club: 'Barcelona', caps: 35 },
       { name: 'Malo Gusto', club: 'Chelsea', caps: 10 },
-      { name: 'Pierre Kalulu', club: 'Juventus', caps: 5 },
+      { name: 'Maxence Lacroix', club: 'Crystal Palace', caps: 4 },
       { name: 'Lucas Digne', club: 'Aston Villa', caps: 55 },
     ],
     midfielders: [
       { name: 'Aurélien Tchouaméni', club: 'Real Madrid', caps: 50 },
-      { name: "N'Golo Kanté", club: 'Al-Ittihad', caps: 60 },
-      { name: 'Eduardo Camavinga', club: 'Real Madrid', caps: 30 },
+      { name: 'N\'Golo Kanté', club: 'Fenerbahçe', caps: 60 },
       { name: 'Adrien Rabiot', club: 'AC Milan', caps: 55 },
       { name: 'Warren Zaïre-Emery', club: 'PSG', caps: 15 },
       { name: 'Manu Koné', club: 'Roma', caps: 15 },
@@ -53,11 +52,11 @@ export default {
       { name: 'Ousmane Dembélé', club: 'PSG', caps: 55 },
       { name: 'Michael Olise', club: 'Bayern Munich', caps: 15 },
       { name: 'Marcus Thuram', club: 'Inter', caps: 25 },
-      { name: 'Randal Kolo Muani', club: 'Tottenham', caps: 25 },
+      { name: 'Bradley Barcola', club: 'PSG', caps: 12 },
       { name: 'Rayan Cherki', club: 'Manchester City', caps: 8 },
       { name: 'Maghnes Akliouche', club: 'Monaco', caps: 5 },
       { name: 'Désiré Doué', club: 'PSG', caps: 8 },
-      { name: 'Hugo Ekitiké', club: 'Liverpool', caps: 5 },
+      { name: 'Jean-Philippe Mateta', club: 'Crystal Palace', caps: 6 },
     ],
   },
   funFacts: [
