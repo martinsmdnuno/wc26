@@ -32,9 +32,16 @@ service cloud.firestore {
               || isAdmin());
       }
 
-      // Special bets (one doc per user, all tournament-wide picks)
+      // Special bets (one doc per user, all tournament-wide picks).
+      // Anti-cheat: you can only read OTHER players' picks once the deadline has
+      // passed (opening match kickoff, 2026-06-11 16:00 UTC = 1781193600000 ms).
+      // Your own picks, the admin and the pool creator can always read.
       match /specialBets/{uid} {
-        allow read: if request.auth != null;
+        allow read: if request.auth != null
+          && (request.auth.uid == uid
+              || request.time.toMillis() >= 1781193600000
+              || isAdmin()
+              || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy);
         // Owner creates/edits their own picks.
         allow create: if request.auth != null
           && request.auth.uid == uid

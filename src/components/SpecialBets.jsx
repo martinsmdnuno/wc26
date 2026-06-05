@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import Autocomplete from './Autocomplete';
+import SpecialStats from './SpecialStats';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useSpecialBets } from '../hooks/useSpecialBets';
+import { useSpecialStats } from '../hooks/useSpecialStats';
 import { SPECIAL_CATEGORIES, SPECIAL_POINTS, isSpecialLocked } from '../data/specialBets';
 import { optionsFor, lookupOption } from '../data/playerIndex';
 
@@ -10,8 +12,10 @@ export default function SpecialBets() {
   const { picks, results, loading, savePick } = useSpecialBets();
   const [savingId, setSavingId] = useState(null);
   const [savedId, setSavedId] = useState(null);
+  const [view, setView] = useState('mine'); // 'mine' | 'group'
 
   const locked = isSpecialLocked();
+  const { members, loading: statsLoading } = useSpecialStats(view === 'group');
 
   const handleChange = async (categoryId, optionId) => {
     setSavingId(categoryId);
@@ -38,6 +42,33 @@ export default function SpecialBets() {
         {locked ? `🔒 ${t('specialLocked')}` : `⏳ ${t('specialDeadlineNote')}`}
       </p>
 
+      <div className="special__subnav">
+        <button
+          className={`special__subnav-chip ${view === 'mine' ? 'special__subnav-chip--active' : ''}`}
+          onClick={() => setView('mine')}
+        >
+          🎯 {t('specialMyPicks')}
+        </button>
+        <button
+          className={`special__subnav-chip ${view === 'group' ? 'special__subnav-chip--active' : ''}`}
+          onClick={() => setView('group')}
+        >
+          📊 {t('specialGroup')}
+        </button>
+      </div>
+
+      {view === 'group' ? (
+        !locked ? (
+          <div className="special__group-locked">
+            <span className="special__group-locked-icon">🔒</span>
+            <p>{t('specialGroupLocked')}</p>
+          </div>
+        ) : statsLoading ? (
+          <div className="bets__loading">{t('loading')}</div>
+        ) : (
+          <SpecialStats members={members} results={results} myPicks={picks} />
+        )
+      ) : (
       <div className="special__list">
         {SPECIAL_CATEGORIES.map((cat) => {
           const options = optionsFor(cat.kind);
@@ -98,6 +129,7 @@ export default function SpecialBets() {
           );
         })}
       </div>
+      )}
     </div>
   );
 }
