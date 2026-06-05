@@ -1288,6 +1288,7 @@
 
 .bets__view-toggle {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   padding: 12px 16px 0;
 }
@@ -2889,4 +2890,257 @@
   .admin__cards {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* ===== Special bets (tournament-wide) ===== */
+.special {
+  padding: 12px 16px 24px;
+}
+
+.special__intro {
+  font-size: 14px;
+  color: var(--dark);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.special__deadline {
+  font-size: 12px;
+  color: var(--green-dark);
+  background: rgba(0, 99, 65, 0.08);
+  padding: 6px 10px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 14px;
+}
+
+.special__deadline--locked {
+  color: #9a3412;
+  background: rgba(154, 52, 18, 0.08);
+}
+
+.special__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.special-card {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.special-card--hit {
+  border-color: var(--green-mid);
+  background: rgba(0, 166, 81, 0.05);
+}
+
+.special-card--miss {
+  border-color: rgba(154, 52, 18, 0.25);
+}
+
+.special-card__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.special-card__icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.special-card__titles {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.special-card__label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.special-card__desc {
+  font-size: 12px;
+  color: var(--gray);
+  line-height: 1.35;
+}
+
+.special-card__points {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  background: rgba(201, 168, 76, 0.12);
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.special-card__pick {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.special-card__status {
+  font-size: 14px;
+  color: var(--gray);
+}
+
+.special-card__status--ok {
+  color: var(--green-mid);
+  font-weight: 700;
+}
+
+.special-card__resolved {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.special-card__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.special-card__row-key {
+  color: var(--gray);
+}
+
+.special-card__row-val {
+  font-weight: 600;
+  color: var(--dark);
+  text-align: right;
+}
+
+.special-card__row-val--correct {
+  color: var(--green-dark);
+}
+
+.special-card__verdict {
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.special-card__verdict--hit { color: var(--green-mid); }
+.special-card__verdict--miss { color: #9a3412; }
+
+/* ===== Autocomplete ===== */
+.autocomplete {
+  position: relative;
+  flex: 1;
+}
+
+.autocomplete__input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: var(--off-white);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--dark);
+}
+
+.autocomplete__input:focus {
+  outline: none;
+  border-color: var(--green-mid);
+  background: var(--white);
+}
+
+.autocomplete__selected {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: var(--white);
+  text-align: left;
+  cursor: pointer;
+}
+
+.autocomplete__selected:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+
+.autocomplete__selected--empty {
+  color: var(--gray);
+  background: var(--off-white);
+  justify-content: flex-start;
+}
+
+.autocomplete__selected-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.autocomplete__selected-sub {
+  font-size: 12px;
+  color: var(--gray);
+  flex: 1;
+}
+
+.autocomplete__clear {
+  font-size: 12px;
+  color: var(--gray);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.autocomplete__clear:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--dark);
+}
+
+.autocomplete__list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  list-style: none;
+  background: var(--white);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.autocomplete__option {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.autocomplete__option--active {
+  background: rgba(0, 166, 81, 0.1);
+}
+
+.autocomplete__option-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.autocomplete__option-sub {
+  font-size: 12px;
+  color: var(--gray);
 }

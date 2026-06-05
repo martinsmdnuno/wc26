@@ -32,6 +32,24 @@ service cloud.firestore {
               || isAdmin());
       }
 
+      // Special bets (one doc per user, all tournament-wide picks)
+      match /specialBets/{uid} {
+        allow read: if request.auth != null;
+        // Owner creates/edits their own picks.
+        allow create: if request.auth != null
+          && request.auth.uid == uid
+          && request.auth.uid == request.resource.data.userId;
+        // Owner edits picks; admin / pool creator write awarded points on resolve.
+        allow update: if request.auth != null
+          && (request.auth.uid == uid
+              || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy
+              || isAdmin());
+        allow delete: if request.auth != null
+          && (request.auth.uid == uid
+              || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy
+              || isAdmin());
+      }
+
       // Leaderboard
       match /leaderboard/{uid} {
         allow read: if request.auth != null;
@@ -50,6 +68,12 @@ service cloud.firestore {
 
     // Match results: admin writes, all read
     match /matchResults/{matchId} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin();
+    }
+
+    // Special-bet correct answers (tournament-wide): admin writes, all read
+    match /specialResults/{docId} {
       allow read: if request.auth != null;
       allow write: if isAdmin();
     }

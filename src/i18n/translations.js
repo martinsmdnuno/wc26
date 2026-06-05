@@ -140,6 +140,25 @@ export const translations = {
     you: 'tu',
     leaderboardEmpty: 'Ainda não há apostas no teu grupo.',
 
+    // Special bets (tournament-wide)
+    specialTab: 'Especiais',
+    specialIntro: 'Palpites para todo o torneio — 10 pontos por cada acerto.',
+    specialDeadlineNote: 'Podes alterar até ao apito inicial (11 jun).',
+    specialLocked: 'Apostas fechadas — começou o torneio.',
+    specialPickPlayer: 'Escreve o nome do jogador...',
+    specialPickTeam: 'Escolhe a seleção...',
+    specialNoPick: 'Sem palpite',
+    specialYourPick: 'O teu palpite',
+    specialCorrect: 'Resposta certa',
+    'special.topScorer.label': 'Melhor Marcador',
+    'special.topScorer.desc': 'Quem termina como melhor goleador (Bota de Ouro).',
+    'special.mvp.label': 'MVP do Torneio',
+    'special.mvp.desc': 'O melhor jogador do Mundial (Bola de Ouro).',
+    'special.youngPlayer.label': 'Melhor Jovem',
+    'special.youngPlayer.desc': 'O melhor jogador jovem do torneio.',
+    'special.surpriseTeam.label': 'Seleção Surpresa',
+    'special.surpriseTeam.desc': 'A seleção que vai mais longe do que se esperava.',
+
     // Auth
     authSubtitle: 'Entra para guardar as tuas apostas em todos os dispositivos.',
     authGoogle: 'Entrar com Google',
@@ -418,6 +437,25 @@ export const translations = {
     player: 'Player',
     you: 'you',
     leaderboardEmpty: 'No bets in your group yet.',
+
+    // Special bets (tournament-wide)
+    specialTab: 'Specials',
+    specialIntro: 'Tournament-long predictions — 10 points for each correct call.',
+    specialDeadlineNote: 'You can change these until kick-off (11 Jun).',
+    specialLocked: 'Picks locked — the tournament has started.',
+    specialPickPlayer: 'Type a player name...',
+    specialPickTeam: 'Pick a team...',
+    specialNoPick: 'No pick',
+    specialYourPick: 'Your pick',
+    specialCorrect: 'Correct answer',
+    'special.topScorer.label': 'Top Scorer',
+    'special.topScorer.desc': 'Who finishes as top goalscorer (Golden Boot).',
+    'special.mvp.label': 'Tournament MVP',
+    'special.mvp.desc': 'The best player of the World Cup (Golden Ball).',
+    'special.youngPlayer.label': 'Best Young Player',
+    'special.youngPlayer.desc': 'The best young player of the tournament.',
+    'special.surpriseTeam.label': 'Surprise Team',
+    'special.surpriseTeam.desc': 'The team that goes further than expected.',
 
     // Auth
     authSubtitle: 'Sign in to keep your bets across all your devices.',

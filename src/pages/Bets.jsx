@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import schedule from '../data/schedule.json';
 import PhaseFilter from '../components/PhaseFilter';
 import BetCard from '../components/BetCard';
+import SpecialBets from '../components/SpecialBets';
 import Leaderboard from '../components/Leaderboard';
 import PoolManager from '../components/PoolManager';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -74,6 +75,12 @@ export default function Bets({ onTeamClick }) {
           🎯 {t('betTab')}
         </button>
         <button
+          className={`teams__view-chip ${view === 'special' ? 'teams__view-chip--active' : ''}`}
+          onClick={() => setView('special')}
+        >
+          🃏 {t('specialTab')}
+        </button>
+        <button
           className={`teams__view-chip ${view === 'ranking' ? 'teams__view-chip--active' : ''}`}
           onClick={() => setView('ranking')}
         >
@@ -83,6 +90,8 @@ export default function Bets({ onTeamClick }) {
 
       {view === 'ranking' ? (
         <Leaderboard />
+      ) : view === 'special' ? (
+        <SpecialBets />
       ) : (
         <>
           <PhaseFilter
