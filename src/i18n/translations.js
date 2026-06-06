@@ -174,6 +174,15 @@ export const translations = {
     matchBetsEmpty: 'Ninguém apostou neste jogo.',
     matchBetsTopScore: 'Placar mais previsto',
     matchBetsAvgGoals: 'Média de golos',
+    summaryTab: 'Resumo',
+    summaryEmpty: 'Ainda não há jogos terminados nesta fase.',
+    summaryOneMatch: 'jogo terminado',
+    summaryManyMatches: 'jogos terminados',
+    summaryTopPhase: 'Top da fase',
+    summaryExactHits: 'Acertos exatos',
+    summaryNoExact: 'Ainda ninguém acertou um placar exato nesta fase.',
+    summaryTrickiest: 'Jogo mais difícil',
+    summaryGotOutcome: 'acertaram o resultado',
 
     // Auth
     authSubtitle: 'Entra para guardar as tuas apostas em todos os dispositivos.',
@@ -488,6 +497,15 @@ export const translations = {
     matchBetsEmpty: 'No one bet on this match.',
     matchBetsTopScore: 'Most predicted score',
     matchBetsAvgGoals: 'Average goals',
+    summaryTab: 'Recap',
+    summaryEmpty: 'No finished matches in this phase yet.',
+    summaryOneMatch: 'finished match',
+    summaryManyMatches: 'finished matches',
+    summaryTopPhase: 'Phase leaders',
+    summaryExactHits: 'Exact-score hits',
+    summaryNoExact: 'No one has nailed an exact score in this phase yet.',
+    summaryTrickiest: 'Trickiest match',
+    summaryGotOutcome: 'got the outcome',
 
     // Auth
     authSubtitle: 'Sign in to keep your bets across all your devices.',

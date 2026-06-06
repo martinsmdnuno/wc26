@@ -3500,3 +3500,119 @@
 .match-bets__pts--scored {
   color: var(--green-dark);
 }
+
+/* ===== Phase summary (post-match recap) ===== */
+.phase-summary {
+  padding-bottom: 8px;
+}
+
+.phase-summary__empty {
+  text-align: center;
+  padding: 40px 24px;
+  color: var(--gray);
+}
+
+.phase-summary__empty-icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.phase-summary__count {
+  font-size: 13px;
+  color: var(--gray);
+  padding: 0 16px;
+  margin-bottom: 12px;
+}
+
+.phase-summary__body {
+  padding: 0 16px;
+}
+
+.phase-summary__card {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.phase-summary__card-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.phase-summary__rank {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+  font-size: 14px;
+}
+
+.phase-summary__rank--me {
+  font-weight: 700;
+}
+
+.phase-summary__rank-pos {
+  width: 24px;
+  text-align: center;
+}
+
+.phase-summary__rank-name {
+  flex: 1;
+}
+
+.phase-summary__rank-exacts {
+  font-size: 12px;
+  color: var(--gray);
+}
+
+.phase-summary__rank-pts {
+  font-weight: 700;
+  color: var(--green-dark);
+  font-size: 13px;
+}
+
+.phase-summary__hit {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 5px 0;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.phase-summary__hit:last-child {
+  border-bottom: none;
+}
+
+.phase-summary__hit-name {
+  font-weight: 700;
+  color: var(--green-dark);
+  white-space: nowrap;
+}
+
+.phase-summary__hit-match {
+  color: var(--gray);
+  text-align: right;
+}
+
+.phase-summary__none {
+  font-size: 13px;
+  color: var(--gray);
+}
+
+.phase-summary__trickiest {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.phase-summary__trickiest-sub {
+  font-size: 12px;
+  color: var(--gray);
+  margin-top: 2px;
+}

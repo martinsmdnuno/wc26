@@ -3,6 +3,7 @@ import schedule from '../data/schedule.json';
 import PhaseFilter from '../components/PhaseFilter';
 import BetCard from '../components/BetCard';
 import SpecialBets from '../components/SpecialBets';
+import PhaseSummary from '../components/PhaseSummary';
 import Leaderboard from '../components/Leaderboard';
 import PoolManager from '../components/PoolManager';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -81,6 +82,12 @@ export default function Bets({ onTeamClick }) {
           🃏 {t('specialTab')}
         </button>
         <button
+          className={`teams__view-chip ${view === 'summary' ? 'teams__view-chip--active' : ''}`}
+          onClick={() => setView('summary')}
+        >
+          📋 {t('summaryTab')}
+        </button>
+        <button
           className={`teams__view-chip ${view === 'ranking' ? 'teams__view-chip--active' : ''}`}
           onClick={() => setView('ranking')}
         >
@@ -92,6 +99,8 @@ export default function Bets({ onTeamClick }) {
         <Leaderboard />
       ) : view === 'special' ? (
         <SpecialBets />
+      ) : view === 'summary' ? (
+        <PhaseSummary />
       ) : (
         <>
           <PhaseFilter
