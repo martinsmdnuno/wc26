@@ -183,6 +183,9 @@ export const translations = {
     summaryNoExact: 'Ainda ninguém acertou um placar exato nesta fase.',
     summaryTrickiest: 'Jogo mais difícil',
     summaryGotOutcome: 'acertaram o resultado',
+    notifEnable: 'Ativar notificações',
+    notifEnabled: 'Notificações ativas ✓',
+    notifBlocked: 'Notificações bloqueadas',
 
     // Auth
     authSubtitle: 'Entra para guardar as tuas apostas em todos os dispositivos.',
@@ -506,6 +509,9 @@ export const translations = {
     summaryNoExact: 'No one has nailed an exact score in this phase yet.',
     summaryTrickiest: 'Trickiest match',
     summaryGotOutcome: 'got the outcome',
+    notifEnable: 'Enable notifications',
+    notifEnabled: 'Notifications on ✓',
+    notifBlocked: 'Notifications blocked',
 
     // Auth
     authSubtitle: 'Sign in to keep your bets across all your devices.',

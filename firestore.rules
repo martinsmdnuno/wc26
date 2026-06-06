@@ -100,6 +100,12 @@ service cloud.firestore {
       allow create, update: if request.auth != null;
     }
 
+    // Notification dedup log: written only by the server (Admin SDK bypasses
+    // rules); clients have no business reading or writing it.
+    match /notificationLog/{docId} {
+      allow read, write: if false;
+    }
+
     // Legacy groups (read-only for migration)
     match /groups/{groupCode} {
       allow read: if request.auth != null;
