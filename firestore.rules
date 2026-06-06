@@ -43,8 +43,15 @@ service cloud.firestore {
                   : request.time.toMillis() >= 1781193600000)
               || isAdmin()
               || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy);
-        allow create, update: if request.auth != null
+        // Owner places/edits their own prediction.
+        allow create: if request.auth != null
           && request.auth.uid == request.resource.data.userId;
+        // Owner edits their prediction; admin / pool creator write pointsAwarded
+        // when a result is scored.
+        allow update: if request.auth != null
+          && (request.auth.uid == request.resource.data.userId
+              || isAdmin()
+              || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy);
         allow delete: if request.auth != null
           && (request.auth.uid == resource.data.userId
               || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy
