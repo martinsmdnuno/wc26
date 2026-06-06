@@ -151,20 +151,29 @@ export function useMyBetsMap() {
       return;
     }
     let cancelled = false;
+    setLoading(true);
     (async () => {
-      const q = query(
-        collection(db, 'pools', activePoolId, 'bets'),
-        where('userId', '==', user.uid)
-      );
-      const snap = await getDocs(q);
-      if (cancelled) return;
-      const map = {};
-      snap.docs.forEach((d) => {
-        const data = d.data();
-        map[data.matchId] = data;
-      });
-      setBetsMap(map);
-      setLoading(false);
+      try {
+        const q = query(
+          collection(db, 'pools', activePoolId, 'bets'),
+          where('userId', '==', user.uid)
+        );
+        const snap = await getDocs(q);
+        if (cancelled) return;
+        const map = {};
+        snap.docs.forEach((d) => {
+          const data = d.data();
+          map[data.matchId] = data;
+        });
+        setBetsMap(map);
+      } catch (err) {
+        if (!cancelled) {
+          logError('BETS_LOAD_FAILED', 'Falha ao carregar apostas do utilizador', { e: String(err) });
+          setBetsMap({});
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
     })();
     return () => { cancelled = true; };
   }, [user, activePoolId]);

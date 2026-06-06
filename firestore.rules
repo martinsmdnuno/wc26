@@ -36,18 +36,21 @@ service cloud.firestore {
       // match has kicked off. Each bet carries `lockAt` (kickoff, epoch ms); for
       // legacy bets without it, fall back to the opening match (1781193600000).
       match /bets/{betId} {
-        // The bet docId is `<uid>_<matchId>`, so the owner is identified from
-        // the id itself — this works even when the doc doesn't exist yet (the
-        // create flow reads its own bet first). Only dereference resource.data
-        // (the time-gate) when the document actually exists.
+        // Two owner checks are both needed:
+        //  - `resource.data.userId == uid` lets the "my bets" list query
+        //    (where userId == uid) validate against the rules.
+        //  - `betId.split('_')[0] == uid` (docId is `<uid>_<matchId>`) covers a
+        //    get of a not-yet-existing own bet (the create flow reads first).
+        // The time-gate (resource.data) is only touched when the doc exists.
         allow read: if request.auth != null
           && (betId.split('_')[0] == request.auth.uid
               || isAdmin()
               || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy
               || (resource != null
-                  && ('lockAt' in resource.data
-                      ? request.time.toMillis() >= resource.data.lockAt
-                      : request.time.toMillis() >= 1781193600000)));
+                  && (resource.data.userId == request.auth.uid
+                      || ('lockAt' in resource.data
+                          ? request.time.toMillis() >= resource.data.lockAt
+                          : request.time.toMillis() >= 1781193600000))));
         // Owner places/edits their own prediction.
         allow create: if request.auth != null
           && request.auth.uid == request.resource.data.userId;
