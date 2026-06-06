@@ -3616,3 +3616,110 @@
   color: var(--gray);
   margin-top: 2px;
 }
+
+/* ===== Pitch / likely XI ===== */
+.pitch {
+  --kit-1: #006341;
+  --kit-2: #00A651;
+}
+
+.pitch__formation {
+  display: inline-block;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  font-size: 14px;
+  color: #fff;
+  background: var(--kit-1);
+  padding: 3px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.pitch__field {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  aspect-ratio: 5 / 7;
+  border-radius: 12px;
+  overflow: hidden;
+  /* Solid fallback first; the striped gradient (uses color-mix) layers on top
+     where supported and is ignored on older browsers. */
+  background-color: var(--kit-1);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, var(--kit-2) 88%, #000 12%) 0,
+      color-mix(in srgb, var(--kit-2) 88%, #000 12%) 12.5%,
+      color-mix(in srgb, var(--kit-1) 86%, #000 14%) 12.5%,
+      color-mix(in srgb, var(--kit-1) 86%, #000 14%) 25%
+    );
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.pitch__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pitch__lines rect,
+.pitch__lines line,
+.pitch__lines circle {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 0.5;
+}
+
+.pitch__lines .pitch__spot {
+  fill: rgba(255, 255, 255, 0.5);
+  stroke: none;
+}
+
+.pitch__player {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 60px;
+  text-align: center;
+  pointer-events: auto;
+}
+
+.pitch__dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--kit-1);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+  border: 1.5px solid var(--kit-1);
+}
+
+.pitch__name {
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  white-space: nowrap;
+}
+
+.pitch__note {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--gray);
+  font-style: italic;
+  border-left: 3px solid var(--gold);
+  padding-left: 10px;
+}

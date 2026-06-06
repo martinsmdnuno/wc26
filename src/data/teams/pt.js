@@ -51,6 +51,20 @@ export default {
       { name: 'João Félix', club: 'Al-Nassr', caps: 40 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    // GK, defence (L→R), midfield (L→R), attack (L→R)
+    xi: [
+      'Diogo Costa',
+      'Nuno Mendes', 'Rúben Dias', 'Gonçalo Inácio', 'Diogo Dalot',
+      'João Neves', 'Vitinha', 'Bruno Fernandes',
+      'Rafael Leão', 'Cristiano Ronaldo', 'Bernardo Silva',
+    ],
+    tacticalNote: {
+      pt: 'Bloco posicional de Roberto Martínez: Vitinha recua para construir e Bruno Fernandes liga o meio ao ataque. Largura dada por Leão e por Nuno Mendes a subir pela esquerda; Ronaldo fixa a defesa como referência.',
+      en: 'Roberto Martínez\'s positional game: Vitinha drops to build and Bruno Fernandes links midfield to attack. Width from Leão and the overlapping Nuno Mendes on the left; Ronaldo pins the defence as the focal point.',
+    },
+  },
   funFacts: [
     { emoji: '⚽', text: { pt: 'Eusébio marcou 9 golos no Mundial 1966 — ainda é o recorde português em Mundiais.', en: 'Eusébio scored 9 goals at the 1966 World Cup — still Portugal\'s all-time World Cup record.' } },
     { emoji: '🔥', text: { pt: 'Portugal goleou a Coreia do Norte 5-3 em 1966, estando a perder 3-0.', en: 'Portugal beat North Korea 5-3 in 1966 after being 3-0 down.' } },

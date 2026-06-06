@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import schedule from '../data/schedule.json';
+import PitchLineup from '../components/PitchLineup';
 import { useLanguage } from '../i18n/LanguageContext';
 
 const teamModules = import.meta.glob('../data/teams/*.js', { eager: true });
@@ -145,6 +146,14 @@ export default function TeamProfile({ iso, onBack, onTeamClick }) {
               <span key={title} className="team-profile__title-badge">{title}</span>
             ))}
           </div>
+        </section>
+      )}
+
+      {/* Likely starting XI + tactics */}
+      {data.lineup && (
+        <section className="team-profile__section">
+          <h3 className="team-profile__section-title">📋 {t('teamLineup')}</h3>
+          <PitchLineup lineup={data.lineup} squad={data.probableSquad} colors={data.colors} />
         </section>
       )}
 
