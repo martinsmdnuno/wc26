@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  collection, getDocs, doc, getDoc, setDoc, serverTimestamp,
+  collection, getDocs, doc, getDoc, setDoc, updateDoc, increment, serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../../firebase';
 import Autocomplete from '../../components/Autocomplete';
@@ -78,11 +78,22 @@ export default function SpecialBetsAdmin() {
             const lbRef = doc(db, 'pools', poolId, 'leaderboard', bet.userId);
             const lbSnap = await getDoc(lbRef);
             if (lbSnap.exists()) {
-              const cur = lbSnap.data();
+              await updateDoc(lbRef, {
+                totalPoints: increment(delta),
+                specialPoints: increment(delta),
+              });
+            } else {
+              let nickname = '';
+              try {
+                const us = await getDoc(doc(db, 'users', bet.userId));
+                if (us.exists()) nickname = us.data().nickname || '';
+              } catch { /* nickname is best-effort */ }
               await setDoc(lbRef, {
-                ...cur,
-                totalPoints: (cur.totalPoints || 0) + delta,
-                specialPoints: (cur.specialPoints || 0) + delta,
+                nickname,
+                totalPoints: Math.max(0, delta),
+                exactResultsCount: 0,
+                correctOutcomeCount: 0,
+                specialPoints: Math.max(0, delta),
               });
             }
           }

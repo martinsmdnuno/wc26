@@ -9,12 +9,10 @@ import {
   query,
   where,
   serverTimestamp,
-  writeBatch,
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from './useAuth';
 import { usePools } from './usePools';
-import { calculatePoints } from '../utils/scoring';
 import { matchLockAt } from '../data/matchLock';
 import { logError } from '../utils/logError';
 
@@ -67,76 +65,7 @@ export function useBets() {
     [user, activePoolId]
   );
 
-  const getMyBets = useCallback(async () => {
-    if (!user || !activePoolId) return [];
-    const q = query(
-      collection(db, 'pools', activePoolId, 'bets'),
-      where('userId', '==', user.uid)
-    );
-    const snap = await getDocs(q);
-    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-  }, [user, activePoolId]);
-
-  const getMatchBets = useCallback(
-    async (matchId) => {
-      if (!activePoolId) return [];
-      const q = query(
-        collection(db, 'pools', activePoolId, 'bets'),
-        where('matchId', '==', matchId)
-      );
-      const snap = await getDocs(q);
-      return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    },
-    [activePoolId]
-  );
-
-  const scoreMatch = useCallback(
-    async (matchId, actualScoreA, actualScoreB) => {
-      if (!activePoolId) return;
-      const bets = await getMatchBets(matchId);
-      const batch = writeBatch(db);
-      const leaderboardUpdates = {};
-
-      for (const bet of bets) {
-        const result = calculatePoints(
-          bet.predictedScoreA,
-          bet.predictedScoreB,
-          actualScoreA,
-          actualScoreB
-        );
-        if (!result) continue;
-
-        const betRef = doc(db, 'pools', activePoolId, 'bets', bet.id);
-        batch.update(betRef, { pointsAwarded: result.points });
-
-        if (!leaderboardUpdates[bet.userId]) {
-          leaderboardUpdates[bet.userId] = { points: 0, exact: 0, outcome: 0 };
-        }
-        leaderboardUpdates[bet.userId].points += result.points;
-        if (result.type === 'exact') leaderboardUpdates[bet.userId].exact += 1;
-        if (result.type === 'outcome') leaderboardUpdates[bet.userId].outcome += 1;
-      }
-
-      await batch.commit();
-
-      for (const [uid, delta] of Object.entries(leaderboardUpdates)) {
-        const lbRef = doc(db, 'pools', activePoolId, 'leaderboard', uid);
-        const lbSnap = await getDoc(lbRef);
-        if (lbSnap.exists()) {
-          const current = lbSnap.data();
-          await setDoc(lbRef, {
-            ...current,
-            totalPoints: (current.totalPoints || 0) + delta.points,
-            exactResultsCount: (current.exactResultsCount || 0) + delta.exact,
-            correctOutcomeCount: (current.correctOutcomeCount || 0) + delta.outcome,
-          });
-        }
-      }
-    },
-    [activePoolId, getMatchBets]
-  );
-
-  return { saveBet, getMyBets, getMatchBets, scoreMatch };
+  return { saveBet };
 }
 
 export function useMyBetsMap() {
