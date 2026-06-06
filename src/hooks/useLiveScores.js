@@ -66,13 +66,18 @@ export function useCachedScores() {
     if (!activePoolId) return;
     let cancelled = false;
     (async () => {
-      const snap = await getDocs(collection(db, 'pools', activePoolId, 'matches'));
-      if (cancelled) return;
-      const map = {};
-      snap.docs.forEach((d) => {
-        map[d.id] = d.data();
-      });
-      setScores(map);
+      try {
+        const snap = await getDocs(collection(db, 'pools', activePoolId, 'matches'));
+        if (cancelled) return;
+        const map = {};
+        snap.docs.forEach((d) => {
+          map[d.id] = d.data();
+        });
+        setScores(map);
+      } catch {
+        // No cached scores yet / read not permitted — fall back to none.
+        if (!cancelled) setScores({});
+      }
     })();
     return () => { cancelled = true; };
   }, [activePoolId]);
