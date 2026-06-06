@@ -1,5 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { isMatchLocked } from '../data/matchLock';
+import MatchBets from './MatchBets';
 
 function getFlagUrl(iso) {
   return `https://flagcdn.com/w80/${iso}.png`;
@@ -9,6 +11,8 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
   const { t } = useLanguage();
   const hasTeams = !!match.home_iso;
   const isKnockout = !hasTeams;
+  const [showBets, setShowBets] = useState(false);
+  const revealAvailable = hasTeams && isMatchLocked(match.id);
 
   const homeName = hasTeams ? t(`team.${match.home_iso}`) : match.home;
   const awayName = hasTeams ? t(`team.${match.away_iso}`) : match.away;
@@ -137,6 +141,27 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
             <span className={`bet-card__points bet-card__points--${bet.pointsAwarded}`}>
               +{bet.pointsAwarded} {t('pts')}
             </span>
+          )}
+        </div>
+      )}
+
+      {revealAvailable && (
+        <div className="bet-card__group">
+          <button
+            className="bet-card__group-toggle"
+            onClick={() => setShowBets((s) => !s)}
+          >
+            {showBets ? '▾' : '▸'} 📊 {t('matchBetsToggle')}
+          </button>
+          {showBets && (
+            <MatchBets
+              matchId={match.id}
+              homeName={homeName}
+              awayName={awayName}
+              finished={isFinished}
+              actualA={matchScore?.scoreHome}
+              actualB={matchScore?.scoreAway}
+            />
           )}
         </div>
       )}

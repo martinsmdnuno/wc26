@@ -170,6 +170,10 @@ export const translations = {
     specialBadgeMajority: 'Maioria',
     specialBadgeUnique: 'Único',
     specialBadgeMinority: 'Contra-corrente',
+    matchBetsToggle: 'Palpites do grupo',
+    matchBetsEmpty: 'Ninguém apostou neste jogo.',
+    matchBetsTopScore: 'Placar mais previsto',
+    matchBetsAvgGoals: 'Média de golos',
 
     // Auth
     authSubtitle: 'Entra para guardar as tuas apostas em todos os dispositivos.',
@@ -480,6 +484,10 @@ export const translations = {
     specialBadgeMajority: 'Majority',
     specialBadgeUnique: 'Only you',
     specialBadgeMinority: 'Against the grain',
+    matchBetsToggle: 'Group predictions',
+    matchBetsEmpty: 'No one bet on this match.',
+    matchBetsTopScore: 'Most predicted score',
+    matchBetsAvgGoals: 'Average goals',
 
     // Auth
     authSubtitle: 'Sign in to keep your bets across all your devices.',

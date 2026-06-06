@@ -15,6 +15,7 @@ import { db } from '../firebase';
 import { useAuth } from './useAuth';
 import { usePools } from './usePools';
 import { calculatePoints } from '../utils/scoring';
+import { matchLockAt } from '../data/matchLock';
 import { logError } from '../utils/logError';
 
 export function useBets() {
@@ -39,6 +40,9 @@ export function useBets() {
         matchId,
         predictedScoreA,
         predictedScoreB,
+        // Kickoff time (epoch ms). The rules use this to reveal this bet to
+        // other players only once the match has started (anti-copy).
+        lockAt: matchLockAt(matchId),
         updatedAt: serverTimestamp(),
       };
 
