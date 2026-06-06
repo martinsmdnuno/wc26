@@ -1,8 +1,8 @@
 # FIFA World Cup 2026
 
-Mobile-first web app for the FIFA World Cup 2026 (USA, Canada & Mexico). Browse the full tournament schedule, follow your favourite teams, run a betting pool with friends, and track live scores.
+Mobile-first web app for the FIFA World Cup 2026 (USA, Canada & Mexico). Browse the full tournament schedule, follow your favourite teams, run a betting pool with friends — including tournament-wide "special" bets and group stats — and track live scores.
 
-**[Open the app →](https://martinsmdnuno.github.io/wc26/)** &nbsp;·&nbsp; **[View the landing page →](https://martinsmdnuno.github.io/wc26/landing.html)**
+**[Open the app →](https://wc26.martinsnuno.com/)** &nbsp;·&nbsp; **[View the landing page →](https://wc26.martinsnuno.com/landing.html)**
 
 <p align="center">
   <img src="designs/calend_rio_main_screen/screen.png" alt="Schedule" width="22%" />
@@ -14,11 +14,15 @@ Mobile-first web app for the FIFA World Cup 2026 (USA, Canada & Mexico). Browse 
 ## Features
 
 - **Schedule** — All 104 matches across 7 phases, with venues and kick-off times (BST)
-- **Teams** — 48 qualified teams browsable A-Z, by group, or by confederation
-- **Favourites** — Star teams to filter their matches in "My Matches"
+- **Teams** — 48 qualified teams browsable A-Z, by group, or by confederation, each with an **official 2026 squad** (announced call-ups)
+- **Favourites** — Star teams to filter their matches in "My Matches"; **synced to your account** across devices
 - **Calendar export** — Add single or bulk matches to your device calendar (ICS)
 - **Betting pool** — Predict match scores and compete with friends in a private group
-- **Leaderboard** — Live ranking with points (5 exact / 3 outcome / 1 partial / 0 miss)
+- **Special bets** — Tournament-wide predictions worth 10 pts each: top scorer, MVP, best young player and surprise team, with a name/team **autocomplete**
+- **Group stats & reveals** — After kick-off (matches) or the deadline (specials), see everyone's picks: pick distribution, consensus/contrarian badges, who-picked-what, per-match prediction breakdowns and a phase-by-phase recap
+- **Anti-cheat** — Other players' picks stay unreadable until the relevant deadline — enforced server-side in Firestore rules (no peeking via dev tools)
+- **Push notifications** — Optional, free web push: a match opening its predictions, a posted result, the specials deadline, and a heads-up about tomorrow's games
+- **Leaderboard** — Live ranking with points (5 exact / 3 outcome / 1 partial / 0 miss, plus 10 per special)
 - **Live scores** — Automatic results via football-data.org API
 - **Bilingual** — Full Portuguese (PT) and English (EN) support
 
@@ -29,10 +33,12 @@ Mobile-first web app for the FIFA World Cup 2026 (USA, Canada & Mexico). Browse 
 | Framework | React 19 |
 | Build | Vite 8 |
 | Styling | Vanilla CSS with custom properties |
-| Auth | Firebase Anonymous Auth |
-| Database | Cloud Firestore |
+| Auth | Firebase Auth (anonymous + Google / email linking) |
+| Database | Cloud Firestore (security rules enforce anti-cheat reveals) |
+| Push | Firebase Cloud Messaging + service worker |
 | Live scores | football-data.org API |
-| Deploy | GitHub Pages (GitHub Actions) |
+| Deploy | GitHub Pages + Firestore rules, via GitHub Actions |
+| Notifications sender | GitHub Actions cron + Firebase Admin SDK (no Cloud Functions) |
 
 ## Getting started
 
@@ -61,49 +67,60 @@ npm run dev
 | `VITE_FIREBASE_STORAGE_BUCKET` | Firebase storage bucket |
 | `VITE_FIREBASE_MESSAGING_SENDER_ID` | Firebase messaging sender ID |
 | `VITE_FIREBASE_APP_ID` | Firebase app ID |
+| `VITE_FIREBASE_VAPID_KEY` | Web Push certificate public key (for notifications) |
 | `VITE_FOOTBALL_DATA_API_KEY` | football-data.org API key (free tier) |
+| `VITE_ADMIN_UID` | UID granted access to the admin panel |
+| `VITE_SENTRY_DSN` | Sentry DSN (optional, error reporting) |
+
+> **CI secrets:** the GitHub Actions workflows also need `FIREBASE_SERVICE_ACCOUNT` (a Firebase Admin SDK service-account JSON, with roles *Service Usage Consumer* + *Firebase Rules Admin*) to auto-deploy Firestore rules and send notifications.
 
 ## Project structure
 
 ```
 src/
-├── components/        # Reusable UI components
-│   ├── BetCard.jsx        # Match card with score prediction inputs
-│   ├── BottomNav.jsx      # Tab navigation bar
-│   ├── HamburgerMenu.jsx  # Slide-out menu (profile, invite, rules)
-│   ├── LanguageSwitcher.jsx
-│   ├── Leaderboard.jsx    # Group ranking table
-│   ├── MatchCard.jsx      # Match display card (schedule view)
-│   ├── NicknameModal.jsx  # First-use onboarding modal
-│   ├── PhaseFilter.jsx    # Phase selection chips
-│   └── TeamCard.jsx       # Team card with favourite toggle
+├── components/
+│   ├── Autocomplete.jsx     # Keyboard-friendly player/team autocomplete
+│   ├── BetCard.jsx          # Match prediction card + group reveal
+│   ├── BottomNav.jsx        # Tab navigation bar
+│   ├── HamburgerMenu.jsx    # Slide-out menu (profile, invite, notifications)
+│   ├── Leaderboard.jsx      # Pool ranking table
+│   ├── MatchBets.jsx        # Per-match group prediction stats
+│   ├── PhaseFilter.jsx      # Phase selection chips
+│   ├── PhaseSummary.jsx     # Post-match recap per phase
+│   ├── SpecialBets.jsx      # Tournament-wide bets + "group" subtab
+│   ├── SpecialStats.jsx     # Special-bet distribution / ranking
+│   └── … (PoolManager, PoolSelector, TeamCard, AuthScreen, …)
 ├── data/
-│   ├── schedule.json      # All 104 matches with venues
-│   └── confederations.js  # Team-to-confederation mapping
+│   ├── schedule.json        # All 104 matches with venues
+│   ├── teams/*.js           # 48 official squads + editorial data
+│   ├── specialBets.js       # Special categories, points, deadline
+│   ├── playerIndex.js       # Flat player/team index for autocomplete
+│   ├── matchLock.js         # Per-match kickoff (reveal) timestamps
+│   └── confederations.js    # Team-to-confederation mapping
 ├── hooks/
-│   ├── useAuth.jsx        # Firebase anonymous auth + profile
-│   ├── useBets.js         # Bet CRUD + scoring
-│   ├── useFavorites.js    # localStorage favourites
-│   └── useLiveScores.js   # football-data.org polling
-├── i18n/
-│   ├── LanguageContext.jsx
-│   └── translations.js   # PT-PT & EN-GB translations
+│   ├── useAuth.jsx          # Auth (anon + Google/email) + profile
+│   ├── useBets.js           # Match bet CRUD + scoring
+│   ├── useFavorites.js      # Favourites synced to the user doc
+│   ├── useLiveScores.js     # football-data.org polling
+│   ├── useSpecialBets.js    # Special picks + correct answers
+│   ├── useSpecialStats.js   # Group special-bet stats (post-deadline)
+│   ├── useMatchStats.js     # Per-match group predictions (post-kickoff)
+│   ├── usePhaseSummary.js   # Finished-match aggregation per phase
+│   ├── useNotifications.js  # FCM permission + token registration
+│   └── usePools.jsx         # Pool create/join/manage
+├── i18n/                    # PT-PT & EN-GB translations
 ├── pages/
-│   ├── Bets.jsx           # Betting pool (predict + ranking)
-│   ├── Missing.jsx        # Teams that didn't qualify
-│   ├── MyMatches.jsx      # Filtered schedule for favourite teams
-│   ├── Rules.jsx          # Pool scoring rules
-│   ├── Schedule.jsx       # Full tournament schedule
-│   └── Teams.jsx          # Team directory
-├── utils/
-│   ├── calendar.js        # ICS file generation
-│   ├── footballApi.js     # football-data.org wrapper
-│   └── scoring.js         # Points calculation (5/3/1/0)
-├── firebase.js            # Firebase config & init
-├── App.jsx
-├── App.css
-├── index.css
-└── main.jsx
+│   ├── Bets.jsx             # Pool: predict / specials / recap / ranking
+│   ├── TeamProfile.jsx      # Team profile + official squad
+│   ├── admin/               # Admin: scores, special results, pools, users…
+│   └── … (Schedule, Teams, MyMatches, Rules, Missing)
+├── utils/                   # calendar (ICS), footballApi, scoring, logError
+└── firebase.js              # Firebase config, Firestore, Messaging
+
+public/firebase-messaging-sw.js   # FCM background service worker
+scripts/send-notifications.mjs    # Notification sender (GitHub Actions cron)
+.github/workflows/                # deploy (Pages + rules), notifications, health
+firestore.rules                   # Security rules (incl. time-gated reveals)
 ```
 
 ## Scoring rules
@@ -114,6 +131,7 @@ src/
 | **3** | Correct outcome | Predicted 1-0, result 2-1 (home win) |
 | **1** | One team's goals correct | Predicted 2-1, result 2-3 |
 | **0** | Nothing correct | Predicted 0-0, result 2-1 |
+| **+10** | Each correct **special** bet | Top scorer / MVP / young player / surprise team |
 
 Tiebreak: total points > exact results > correct outcomes.
 
