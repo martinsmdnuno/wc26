@@ -3,6 +3,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import { usePools } from './usePools';
 import schedule from '../data/schedule.json';
+import { getNicknames } from '../data/nicknames';
 import { logError } from '../utils/logError';
 
 // Aggregates every finished match in a phase with all members' predictions and
@@ -28,16 +29,14 @@ export function usePhaseSummary(phaseId, enabled) {
           return;
         }
 
-        const [resultsSnap, lbSnap] = await Promise.all([
+        const [resultsSnap, names] = await Promise.all([
           getDocs(collection(db, 'matchResults')),
-          getDocs(collection(db, 'pools', activePoolId, 'leaderboard')),
+          getNicknames(activePoolId),
         ]);
         if (cancelled) return;
 
         const results = {};
         resultsSnap.docs.forEach((d) => { results[d.id] = d.data(); });
-        const names = {};
-        lbSnap.docs.forEach((d) => { names[d.id] = d.data().nickname || ''; });
 
         const finished = phase.matches.filter((m) => {
           const r = results[String(m.id)];

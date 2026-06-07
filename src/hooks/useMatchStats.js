@@ -3,6 +3,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import { usePools } from './usePools';
 import { isMatchLocked } from '../data/matchLock';
+import { getNicknames } from '../data/nicknames';
 import { logError } from '../utils/logError';
 
 // Loads every member's prediction (+ nicknames) for one match. Only runs once
@@ -22,13 +23,11 @@ export function useMatchStats(matchId, enabled) {
     (async () => {
       setLoading(true);
       try {
-        const [betsSnap, lbSnap] = await Promise.all([
+        const [betsSnap, names] = await Promise.all([
           getDocs(query(collection(db, 'pools', activePoolId, 'bets'), where('matchId', '==', matchId))),
-          getDocs(collection(db, 'pools', activePoolId, 'leaderboard')),
+          getNicknames(activePoolId),
         ]);
         if (cancelled) return;
-        const names = {};
-        lbSnap.docs.forEach((d) => { names[d.id] = d.data().nickname || ''; });
         const list = betsSnap.docs
           .map((d) => {
             const data = d.data();

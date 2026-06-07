@@ -3,6 +3,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { usePools } from './usePools';
 import { isSpecialLocked } from '../data/specialBets';
+import { getNicknames } from '../data/nicknames';
 import { logError } from '../utils/logError';
 
 // Loads every member's special picks (+ nicknames) for the active pool.
@@ -22,13 +23,11 @@ export function useSpecialStats(enabled) {
     (async () => {
       setLoading(true);
       try {
-        const [betsSnap, lbSnap] = await Promise.all([
+        const [betsSnap, names] = await Promise.all([
           getDocs(collection(db, 'pools', activePoolId, 'specialBets')),
-          getDocs(collection(db, 'pools', activePoolId, 'leaderboard')),
+          getNicknames(activePoolId),
         ]);
         if (cancelled) return;
-        const names = {};
-        lbSnap.docs.forEach((d) => { names[d.id] = d.data().nickname || ''; });
         const list = betsSnap.docs.map((d) => {
           const data = d.data();
           return {

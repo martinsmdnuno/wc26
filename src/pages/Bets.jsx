@@ -1,16 +1,19 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import schedule from '../data/schedule.json';
 import PhaseFilter from '../components/PhaseFilter';
 import BetCard from '../components/BetCard';
-import SpecialBets from '../components/SpecialBets';
-import BracketPredictor from '../components/BracketPredictor';
-import PhaseSummary from '../components/PhaseSummary';
-import Leaderboard from '../components/Leaderboard';
 import PoolManager from '../components/PoolManager';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useBets, useMyBetsMap } from '../hooks/useBets';
 import { usePools } from '../hooks/usePools';
 import { useCachedScores } from '../hooks/useLiveScores';
+
+// Lazy sub-views: Especiais/Bracket pull in the player index; defer them so the
+// default "Apostar" (match betting) tab stays in the light initial chunk.
+const SpecialBets = lazy(() => import('../components/SpecialBets'));
+const BracketPredictor = lazy(() => import('../components/BracketPredictor'));
+const PhaseSummary = lazy(() => import('../components/PhaseSummary'));
+const Leaderboard = lazy(() => import('../components/Leaderboard'));
 
 export default function Bets({ onTeamClick }) {
   const [activePhase, setActivePhase] = useState('group');
@@ -102,6 +105,7 @@ export default function Bets({ onTeamClick }) {
         </button>
       </div>
 
+      <Suspense fallback={<div className="bets__loading">{t('loading')}</div>}>
       {view === 'ranking' ? (
         <Leaderboard />
       ) : view === 'special' ? (
@@ -150,6 +154,7 @@ export default function Bets({ onTeamClick }) {
           )}
         </>
       )}
+      </Suspense>
     </div>
   );
 }
