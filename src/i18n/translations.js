@@ -41,10 +41,10 @@ export const translations = {
 
     // Phase names
     'phase.group': 'Fase de Grupos',
-    'phase.r32': 'Oitavos de Final',
-    'phase.r16': 'Quartos de Final',
-    'phase.qf': 'Meias-Finais',
-    'phase.sf': 'Semi-Finais',
+    'phase.r32': '16-avos de Final',
+    'phase.r16': 'Oitavos de Final',
+    'phase.qf': 'Quartos de Final',
+    'phase.sf': 'Meias-Finais',
     'phase.3rd': '3.º Lugar',
     'phase.final': 'Final',
 

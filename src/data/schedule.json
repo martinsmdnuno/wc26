@@ -82,7 +82,7 @@
     },
     {
       "id": "r32",
-      "name": "Oitavos de Final",
+      "name": "16-avos de Final",
       "matches": [
         { "id": 73, "date": "2026-06-28", "day": "Sun", "kickoff_bst": "21:00", "home": "2A", "away": "2B", "label": "Jogo 73", "venue": "SoFi Stadium", "city": "Los Angeles", "country": "USA" },
         { "id": 74, "date": "2026-06-29", "day": "Mon", "kickoff_bst": "18:00", "home": "1C", "away": "2F/B/C/D/F", "label": "Jogo 74", "venue": "Gillette Stadium", "city": "Boston", "country": "USA" },
@@ -104,7 +104,7 @@
     },
     {
       "id": "r16",
-      "name": "Quartos de Final",
+      "name": "Oitavos de Final",
       "matches": [
         { "id": 89, "date": "2026-07-04", "day": "Sat", "kickoff_bst": "21:00", "home": "W73", "away": "W76", "label": "Jogo 89", "venue": "Lincoln Financial Field", "city": "Philadelphia", "country": "USA" },
         { "id": 90, "date": "2026-07-04", "day": "Sat", "kickoff_bst": "23:00", "home": "W75", "away": "W78", "label": "Jogo 90", "venue": "NRG Stadium", "city": "Houston", "country": "USA" },
@@ -118,7 +118,7 @@
     },
     {
       "id": "qf",
-      "name": "Meias-Finais",
+      "name": "Quartos de Final",
       "matches": [
         { "id": 97, "date": "2026-07-09", "day": "Thu", "kickoff_bst": "21:00", "home": "W89", "away": "W90", "label": "Jogo 97", "venue": "Gillette Stadium", "city": "Boston", "country": "USA" },
         { "id": 98, "date": "2026-07-10", "day": "Fri", "kickoff_bst": "21:00", "home": "W93", "away": "W94", "label": "Jogo 98", "venue": "SoFi Stadium", "city": "Los Angeles", "country": "USA" },
@@ -128,7 +128,7 @@
     },
     {
       "id": "sf",
-      "name": "Semi-Finais",
+      "name": "Meias-Finais",
       "matches": [
         { "id": 101, "date": "2026-07-14", "day": "Tue", "kickoff_bst": "21:00", "home": "W97", "away": "W98", "label": "Semi-Final 1", "venue": "AT&T Stadium", "city": "Dallas", "country": "USA" },
         { "id": 102, "date": "2026-07-15", "day": "Wed", "kickoff_bst": "21:00", "home": "W99", "away": "W100", "label": "Semi-Final 2", "venue": "Mercedes-Benz Stadium", "city": "Atlanta", "country": "USA" }

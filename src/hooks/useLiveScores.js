@@ -26,7 +26,7 @@ export function useLiveScores() {
         updates[m.id] = { status, score, apiMatchId: m.id };
         if (status === 'live') anyLive = true;
 
-        if (status === 'finished' && score && activePoolId) {
+        if (status === 'finished' && score && score.home != null && score.away != null && activePoolId) {
           await setDoc(
             doc(db, 'pools', activePoolId, 'matches', String(m.id)),
             { status, scoreHome: score.home, scoreAway: score.away },
