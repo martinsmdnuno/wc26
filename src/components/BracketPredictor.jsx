@@ -1,10 +1,9 @@
-import { useState, useMemo } from 'react';
-import Autocomplete from './Autocomplete';
+import { useMemo, useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useBracket } from '../hooks/useBracket';
 import { isSpecialLocked } from '../data/specialBets';
 import {
-  BRACKET, BRACKET_PHASES, PHASE_POINTS,
+  BRACKET, PHASE_POINTS,
   matchTeams, candidatesFor, predictedAdvancers, scoreBracket, normalizePrediction,
 } from '../data/bracket';
 
@@ -17,7 +16,7 @@ function flag(iso) {
 export default function BracketPredictor() {
   const { t } = useLanguage();
   const { pred, results, loading, save } = useBracket();
-  const [round, setRound] = useState('r32');
+  const [picking, setPicking] = useState(null); // { matchId, key, source }
 
   const locked = isSpecialLocked();
   const resolved = !!results?.resolved;
@@ -28,28 +27,25 @@ export default function BracketPredictor() {
     () => (resolved ? scoreBracket(pred, results.advancers) : null),
     [pred, results, resolved]
   );
-
-  const phase = BRACKET.find((p) => p.id === round);
+  // Teams already placed in the R32 — excluded from other pickers.
+  const usedIsos = useMemo(() => Object.values(pred.slots || {}).filter(Boolean), [pred.slots]);
 
   const assignSlot = (matchId, key, iso) => {
     if (locked) return;
-    const next = normalizePrediction({
+    save(normalizePrediction({
       slots: { ...pred.slots, [`${matchId}${key}`]: iso || undefined },
       picks: pred.picks,
-    });
-    save(next);
+    }));
   };
 
   const pickWinner = (matchId, iso) => {
     if (locked || !iso) return;
-    const next = normalizePrediction({
+    save(normalizePrediction({
       slots: pred.slots,
       picks: { ...pred.picks, [matchId]: iso },
-    });
-    save(next);
+    }));
   };
 
-  // Did a winner pick actually advance? (phase-based, matches the scoring.)
   const isCorrect = (phaseId, iso) => {
     if (!resolved || !iso) return false;
     const feed = PHASE_FEEDS[phaseId];
@@ -89,76 +85,112 @@ export default function BracketPredictor() {
         <div className="bracket__score">{t('bracketYourScore')}: <strong>{score.points} {t('pts')}</strong></div>
       )}
 
-      <div className="bracket__rounds">
-        {BRACKET_PHASES.map((pid) => (
-          <button
-            key={pid}
-            className={`bracket__round-chip ${round === pid ? 'bracket__round-chip--active' : ''}`}
-            onClick={() => setRound(pid)}
-          >
-            {t(`bracket.round.${pid}`)}
-          </button>
-        ))}
-      </div>
-
-      <div className="bracket__matches">
-        {phase.matches.map((m) => {
-          const { home, away } = matchTeams(m, pred);
-          const winner = pred.picks?.[m.id];
-
-          const renderSide = (iso, source, key) => {
-            // R32 empty group slot → picker.
-            if (!iso && source?.type === 'group' && !locked) {
-              return (
-                <Autocomplete
-                  options={candidatesFor(source)}
-                  value={null}
-                  onChange={(opt) => assignSlot(m.id, key, opt)}
-                  placeholder={t('bracketPickTeam')}
-                  emptyText="—"
-                />
-              );
-            }
-            if (!iso) {
-              const wait = source?.type === 'winner' ? `${t('bracketWinnerOf')} ${source.match}` : '—';
-              return <span className="bracket__slot-empty">{wait}</span>;
-            }
-            const isWinner = winner === iso;
-            const correct = isCorrect(m.phase, iso);
-            return (
-              <div className="bracket__team-row">
-                <button
-                  className={`bracket__team ${isWinner ? 'bracket__team--win' : ''} ${resolved && isWinner ? (correct ? 'bracket__team--ok' : 'bracket__team--bad') : ''}`}
-                  disabled={locked || !home || !away}
-                  onClick={() => pickWinner(m.id, iso)}
-                >
-                  <img src={flag(iso)} alt="" className="bracket__flag" />
-                  <span className="bracket__team-name">{teamName(iso)}</span>
-                  {isWinner && <span className="bracket__check">→</span>}
-                </button>
-                {source?.type === 'group' && !locked && iso && (
-                  <button
-                    type="button"
-                    className="bracket__clear"
-                    aria-label="Limpar equipa"
-                    onClick={() => assignSlot(m.id, key, null)}
-                  >✕</button>
-                )}
-              </div>
-            );
-          };
-
-          return (
-            <div key={m.id} className="bracket__match">
-              {renderSide(home, m.home, 'H')}
-              <span className="bracket__vs">{t('vs')}</span>
-              {renderSide(away, m.away, 'A')}
-            </div>
-          );
-        })}
-      </div>
-
       {!locked && <p className="bracket__hint">{t('bracketHint')}</p>}
+
+      <div className="bkt-board">
+        {BRACKET.map((phase) => (
+          <div key={phase.id} className="bkt-col">
+            <div className="bkt-col-head">{t(`bracket.round.${phase.id}`)}</div>
+            <div className="bkt-col-body">
+              {phase.matches.map((m) => {
+                const { home, away } = matchTeams(m, pred);
+                const winner = pred.picks?.[m.id];
+                const bothKnown = !!home && !!away;
+
+                const renderSlot = (iso, source, key) => {
+                  if (!iso) {
+                    if (source?.type === 'group' && !locked) {
+                      return (
+                        <button
+                          type="button"
+                          className="bkt-slot bkt-slot--add"
+                          onClick={() => setPicking({ matchId: m.id, key, source })}
+                        >
+                          ＋ <span>{t('bracketPickTeam')}</span>
+                        </button>
+                      );
+                    }
+                    return <div className="bkt-slot bkt-slot--empty">—</div>;
+                  }
+                  const isWinner = winner === iso;
+                  const correct = isCorrect(m.phase, iso);
+                  const stateCls = resolved && isWinner
+                    ? (correct ? 'bkt-slot--ok' : 'bkt-slot--bad')
+                    : (isWinner ? 'bkt-slot--win' : (winner ? 'bkt-slot--out' : ''));
+                  return (
+                    <div className={`bkt-slot ${stateCls}`}>
+                      <button
+                        type="button"
+                        className="bkt-slot-btn"
+                        disabled={locked || !bothKnown}
+                        onClick={() => pickWinner(m.id, iso)}
+                      >
+                        <img src={flag(iso)} alt="" className="bkt-flag" />
+                        <span className="bkt-name">{teamName(iso)}</span>
+                        {isWinner && <span className="bkt-adv">→</span>}
+                      </button>
+                      {source?.type === 'group' && !locked && (
+                        <button
+                          type="button"
+                          className="bkt-clear"
+                          aria-label="Limpar equipa"
+                          onClick={() => assignSlot(m.id, key, null)}
+                        >✕</button>
+                      )}
+                    </div>
+                  );
+                };
+
+                return (
+                  <div key={m.id} className="bkt-match">
+                    {renderSlot(home, m.home, 'H')}
+                    {renderSlot(away, m.away, 'A')}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+
+        <div className="bkt-col bkt-col--champ">
+          <div className="bkt-col-head">🏆</div>
+          <div className="bkt-col-body">
+            <div className={`bkt-champ ${champion ? '' : 'bkt-champ--empty'}`}>
+              {champion ? (
+                <>
+                  <img src={flag(champion)} alt="" className="bkt-flag" />
+                  <span className="bkt-name">{teamName(champion)}</span>
+                </>
+              ) : '—'}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {picking && (
+        <div className="bkt-modal" onClick={() => setPicking(null)}>
+          <div className="bkt-modal-sheet" onClick={(e) => e.stopPropagation()}>
+            <div className="bkt-modal-head">
+              <span>{t('bracketPickTeam')}</span>
+              <button type="button" aria-label="Fechar" onClick={() => setPicking(null)}>✕</button>
+            </div>
+            <div className="bkt-modal-list">
+              {candidatesFor(picking.source, usedIsos).map((opt) => (
+                <button
+                  key={opt.id}
+                  type="button"
+                  className="bkt-modal-item"
+                  onClick={() => { assignSlot(picking.matchId, picking.key, opt.id); setPicking(null); }}
+                >
+                  <img src={flag(opt.id)} alt="" className="bkt-flag" />
+                  <span className="bkt-modal-name">{teamName(opt.id)}</span>
+                  <span className="bkt-modal-group">{opt.sublabel}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

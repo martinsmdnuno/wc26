@@ -3928,3 +3928,207 @@
   padding: 3px 8px; border-radius: 999px;
 }
 .admin__bracket-chip button { color: var(--green-dark); font-size: 11px; }
+
+/* ===== Bracket — classic horizontal board ===== */
+.bkt-board {
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
+  gap: 0;
+  padding: 4px 0 14px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bkt-col {
+  flex: 0 0 auto;
+  width: 176px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 6px;
+}
+
+.bkt-col--champ { width: 150px; }
+
+.bkt-col-head {
+  text-align: center;
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--gray);
+  text-transform: uppercase;
+  padding: 0 0 8px;
+}
+
+.bkt-col-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 8px;
+}
+
+.bkt-match {
+  background: var(--white);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.bkt-slot {
+  display: flex;
+  align-items: center;
+  min-height: 36px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.bkt-match .bkt-slot:last-child { border-bottom: none; }
+
+.bkt-slot-btn {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  text-align: left;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.bkt-slot-btn:disabled { cursor: default; }
+
+.bkt-flag {
+  width: 18px;
+  height: 13px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex: 0 0 auto;
+}
+
+.bkt-name {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bkt-adv { margin-left: auto; color: var(--green-dark); font-weight: 800; }
+
+.bkt-slot--win { background: rgba(0, 166, 81, 0.12); }
+.bkt-slot--win .bkt-name { color: var(--green-dark); }
+.bkt-slot--out { opacity: 0.45; }
+.bkt-slot--ok { background: rgba(0, 166, 81, 0.2); }
+.bkt-slot--bad { background: rgba(154, 52, 18, 0.12); }
+
+.bkt-slot--empty {
+  padding: 8px;
+  color: var(--gray);
+  font-size: 12px;
+  font-style: italic;
+}
+
+.bkt-slot--add {
+  width: 100%;
+  padding: 8px;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green-dark);
+  text-align: left;
+  background: rgba(0, 166, 81, 0.05);
+}
+
+.bkt-clear {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  color: var(--gray);
+  font-size: 11px;
+}
+
+.bkt-champ {
+  background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+  color: #fff;
+  border-radius: 10px;
+  padding: 12px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.bkt-champ--empty {
+  background: var(--off-white);
+  color: var(--gray);
+  justify-content: center;
+}
+
+.bkt-champ .bkt-name { white-space: normal; }
+
+/* Bracket team picker (modal) */
+.bkt-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.bkt-modal-sheet {
+  width: 100%;
+  max-width: 430px;
+  max-height: 72vh;
+  background: var(--white);
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.bkt-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.bkt-modal-head button { font-size: 16px; color: var(--gray); padding: 4px 8px; }
+
+.bkt-modal-list {
+  overflow-y: auto;
+  padding: 6px;
+}
+
+.bkt-modal-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.bkt-modal-item:active { background: var(--off-white); }
+.bkt-modal-name { flex: 1; }
+
+.bkt-modal-group {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray);
+  background: var(--off-white);
+  padding: 2px 8px;
+  border-radius: 999px;
+}

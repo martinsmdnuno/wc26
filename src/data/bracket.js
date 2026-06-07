@@ -45,13 +45,16 @@ const matchIdsByPhase = Object.fromEntries(
 export const FINAL_MATCH_ID = matchIdsByPhase.final[0];
 
 // Candidate team options for a group-based slot (used by the R32 pickers).
-export function candidatesFor(source) {
+// `exclude` removes teams already assigned to OTHER slots so the same team
+// can't be placed in two places.
+export function candidatesFor(source, exclude = []) {
   if (!source || source.type !== 'group') return [];
+  const ex = new Set(exclude);
   const seen = new Set();
   const out = [];
   for (const g of source.groups) {
     for (const t of GROUP_TEAMS[g] || []) {
-      if (!seen.has(t.id)) {
+      if (!seen.has(t.id) && !ex.has(t.id)) {
         seen.add(t.id);
         out.push({ id: t.id, label: t.label, sublabel: `${g}`, group: g });
       }
