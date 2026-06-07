@@ -107,6 +107,27 @@ service cloud.firestore {
         allow write: if request.auth != null
           && request.auth.uid in get(/databases/$(database)/documents/pools/$(poolId)).data.members;
       }
+
+      // Bracket predictions (one doc per user). Like specialBets, other
+      // players' brackets are unreadable until the deadline (opening kickoff).
+      match /brackets/{uid} {
+        allow read: if request.auth != null
+          && (request.auth.uid == uid
+              || request.time.toMillis() >= 1781193600000
+              || isAdmin()
+              || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy);
+        allow create: if request.auth != null
+          && request.auth.uid == uid
+          && request.auth.uid == request.resource.data.userId;
+        allow update: if request.auth != null
+          && (request.auth.uid == uid
+              || isAdmin()
+              || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy);
+        allow delete: if request.auth != null
+          && (request.auth.uid == uid
+              || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy
+              || isAdmin());
+      }
     }
 
     // Admin logs: only admin can read/write
@@ -123,6 +144,12 @@ service cloud.firestore {
 
     // Special-bet correct answers (tournament-wide): admin writes, all read
     match /specialResults/{docId} {
+      allow read: if request.auth != null;
+      allow write: if isAdmin();
+    }
+
+    // Bracket actual advancers (tournament-wide): admin writes, all read
+    match /bracketResults/{docId} {
       allow read: if request.auth != null;
       allow write: if isAdmin();
     }

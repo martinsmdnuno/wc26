@@ -4,6 +4,7 @@ import PoolsAdmin from './admin/PoolsAdmin';
 import UsersAdmin from './admin/UsersAdmin';
 import ScoresAdmin from './admin/ScoresAdmin';
 import SpecialBetsAdmin from './admin/SpecialBetsAdmin';
+import BracketAdmin from './admin/BracketAdmin';
 import ErrorLogs from './admin/ErrorLogs';
 
 const SECTIONS = [
@@ -12,6 +13,7 @@ const SECTIONS = [
   { id: 'users', label: 'Utilizadores', icon: '👥' },
   { id: 'scores', label: 'Resultados', icon: '⚽' },
   { id: 'special', label: 'Especiais', icon: '🃏' },
+  { id: 'bracket', label: 'Bracket', icon: '🏆' },
   { id: 'logs', label: 'Error Logs', icon: '🐛' },
 ];
 
@@ -38,6 +40,7 @@ export default function Admin() {
         {section === 'users' && <UsersAdmin />}
         {section === 'scores' && <ScoresAdmin />}
         {section === 'special' && <SpecialBetsAdmin />}
+        {section === 'bracket' && <BracketAdmin />}
         {section === 'logs' && <ErrorLogs />}
       </div>
     </div>
