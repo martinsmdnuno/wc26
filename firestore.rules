@@ -51,15 +51,23 @@ service cloud.firestore {
                       || ('lockAt' in resource.data
                           ? request.time.toMillis() >= resource.data.lockAt
                           : request.time.toMillis() >= 1781193600000))));
-        // Owner places/edits their own prediction.
+        // Owner places their prediction: only before kickoff, and may not
+        // award themselves points.
         allow create: if request.auth != null
-          && request.auth.uid == request.resource.data.userId;
-        // Owner edits their prediction; admin / pool creator write pointsAwarded
-        // when a result is scored.
+          && request.auth.uid == request.resource.data.userId
+          && request.resource.data.pointsAwarded == null
+          && (request.resource.data.lockAt == null
+              || request.time.toMillis() < request.resource.data.lockAt);
+        // Owner edits their prediction (before kickoff, without touching the
+        // awarded points); admin / pool creator write pointsAwarded on scoring.
         allow update: if request.auth != null
-          && (request.auth.uid == request.resource.data.userId
-              || isAdmin()
-              || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy);
+          && (
+            (request.auth.uid == request.resource.data.userId
+              && request.resource.data.pointsAwarded == resource.data.pointsAwarded
+              && (request.resource.data.lockAt == null
+                  || request.time.toMillis() < request.resource.data.lockAt))
+            || isAdmin()
+            || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy);
         allow delete: if request.auth != null
           && (request.auth.uid == resource.data.userId
               || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy
@@ -76,15 +84,21 @@ service cloud.firestore {
               || request.time.toMillis() >= 1781193600000
               || isAdmin()
               || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy);
-        // Owner creates/edits their own picks.
+        // Owner creates picks before the deadline and can't self-award points.
         allow create: if request.auth != null
           && request.auth.uid == uid
-          && request.auth.uid == request.resource.data.userId;
-        // Owner edits picks; admin / pool creator write awarded points on resolve.
+          && request.auth.uid == request.resource.data.userId
+          && request.resource.data.pointsAwarded == null
+          && request.time.toMillis() < 1781193600000;
+        // Owner edits picks before the deadline (points unchanged); admin / pool
+        // creator write awarded points on resolve.
         allow update: if request.auth != null
-          && (request.auth.uid == uid
-              || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy
-              || isAdmin());
+          && (
+            (request.auth.uid == uid
+              && request.time.toMillis() < 1781193600000
+              && request.resource.data.pointsAwarded == resource.data.pointsAwarded)
+            || isAdmin()
+            || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy);
         allow delete: if request.auth != null
           && (request.auth.uid == uid
               || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy
@@ -116,13 +130,19 @@ service cloud.firestore {
               || request.time.toMillis() >= 1781193600000
               || isAdmin()
               || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy);
+        // Owner builds the bracket before the deadline; no self-awarded points.
         allow create: if request.auth != null
           && request.auth.uid == uid
-          && request.auth.uid == request.resource.data.userId;
+          && request.auth.uid == request.resource.data.userId
+          && request.resource.data.pointsAwarded == null
+          && request.time.toMillis() < 1781193600000;
         allow update: if request.auth != null
-          && (request.auth.uid == uid
-              || isAdmin()
-              || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy);
+          && (
+            (request.auth.uid == uid
+              && request.time.toMillis() < 1781193600000
+              && request.resource.data.pointsAwarded == resource.data.pointsAwarded)
+            || isAdmin()
+            || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy);
         allow delete: if request.auth != null
           && (request.auth.uid == uid
               || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy

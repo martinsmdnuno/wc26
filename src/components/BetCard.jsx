@@ -19,7 +19,9 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
 
   const isFinished = matchScore?.status === 'finished';
   const isLive = matchScore?.status === 'live';
-  const isLocked = isFinished || isLive;
+  // Lock at kickoff too (not just when the live feed reports it), so a lagging
+  // feed can't leave the inputs editable after the match has started.
+  const isLocked = isFinished || isLive || isMatchLocked(match.id);
 
   const [scoreA, setScoreA] = useState(bet?.predictedScoreA ?? '');
   const [scoreB, setScoreB] = useState(bet?.predictedScoreB ?? '');
