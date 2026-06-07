@@ -3871,8 +3871,10 @@
   width: 22px;
   height: 16px;
   object-fit: cover;
-  border-radius: 2px;
+  border-radius: 3px;
   flex: 0 0 auto;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
 }
 
 .bracket__check { color: var(--green-dark); font-weight: 800; }
@@ -4018,6 +4020,8 @@
   object-fit: cover;
   border-radius: 2px;
   flex: 0 0 auto;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
 .bkt-name {
