@@ -51,6 +51,20 @@ export default {
       { name: 'Denis Dargahi', club: 'Standard Liège', caps: 3 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Alireza Beiranvand',
+      'Milad Mohammadi', 'Shoja Khalilzadeh', 'Mohammadhossein Kananizadegan', 'Saleh Hardani',
+      'Saeid Ezatolahi', 'Saman Ghoddos',
+      'Alireza Jahanbakhsh', 'Mehdi Ghayedi', 'Mohammad Mohebi',
+      'Mehdi Taremi',
+    ],
+    tacticalNote: {
+      pt: 'O Irão organiza-se num 4-2-3-1 compacto e reativo, com Ezatolahi e Ghoddos a proteger a defesa e a permitir blocos baixos disciplinados. A transição rápida procura Taremi como ponto de referência, com Jahanbakhsh e os extremos a explorar o espaço nas costas dos laterais adversários.',
+      en: 'Iran set up in a compact, reactive 4-2-3-1, with Ezatolahi and Ghoddos shielding the back line and enabling a disciplined low block. Quick transitions target Taremi as the focal point, while Jahanbakhsh and the wide men exploit space behind the opposition full-backs.',
+    },
+  },
   funFacts: [
     { emoji: '\ud83d\udcaa', text: { pt: 'O Irão é a seleção asiática com mais sucesso na história da qualificação para Mundiais — esta é a sua 7.ª participação, mais do que qualquer outra nação da AFC.', en: 'Iran are the most successful Asian team in World Cup qualifying history \u2014 this is their 7th appearance, more than any other AFC nation.' } },
     { emoji: '\u26bd', text: { pt: 'Mehdi Taremi marcou em três Mundiais diferentes e joga pelo gigante europeu Inter de Milão — é o talismã moderno do Irão.', en: 'Mehdi Taremi has scored at three different World Cups and plays for European giants Inter Milan \u2014 he is Iran\'s modern talisman.' } },

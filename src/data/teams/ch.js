@@ -51,6 +51,19 @@ export default {
       { name: 'Cedric Itten', club: 'Fortuna Düsseldorf', caps: 14 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Gregor Kobel',
+      'Ricardo Rodríguez', 'Manuel Akanji', 'Nico Elvedi', 'Silvan Widmer',
+      'Remo Freuler', 'Granit Xhaka', 'Djibril Sow',
+      'Dan Ndoye', 'Breel Embolo', 'Rubén Vargas',
+    ],
+    tacticalNote: {
+      pt: 'A Suíça de Yakin organiza-se num 4-3-3 compacto, defendendo num bloco disciplinado e confiando na espinha experiente de Akanji e Xhaka para controlar o jogo. Xhaka dita o ritmo na construção, enquanto Ndoye e Vargas dão profundidade e desequilíbrio pelas alas para Embolo finalizar.',
+      en: 'Yakin\'s Switzerland sets up in a compact 4-3-3, defending in a disciplined block and trusting the experienced spine of Akanji and Xhaka to control games. Xhaka dictates the tempo in build-up, while Ndoye and Vargas stretch play and provide width for Embolo to finish.',
+    },
+  },
   funFacts: [
     { emoji: '🎯', text: { pt: 'No Euro 2020, a Suíça eliminou a França campeã do mundo nos oitavos por penáltis (5-4), após igualar 3-3 nos 120 minutos.', en: 'At Euro 2020, Switzerland eliminated reigning world champions France in the Round of 16 on penalties (5-4), after a 3-3 draw over 120 minutes.' } },
     { emoji: '🧠', text: { pt: 'Xhaka é o jogador mais internacional de sempre da Suíça, com mais de 130 jogos, e lidera a equipa desde os 24 anos.', en: 'Xhaka is Switzerland\'s most-capped player of all time with over 130 appearances, and has led the team since the age of 24.' } },

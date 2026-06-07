@@ -55,6 +55,19 @@ export default {
       { name: 'Bazoumana Touré', club: 'Hoffenheim', caps: 2 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Yahia Fofana',
+      'Ghislain Konan', 'Evan Ndicka', 'Odilon Kossounou', 'Wilfried Singo',
+      'Ibrahim Sangaré', 'Franck Kessié', 'Seko Fofana',
+      'Simon Adingra', 'Evann Guessand', 'Amad Diallo',
+    ],
+    tacticalNote: {
+      pt: 'Faé arma um 4-3-3 equilibrado, com Kessié a controlar o meio-campo e Singo a subir pela direita. A ameaça nasce nas transições rápidas e nas diagonais de Adingra e Amad Diallo pelas alas.',
+      en: 'Faé sets up a balanced 4-3-3, with Kessié anchoring midfield and Singo bombing forward on the right. The threat comes from quick transitions and the inside runs of Adingra and Amad Diallo from the flanks.',
+    },
+  },
   funFacts: [
     { emoji: '🐘', text: { pt: '"Les Éléphants" nunca passaram da fase de grupos no Mundial — apesar da geração dourada de Drogba, Yaya Touré e Kolo Touré (2006–2014).', en: '"Les Éléphants" have never advanced past the group stage at the World Cup — despite the golden generation of Drogba, Yaya Touré and Kolo Touré (2006–2014).' } },
     { emoji: '🕊️', text: { pt: 'Didier Drogba ajudou a negociar um cessar-fogo durante a guerra civil marfinense após a qualificação para o Mundial de 2006.', en: 'Didier Drogba helped negotiate a ceasefire during the Ivorian civil war after qualifying for the 2006 World Cup.' } },

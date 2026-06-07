@@ -55,6 +55,19 @@ export default {
       { name: 'Azizbek Amonov', club: 'Dinamo Samarqand', caps: 11 },
     ],
   },
+  lineup: {
+    formation: '3-4-3',
+    xi: [
+      'Utkir Yusupov',
+      'Rustam Ashurmatov', 'Abdukodir Khusanov', 'Abdulla Abdullaev',
+      'Khojiakbar Alijonov', 'Otabek Shukurov', 'Odiljon Hamrobekov', 'Sherzod Nasrullaev',
+      'Abbosbek Fayzullaev', 'Eldor Shomurodov', 'Oston Urunov',
+    ],
+    tacticalNote: {
+      pt: 'Cannavaro monta uma defesa de três compacta com Khusanov a comandar o eixo, fechando os corredores centrais e transitando de forma direta e vertical. Os alas Alijonov e Nasrullaev sobem para dar largura, libertando Fayzullaev e Urunov para alimentar o capitão Shomurodov.',
+      en: 'Cannavaro sets up a compact back three with Khusanov marshalling the centre, packing the central channels and breaking forward directly and vertically. Wing-backs Alijonov and Nasrullaev provide the width, freeing Fayzullaev and Urunov to feed captain Shomurodov.',
+    },
+  },
   funFacts: [
     { emoji: '🐺', text: { pt: 'Conhecidos como os "Lobos Brancos", o Uzbequistão é a primeira nação da Ásia Central e apenas a terceira ex-república soviética (depois da Rússia e Ucrânia) a qualificar-se para o Mundial.', en: 'Known as the "White Wolves," Uzbekistan are the first Central Asian nation and only the third former Soviet republic (after Russia and Ukraine) to qualify for the World Cup.' } },
     { emoji: '🏅', text: { pt: 'Em 1994, apenas dois anos após a independência, o Uzbequistão surpreendeu o mundo do futebol ao conquistar o ouro nos Jogos Asiáticos, batendo a China 4-2 na final.', en: 'In 1994, just two years after independence, Uzbekistan stunned the football world by winning the Asian Games gold medal, beating China 4-2 in the final.' } },

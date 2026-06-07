@@ -70,6 +70,20 @@ export default {
       { name: 'Rayan', club: 'Bournemouth', caps: 2 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Alisson',
+      'Alex Sandro', 'Gabriel Magalhães', 'Marquinhos', 'Wesley',
+      'Bruno Guimarães', 'Casemiro',
+      'Vinícius Júnior', 'Lucas Paquetá', 'Raphinha',
+      'Matheus Cunha',
+    ],
+    tacticalNote: {
+      pt: 'Ancelotti monta um 4-2-3-1 com Casemiro e Bruno Guimarães a darem equilíbrio à frente da defesa, permitindo que Vinícius Júnior e Raphinha ataquem por dentro a partir das alas. Paquetá liga o meio-campo ao ataque e Matheus Cunha fixa os centrais como referência ofensiva.',
+      en: 'Ancelotti sets up in a 4-2-3-1 with Casemiro and Bruno Guimarães providing balance in front of the back four, freeing Vinícius Júnior and Raphinha to drive infield from the flanks. Paquetá links midfield to attack while Matheus Cunha pins the centre-backs as the focal point up top.',
+    },
+  },
   funFacts: [
     { emoji: '🏆', text: { pt: 'Único país pentacampeão mundial — 5 títulos (1958, 1962, 1970, 1994, 2002).', en: 'The only country to win the World Cup five times — 5 titles (1958, 1962, 1970, 1994, 2002).' } },
     { emoji: '🌍', text: { pt: 'Única seleção a disputar todas as edições do Mundial — 23 participações consecutivas desde 1930.', en: 'The only team to have played in every edition of the World Cup — 23 consecutive appearances since 1930.' } },

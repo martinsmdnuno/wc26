@@ -62,6 +62,19 @@ export default {
       { name: 'Alejandro Zendejas', club: 'Club América', caps: 11 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Matt Freese',
+      'Antonee Robinson', 'Tim Ream', 'Mark McKenzie', 'Alex Freeman',
+      'Tyler Adams', 'Weston McKennie', 'Christian Pulisic',
+      'Malik Tillman', 'Tim Weah', 'Folarin Balogun',
+    ],
+    tacticalNote: {
+      pt: 'Pochettino aposta num 4-2-3-1 com Adams e McKennie a equilibrar o meio-campo, libertando Tillman e Pulisic para a criação. Balogun é a referência ofensiva, com Dest e Freeman a dar largura nas alas.',
+      en: 'Pochettino favours a 4-2-3-1 with Adams and McKennie anchoring midfield, freeing Tillman and Pulisic to create. Balogun leads the line, while the full-backs provide attacking width down the flanks.',
+    },
+  },
   funFacts: [
     { emoji: '🏟️', text: { pt: 'Os EUA são co-anfitriões do Mundial 2026 — a final será disputada no MetLife Stadium, em Nova Jérsia, com capacidade para 82.500 espetadores.', en: 'The USA are co-hosts of the 2026 World Cup — the final will be played at MetLife Stadium in New Jersey, with a capacity of 82,500.' } },
     { emoji: '🇺🇸', text: { pt: 'Em 1930, na primeira edição do Mundial, os EUA alcançaram as meias-finais e terminaram em terceiro lugar — o melhor resultado da sua história.', en: 'In 1930, at the first-ever World Cup, the USA reached the semi-finals and finished third — the best result in their history.' } },

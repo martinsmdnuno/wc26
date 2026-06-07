@@ -51,6 +51,19 @@ export default {
       { name: 'Jearl Margaritha', club: 'SK Beveren', caps: 12 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Eloy Room',
+      'Sherel Floranus', 'Armando Obispo', 'Juriën Gaari', 'Shurandy Sambo',
+      'Livano Comenencia', 'Leandro Bacuna', 'Juninho Bacuna',
+      'Jeremy Antonisse', 'Gervane Kastaneer', 'Kenji Gorré',
+    ],
+    tacticalNote: {
+      pt: 'Curaçao organiza-se num 4-3-3 compacto que recua para um bloco 4-4-2 sem bola, apostando na solidez defensiva e em transições rápidas. O capitão Leandro Bacuna controla o meio-campo enquanto os primos Bacuna lançam Kastaneer e os extremos velozes no contra-ataque.',
+      en: 'Curaçao set up in a compact 4-3-3 that drops into a 4-4-2 block out of possession, relying on defensive solidity and quick transitions. Captain Leandro Bacuna anchors midfield while the Bacuna cousins spring Kastaneer and the pacey wingers on the counter.',
+    },
+  },
   funFacts: [
     { emoji: '🏖️', text: { pt: 'Curaçao é uma ilha caribenha com apenas 156 mil habitantes — a menor nação de sempre a qualificar-se para um Mundial da FIFA, superando a Islândia (350 mil em 2018).', en: 'Curaçao is a Caribbean island of just 156,000 people — the smallest nation ever to qualify for a FIFA World Cup, surpassing Iceland (350k in 2018).' } },
     { emoji: '🇳🇱', text: { pt: 'Quase todo o plantel joga na Eredivisie holandesa ou em ligas inferiores dos Países Baixos, graças ao estatuto de Curaçao como país constituinte do Reino dos Países Baixos.', en: 'Nearly the entire squad plays in the Dutch Eredivisie or lower Dutch leagues, thanks to Curaçao\'s status as a constituent country of the Kingdom of the Netherlands.' } },

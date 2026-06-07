@@ -51,6 +51,20 @@ export default {
       { name: 'Lucas Stassin', club: 'Saint-Étienne', caps: 3 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Thibaut Courtois',
+      'Maxim De Cuyper', 'Arthur Theate', 'Zeno Debast', 'Timothy Castagne',
+      'Youri Tielemans', 'Amadou Onana',
+      'Jeremy Doku', 'Kevin De Bruyne', 'Leandro Trossard',
+      'Romelu Lukaku',
+    ],
+    tacticalNote: {
+      pt: 'Rudi Garcia organiza a Bélgica num 4-2-3-1, com Tielemans e Onana como duplo pivô a dar equilíbrio e a libertar Kevin De Bruyne para o papel de 10 criativo. A ameaça vem da velocidade e do drible de Doku pela esquerda, da inteligência de Trossard pela direita e da referência de Lukaku na frente.',
+      en: 'Rudi Garcia sets Belgium up in a 4-2-3-1, with Tielemans and Onana as a double pivot providing balance and freeing Kevin De Bruyne in the creative number 10 role. The threat comes from Doku\'s pace and dribbling on the left, Trossard\'s movement on the right and Lukaku leading the line.',
+    },
+  },
   funFacts: [
     { emoji: '👑', text: { pt: 'A Bélgica liderou o ranking FIFA de 2018 a 2022 — a única seleção a ocupar o 1.º lugar sem vencer um Mundial ou título continental.', en: 'Belgium held the FIFA #1 ranking from 2018 to 2022 — the only team to top the ranking without winning a World Cup or continental title.' } },
     { emoji: '⚽', text: { pt: 'Romelu Lukaku é o melhor marcador de sempre da Bélgica com mais de 89 golos, o segundo entre internacionais europeus ativos, atrás apenas de Cristiano Ronaldo.', en: 'Romelu Lukaku is Belgium\'s all-time top scorer with 89+ goals, second among active European internationals behind only Cristiano Ronaldo.' } },

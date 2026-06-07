@@ -51,6 +51,19 @@ export default {
       { name: 'Odeh Al-Fakhouri', club: 'Pyramids FC', caps: 8 },
     ],
   },
+  lineup: {
+    formation: '5-3-2',
+    xi: [
+      'Yazeed Abu Laila',
+      'Mohammad Abu Al-Nadi', 'Yazan Al Arab', 'Ehsan Haddad', 'Abdallah Nasib', 'Mohammad Abu Hasheesh',
+      'Rajaei Ayed', 'Nizar Al-Rashdan', 'Noor Al-Rawabdeh',
+      'Musa Al-Taamari', 'Ali Olwan',
+    ],
+    tacticalNote: {
+      pt: 'A Jordânia de Jamal Sellami arma-se numa estrutura compacta de cinco defesas, com os alas a recuar para um bloco baixo e a sair em contra-ataques rápidos. Musa Al-Taamari é a faísca criativa pela esquerda, ligando-se a Ali Olwan na finalização.',
+      en: 'Jamal Sellami\'s Jordan sets up in a compact back-five shape, with the wing-backs dropping into a low block and springing rapid counters. Musa Al-Taamari is the creative spark from the left, linking with Ali Olwan to finish chances.',
+    },
+  },
   funFacts: [
     { emoji: '🎉', text: { pt: 'A Jordânia qualificou-se para o Mundial pela primeira vez em 2025 — um momento histórico para a nação de 11 milhões de habitantes.', en: 'Jordan qualified for the World Cup for the first time ever in 2025 — a historic moment for the nation of 11 million.' } },
     { emoji: '🥈', text: { pt: 'A Jordânia chegou à final da Taça Asiática de 2024 no Qatar, perdendo 3-1 contra os anfitriões — o seu melhor resultado continental de sempre.', en: 'Jordan reached the 2024 AFC Asian Cup final in Qatar, losing 3-1 to hosts Qatar — their best-ever continental result.' } },

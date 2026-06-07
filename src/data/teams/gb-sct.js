@@ -51,6 +51,19 @@ export default {
       { name: 'Ross Stewart', club: 'Southampton', caps: 4 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Craig Gordon',
+      'Andy Robertson', 'Scott McKenna', 'Jack Hendry', 'Aaron Hickey',
+      'Lewis Ferguson', 'Ryan Christie', 'Ben Gannon-Doak', 'Scott McTominay', 'John McGinn',
+      'Lyndon Dykes',
+    ],
+    tacticalNote: {
+      pt: 'A Escócia de Steve Clarke organiza-se num 4-2-3-1 compacto, com Ferguson e Christie a protegerem a defesa enquanto McTominay surge como o homem mais avançado, atacando a área. Robertson dá largura e perigo pela esquerda, McGinn e Gannon-Doak ligam o ataque e Dykes fixa os centrais à espera dos cruzamentos.',
+      en: 'Steve Clarke\'s Scotland sets up in a compact 4-2-3-1, with Ferguson and Christie shielding the defence while McTominay pushes highest as the No. 10 attacking the box. Robertson provides width and threat down the left, McGinn and Gannon-Doak link the attack, and Dykes pins the centre-backs as a target for crosses.',
+    },
+  },
   funFacts: [
     { emoji: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', text: { pt: 'A Escócia é uma das seleções mais antigas do mundo — jogou o primeiro jogo internacional da história, um empate 0-0 contra a Inglaterra em 1872.', en: 'Scotland is one of the oldest national teams in the world — they played the first international match in history, a 0-0 draw against England in 1872.' } },
     { emoji: '🎯', text: { pt: 'Kenny McLean marcou do meio-campo nos descontos contra a Dinamarca, lobando Schmeichel para selar a qualificação para o Mundial 2026.', en: 'Kenny McLean scored from the halfway line in stoppage time against Denmark, lobbing Schmeichel to seal qualification for the 2026 World Cup.' } },

@@ -51,6 +51,20 @@ export default {
       { name: 'Ben Waine', club: 'Port Vale', caps: 12 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Max Crocombe',
+      'Liberato Cacace', 'Finn Surman', 'Michael Boxall', 'Tim Payne',
+      'Joe Bell', 'Marko Stamenić',
+      'Eli Just', 'Sarpreet Singh', 'Matt Garbett',
+      'Chris Wood',
+    ],
+    tacticalNote: {
+      pt: 'Bazeley monta um 4-2-3-1 sólido com Bell e Stamenić como duplo pivô a proteger a defesa, libertando Sarpreet Singh como o único 10 criativo. Cacace dá largura pela esquerda e tudo passa pela referência de Chris Wood, que finaliza os cruzamentos e segura a bola para a transição.',
+      en: 'Bazeley sets up a solid 4-2-3-1 with Bell and Stamenić as a double pivot shielding the back four, freeing Sarpreet Singh as the lone creative No. 10. Cacace provides width on the left and everything funnels to target man Chris Wood, who finishes crosses and holds up play to spark transitions.',
+    },
+  },
   funFacts: [
     { emoji: '🤝', text: { pt: 'A Nova Zelândia ficou invicta no Mundial de 2010 — empatou os três jogos da fase de grupos 1-1 contra Eslováquia, Itália e Paraguai.', en: 'New Zealand went unbeaten at the 2010 World Cup — drawing all three group matches 1-1 against Slovakia, Italy, and Paraguay.' } },
     { emoji: '🌿', text: { pt: 'Conhecidos como "All Whites" — uma referência aos seus equipamentos brancos tradicionais e aos famosos All Blacks do rugby neozelandês.', en: 'Known as the "All Whites" — a nod to their traditional white kits and New Zealand\'s famous All Blacks rugby team.' } },

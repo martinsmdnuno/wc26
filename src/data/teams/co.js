@@ -53,6 +53,19 @@ export default {
       { name: 'Jaminton Campaz', club: 'Rosario Central', caps: 8 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Camilo Vargas',
+      'Johan Mojica', 'Jhon Lucumi', 'Davinson Sanchez', 'Daniel Munoz',
+      'James Rodriguez', 'Jefferson Lerma', 'Richard Rios',
+      'Luis Diaz', 'Luis Suarez', 'Jhon Arias',
+    ],
+    tacticalNote: {
+      pt: 'A Colômbia de Lorenzo arma-se num 4-3-3 com Lerma a fazer de âncora e James Rodriguez a orquestrar entre linhas, libertando Richard Rios para conduzir a posse. A ameaça nasce nas alas, com Luis Diaz a esticar a defesa e a isolar-se no um-contra-um, enquanto Luis Suarez finaliza ao centro.',
+      en: 'Lorenzo\'s Colombia line up in a 4-3-3 with Lerma anchoring and James Rodriguez orchestrating between the lines, freeing Richard Rios to carry possession forward. The threat comes from the flanks, with Luis Diaz stretching defenses and isolating defenders one-on-one while Luis Suarez finishes through the middle.',
+    },
+  },
   funFacts: [
     { emoji: '🏆', text: { pt: 'A Colômbia chegou à final da Copa America 2024, perdendo 1-0 para a Argentina em Miami, após uma campanha invicta extraordinária sob Nestor Lorenzo.', en: 'Colombia reached the 2024 Copa America final, losing 1-0 to Argentina in Miami after an extraordinary unbeaten run under Nestor Lorenzo.' } },
     { emoji: '🎯', text: { pt: 'James Rodriguez venceu a Bota de Ouro do Mundial 2014 com 6 golos — o único colombiano a ganhar o prémio — e foi eleito Melhor Jogador da Copa America 2024.', en: 'James Rodriguez won the 2014 World Cup Golden Boot with 6 goals — the only Colombian ever to win the award — and was named Copa America 2024 Best Player.' } },

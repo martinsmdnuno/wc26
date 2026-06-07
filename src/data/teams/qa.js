@@ -54,6 +54,20 @@ export default {
       { name: 'Tahsin Jamshid', club: 'Al-Duhail', caps: 8 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Meshaal Barsham',
+      'Lucas Mendes', 'Pedro Miguel', 'Boualem Khoukhi', 'Sultan Al-Braik',
+      'Assim Madibo', 'Karim Boudiaf',
+      'Edmilson Junior', 'Akram Afif', 'Mohamed Manai',
+      'Almoez Ali',
+    ],
+    tacticalNote: {
+      pt: 'Lopetegui organiza o Qatar num 4-2-3-1 com Madibo e Boudiaf a equilibrar o meio-campo, libertando o capitão Akram Afif para criar como número 10. A construção sai de trás com posse paciente e a ameaça concentra-se nos dribles de Afif e na finalização de Almoez Ali na frente.',
+      en: 'Lopetegui sets Qatar up in a 4-2-3-1 with Madibo and Boudiaf shielding the back four, freeing captain Akram Afif to create from the number 10 role. They build patiently from the back, with the main threat coming through Afif\'s dribbling and Almoez Ali\'s finishing up top.',
+    },
+  },
   funFacts: [
     { emoji: '🏠', text: { pt: 'O Qatar acolheu o Mundial de 2022 — o primeiro no Médio Oriente — mas perdeu os três jogos da fase de grupos, tornando-se o anfitrião com piores resultados.', en: 'Qatar hosted the 2022 World Cup — the first in the Middle East — but lost all three group matches, becoming the worst-performing host nation.' } },
     { emoji: '🏆', text: { pt: 'Bicampeão asiático consecutivo (2019 e 2023) — o primeiro país desde o Japão a defender com sucesso o título da Taça Asiática.', en: 'Back-to-back Asian champions (2019 and 2023) — the first country since Japan to successfully defend the Asian Cup title.' } },

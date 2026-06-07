@@ -51,6 +51,19 @@ export default {
       { name: 'Ernest Nuamah', club: 'Lyon', caps: 12 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Benjamin Asare',
+      'Gideon Mensah', 'Abdul Mumin', 'Jerome Opoku', 'Alidu Seidu',
+      'Elisha Owusu', 'Thomas Partey', 'Kwasi Sibo',
+      'Abdul Fatawu Issahaku', 'Jordan Ayew', 'Antoine Semenyo',
+    ],
+    tacticalNote: {
+      pt: 'O Gana arma-se num 4-3-3 com Thomas Partey a equilibrar o meio-campo e Sibo e Owusu a darem-lhe pernas, libertando os extremos. A ameaça vem da velocidade de Semenyo e Issahaku nas alas e da liderança de Jordan Ayew na frente, com transições rápidas a partir da recuperação alta.',
+      en: 'Ghana set up in a 4-3-3 with Thomas Partey anchoring midfield and Sibo and Owusu providing legs to free the wide men. The threat comes from the pace of Semenyo and Issahaku on the flanks and the leadership of Jordan Ayew up top, springing quick transitions off a high press.',
+    },
+  },
   funFacts: [
     { emoji: '\ud83d\udc94', text: { pt: 'Nos quartos-de-final do Mundial 2010, Luis Su\u00e1rez bloqueou deliberadamente um cabeceamento em cima da linha com as mãos. Asamoah Gyan falhou o penálti resultante — o Gana perdeu no desempate e o sonho africano de uma primeira meia-final morreu.', en: 'In the 2010 WC quarter-final, Luis Su\u00e1rez deliberately blocked a header on the line with his hands. Asamoah Gyan missed the resulting penalty \u2014 Ghana lost the shootout and Africa\'s dream of a first semi-final died.' } },
     { emoji: '\u2b50', text: { pt: 'As Black Stars venceram quatro CAN (1963, 1965, 1978, 1982) e foram a primeira nação a ganhar três, conquistando o direito de ficar permanentemente com o troféu original.', en: 'The Black Stars won four AFCONs (1963, 1965, 1978, 1982) and were the first nation to win three, earning the right to permanently keep the original trophy.' } },

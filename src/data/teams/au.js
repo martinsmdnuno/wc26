@@ -57,6 +57,19 @@ export default {
       { name: 'Tete Yengi', club: 'Machida Zelvia', caps: 0 },
     ],
   },
+  lineup: {
+    formation: '3-4-3',
+    xi: [
+      'Mathew Ryan',
+      'Alessandro Circati', 'Harry Souttar', 'Cameron Burgess',
+      'Jordan Bos', 'Jackson Irvine', 'Aiden O\'Neill', 'Jacob Italiano',
+      'Mathew Leckie', 'Awer Mabil', 'Nestory Irankunda',
+    ],
+    tacticalNote: {
+      pt: 'Popovic mantém o 3-4-3 da qualificação: um bloco de três centrais sólido (Souttar no eixo) que defende baixo e sai em transição rápida, com os alas Bos e Italiano a dar largura e Irvine e O\'Neill a controlar o meio-campo. Irankunda é a ameaça mais perigosa pela direita.',
+      en: 'Popovic keeps the 3-4-3 from qualifying: a sturdy back three (Souttar anchoring) that defends deep and breaks fast on the counter, with wing-backs Bos and Italiano providing width and Irvine and O\'Neill controlling midfield. Irankunda is the most dangerous threat off the right.',
+    },
+  },
   funFacts: [
     { emoji: '🌏', text: { pt: 'A Austrália é a única nação a ter vencido campeonatos em duas confederações — a OFC Nations Cup (4 vezes) e a Taça Asiática (2015).', en: 'Australia is the only nation to have won championships across two confederations — the OFC Nations Cup (4 times) and the AFC Asian Cup (2015).' } },
     { emoji: '⚽', text: { pt: 'Os cinco golos de Tim Cahill em três edições de Mundiais (2006–2014) continuam a ser o recorde australiano. O seu bis contra o Japão em 2006 deu aos Socceroos a sua primeira vitória de sempre num Mundial.', en: 'Tim Cahill\'s five World Cup goals across three editions (2006-2014) remain Australia\'s all-time record. His brace against Japan in 2006 gave the Socceroos their first-ever World Cup win.' } },

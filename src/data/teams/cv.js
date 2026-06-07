@@ -53,6 +53,20 @@ export default {
       { name: 'Hélio Varela', club: 'Maccabi Tel Aviv', caps: 10 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Vozinha',
+      'Steven Moreira', 'Logan Costa', 'Roberto Lopes', 'Wagner Pina',
+      'Jamiro Monteiro', 'Deroy Duarte',
+      'Jovane Cabral', 'Kevin Pina', 'Garry Rodrigues',
+      'Ryan Mendes',
+    ],
+    tacticalNote: {
+      pt: 'Cabo Verde organiza-se num 4-2-3-1 compacto, com Jamiro Monteiro e Deroy Duarte a protegerem a dupla de centrais Logan Costa e o capitão Roberto Lopes. Em transição muda para um 4-3-3 vertical, lançando os extremos rápidos Garry Rodrigues e Jovane Cabral para alimentar o veterano Ryan Mendes na frente.',
+      en: 'Cape Verde set up in a compact 4-2-3-1, with Jamiro Monteiro and Deroy Duarte shielding centre-backs Logan Costa and captain Roberto Lopes. In transition they morph into a vertical 4-3-3, releasing quick wingers Garry Rodrigues and Jovane Cabral to feed veteran Ryan Mendes up top.',
+    },
+  },
   funFacts: [
     { emoji: '🏝️', text: { pt: 'Cabo Verde tem apenas 600 mil habitantes — será uma das menores nações de sempre a disputar um Mundial.', en: 'Cape Verde has only 600,000 inhabitants — it will be one of the smallest nations ever to compete in a World Cup.' } },
     { emoji: '🦈', text: { pt: 'A seleção é apelidada de "Tubarões Azuis" (Blue Sharks), refletindo a identidade marítima do arquipélago.', en: 'The national team is nicknamed "Tubarões Azuis" (Blue Sharks), reflecting the archipelago\'s maritime identity.' } },

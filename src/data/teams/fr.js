@@ -59,6 +59,20 @@ export default {
       { name: 'Jean-Philippe Mateta', club: 'Crystal Palace', caps: 6 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Mike Maignan',
+      'Theo Hernández', 'William Saliba', 'Dayot Upamecano', 'Jules Koundé',
+      'Aurélien Tchouaméni', 'Adrien Rabiot',
+      'Ousmane Dembélé', 'Michael Olise', 'Bradley Barcola',
+      'Kylian Mbappé',
+    ],
+    tacticalNote: {
+      pt: 'A França de Deschamps arma-se num 4-2-3-1 equilibrado, com o duplo pivô Tchouaméni-Rabiot a proteger a defesa e a lançar transições rápidas. Mbappé lidera o ataque apoiado pela criatividade de Dembélé e Olise, com os laterais Theo Hernández e Koundé a dar largura.',
+      en: 'Deschamps\' France set up in a balanced 4-2-3-1, with the Tchouaméni-Rabiot double pivot shielding the back line and sparking quick transitions. Mbappé leads the line supported by the creativity of Dembélé and Olise, while full-backs Theo Hernández and Koundé provide the width.',
+    },
+  },
   funFacts: [
     { emoji: '⚽', text: { pt: 'Just Fontaine marcou 13 golos no Mundial 1958 — recorde absoluto numa única edição, nunca igualado.', en: 'Just Fontaine scored 13 goals at the 1958 World Cup — an all-time record for a single edition, never equalled.' } },
     { emoji: '🏆', text: { pt: 'França é a única seleção europeia a vencer todos os troféus seniores FIFA e UEFA (Mundial, Euro, Confederações, Nations League).', en: 'France are the only European team to have won every senior FIFA and UEFA trophy (World Cup, Euro, Confederations Cup, Nations League).' } },

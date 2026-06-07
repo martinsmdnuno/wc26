@@ -54,6 +54,20 @@ export default {
       { name: 'Promise David', club: 'Union Saint-Gilloise', caps: 6 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Dayne St. Clair',
+      'Alphonso Davies', 'Moïse Bombito', 'Derek Cornelius', 'Alistair Johnston',
+      'Stephen Eustáquio', 'Ismaël Koné',
+      'Tajon Buchanan', 'Marcelo Flores', 'Jacob Shaffelburg',
+      'Jonathan David',
+    ],
+    tacticalNote: {
+      pt: 'O Canadá de Marsch joga num 4-2-3-1 de pressão alta e intensa, com Eustáquio e Koné a equilibrar o meio-campo e Davies a projetar-se pela esquerda. Jonathan David é a referência ofensiva, alimentado pelas transições rápidas e pelos extremos verticais.',
+      en: 'Marsch\'s Canada plays a high-intensity pressing 4-2-3-1, with Eustáquio and Koné anchoring midfield and Davies surging forward from left-back. Jonathan David is the focal point up top, fed by quick transitions and direct wide runners.',
+    },
+  },
   funFacts: [
     { emoji: '🏠', text: { pt: 'O Canadá é co-anfitrião do Mundial 2026 juntamente com os EUA e o México — a primeira edição com 48 seleções e três países anfitriões.', en: 'Canada is co-hosting the 2026 World Cup alongside the USA and Mexico — the first edition with 48 teams and three host countries.' } },
     { emoji: '🌍', text: { pt: 'Alphonso Davies nasceu num campo de refugiados no Gana, fugindo da guerra civil na Libéria. Tornou-se embaixador da ACNUR e capitão do Canadá.', en: 'Alphonso Davies was born in a refugee camp in Ghana, fleeing the Liberian civil war. He became a UNHCR ambassador and Canada\'s captain.' } },

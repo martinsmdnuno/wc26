@@ -56,6 +56,19 @@ export default {
       { name: 'Federico Viñas', club: 'Real Oviedo', caps: 8 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Sergio Rochet',
+      'Mathias Olivera', 'Jose Gimenez', 'Ronald Araujo', 'Guillermo Varela',
+      'Rodrigo Bentancur', 'Manuel Ugarte', 'Federico Valverde',
+      'Giorgian De Arrascaeta', 'Darwin Nunez', 'Facundo Pellistri',
+    ],
+    tacticalNote: {
+      pt: 'Bielsa monta um 4-3-3 de pressão alta com Ugarte a equilibrar atrás de Valverde e Bentancur, libertando De Arrascaeta para criar e Darwin Nunez para atacar a profundidade.',
+      en: 'Bielsa sets up a high-pressing 4-3-3 with Ugarte anchoring behind Valverde and Bentancur, freeing De Arrascaeta to create and Darwin Nunez to attack the space in behind.',
+    },
+  },
   funFacts: [
     { emoji: '🏆', text: { pt: 'O Uruguai venceu o primeiro Mundial de sempre em 1930 como anfitrião, batendo a vizinha Argentina 4-2 na final em Montevideu.', en: 'Uruguay won the first-ever FIFA World Cup in 1930 as hosts, beating neighbours Argentina 4-2 in the final in Montevideo.' } },
     { emoji: '😱', text: { pt: 'O "Maracanazo" de 1950 é uma das maiores surpresas do desporto — o Uruguai bateu o Brasil 2-1 no jogo decisivo no Maracanã perante quase 200.000 adeptos.', en: 'The 1950 "Maracanazo" is one of sport\'s greatest upsets — Uruguay beat Brazil 2-1 in the final match at the Maracana in front of nearly 200,000 fans.' } },

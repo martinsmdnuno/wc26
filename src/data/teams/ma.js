@@ -59,6 +59,19 @@ export default {
       { name: 'Ayoube Amaimouni', club: 'Eintracht Frankfurt', caps: 2 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Yassine Bounou',
+      'Noussair Mazraoui', 'Nayef Aguerd', 'Chadi Riad', 'Achraf Hakimi',
+      'Neil El Aynaoui', 'Sofyan Amrabat', 'Bilal El Khannouss',
+      'Abdessamad Ezzalzouli', 'Ayoub El Kaabi', 'Brahim Díaz',
+    ],
+    tacticalNote: {
+      pt: 'Marrocos joga num 4-3-3 com Amrabat a proteger a defesa e El Khannouss e El Aynaoui a ligar o jogo, enquanto Hakimi sobe pela direita para criar superioridade. A ameaça nasce das transições rápidas e da finalização de El Kaabi apoiado por Brahim Díaz e Ezzalzouli.',
+      en: 'Morocco line up in a 4-3-3 with Amrabat shielding the defence and El Khannouss and El Aynaoui linking play, while Hakimi bombs forward on the right to create overloads. The threat comes from quick transitions and El Kaabi finishing chances supplied by Brahim Díaz and Ezzalzouli.',
+    },
+  },
   funFacts: [
     { emoji: '🦁', text: { pt: 'Em 2022, Marrocos tornou-se a primeira seleção africana e árabe a alcançar as meias-finais de um Mundial.', en: 'In 2022, Morocco became the first African and Arab team to reach a World Cup semi-final.' } },
     { emoji: '🧤', text: { pt: 'Bounou não sofreu golos nas fases de grupos e oitavos do Mundial 2022 — 3 jogos seguidos a zero.', en: 'Bounou kept clean sheets in the group stage and round of 16 at the 2022 World Cup — 3 consecutive shutouts.' } },

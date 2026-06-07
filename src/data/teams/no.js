@@ -51,6 +51,19 @@ export default {
       { name: 'Jens Petter Hauge', club: 'Bodo/Glimt', caps: 14 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Orjan Nyland',
+      'David Moller Wolfe', 'Torbjorn Heggem', 'Kristoffer Ajer', 'Julian Ryerson',
+      'Martin Odegaard', 'Sander Berge', 'Kristian Thorstvedt',
+      'Antonio Nusa', 'Erling Haaland', 'Alexander Sorloth',
+    ],
+    tacticalNote: {
+      pt: 'A Noruega organiza-se num 4-3-3 sólido, com Odegaard a baixar para construir e a alimentar Haaland nas costas das defesas. Nusa e Sorloth dão largura e profundidade, enquanto Berge protege a defesa e Thorstvedt acrescenta dinâmica entre linhas.',
+      en: 'Norway set up in a solid 4-3-3, with Odegaard dropping to dictate build-up and feed Haaland in behind. Nusa and Sorloth provide width and depth, while Berge shields the back four and Thorstvedt adds box-to-box energy.',
+    },
+  },
   funFacts: [
     { emoji: '🔥', text: { pt: 'Erling Haaland marcou 16 golos em 8 jogos de qualificação — igualando o recorde de Robert Lewandowski para uma única campanha de qualificação da UEFA.', en: 'Erling Haaland scored 16 goals in 8 qualifying matches — equalling Robert Lewandowski\'s all-time record for a single UEFA qualifying campaign.' } },
     { emoji: '💯', text: { pt: 'A Noruega venceu os 8 jogos de qualificação — um registo perfeito que a tornou cabeça de série no seu grupo do Mundial.', en: 'Norway won all 8 qualifying matches — a perfect record that made them the top seeds in their World Cup group.' } },

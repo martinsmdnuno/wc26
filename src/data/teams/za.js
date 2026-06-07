@@ -53,6 +53,20 @@ export default {
       { name: 'Thapelo Maseko', club: 'AEL Limassol', caps: 8 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Ronwen Williams',
+      'Aubrey Modiba', 'Mbekezeli Mbokazi', 'Ime Okon', 'Khuliso Mudau',
+      'Teboho Mokoena', 'Jayden Adams',
+      'Oswin Appollis', 'Themba Zwane', 'Relebohile Mofokeng',
+      'Lyle Foster',
+    ],
+    tacticalNote: {
+      pt: 'Broos aposta num 4-2-3-1 disciplinado, com Mokoena e Adams a proteger a defesa e a lançar transições rápidas para Appollis e Mofokeng nas alas. Foster fixa os centrais enquanto Zwane orquestra entre linhas.',
+      en: 'Broos sets up a disciplined 4-2-3-1, with Mokoena and Adams shielding the back four and springing quick transitions to Appollis and Mofokeng out wide. Foster pins the centre-backs while Zwane pulls the strings between the lines.',
+    },
+  },
   funFacts: [
     { emoji: '🏟️', text: { pt: 'A África do Sul organizou o Mundial de 2010 — a primeira nação africana a fazê-lo — com a icónica vuvuzela a tornar-se um fenómeno cultural global.', en: 'South Africa hosted the 2010 World Cup — the first African nation to do so — with the iconic vuvuzela becoming a global cultural phenomenon.' } },
     { emoji: '😢', text: { pt: 'Apesar de ser anfitriã em 2010, a Bafana Bafana tornou-se a primeira nação anfitriã na história dos Mundiais a ser eliminada na fase de grupos.', en: 'Despite hosting in 2010, Bafana Bafana became the first host nation in World Cup history to be eliminated in the group stage.' } },

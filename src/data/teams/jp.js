@@ -56,6 +56,19 @@ export default {
       { name: 'Kento Shiogai', club: 'VfL Wolfsburg', caps: 2 },
     ],
   },
+  lineup: {
+    formation: '3-4-3',
+    xi: [
+      'Zion Suzuki',
+      'Hiroki Ito', 'Takehiro Tomiyasu', 'Ko Itakura',
+      'Yukinari Sugawara', 'Wataru Endo', 'Ao Tanaka', 'Ritsu Doan',
+      'Keito Nakamura', 'Ayase Ueda', 'Takefusa Kubo',
+    ],
+    tacticalNote: {
+      pt: 'O Japão de Moriyasu joga num 3-4-3 fluido, com uma linha de três atrás que se transforma em construção e alas (Sugawara e Doan) que dão largura e profundidade. Endo equilibra o meio-campo enquanto Kubo e os extremos invertidos atacam os espaços para servir Ueda.',
+      en: 'Moriyasu\'s Japan play a fluid 3-4-3, with a back three that builds from deep and wing-backs (Sugawara and Doan) providing width and overlaps. Endo anchors midfield while Kubo and the inverted wingers attack the half-spaces to feed Ueda.',
+    },
+  },
   funFacts: [
     { emoji: '🇩🇪', text: { pt: 'O Japão surpreendeu a Alemanha por 2-1 e a Espanha por 2-1 na fase de grupos do Mundial 2022, liderando o Grupo E.', en: 'Japan stunned Germany 2-1 and Spain 2-1 in the 2022 World Cup group stage, topping Group E.' } },
     { emoji: '⚡', text: { pt: 'O golo de Kaoru Mitoma "na linha" contra a Espanha em 2022 gerou um debate milimétrico de VAR visto em todo o mundo.', en: 'Kaoru Mitoma\'s "goal line clearance" goal vs Spain in 2022 sparked a millimetre VAR debate seen worldwide.' } },

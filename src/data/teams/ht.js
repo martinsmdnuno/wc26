@@ -51,6 +51,20 @@ export default {
       { name: 'Lenny Joseph', club: 'Ferencv\u00e1ros', caps: 6 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Johny Placide',
+      'Duke Lacroix', 'Hannes Delcroix', 'Ricardo Adé', 'Carlens Arcus',
+      'Leverton Pierre', 'Danley Jean Jacques',
+      'Ruben Providence', 'Jean-Ricner Bellegarde', 'Josue Casimir',
+      'Frantzdy Pierrot',
+    ],
+    tacticalNote: {
+      pt: 'Migné organiza o Haiti num 4-2-3-1 compacto, com Pierre e Jean Jacques a protegerem a defesa e a equipa a recuperar a bola para transições rápidas. A criatividade de Bellegarde alimenta os corredores, com Providence e Casimir a explorarem a velocidade e Pierrot a fixar os centrais como ponta de lança.',
+      en: 'Migné sets Haiti up in a compact 4-2-3-1, with Pierre and Jean Jacques shielding the back four and the side winning the ball back for fast transitions. Bellegarde\'s creativity feeds the wide men, with Providence and Casimir exploiting pace while Pierrot pins the centre-backs as the lone striker.',
+    },
+  },
   funFacts: [
     { emoji: '\ud83c\udf1f', text: { pt: 'Em 1974, o avançado Emmanuel Sanon acabou com o recorde mundial de Dino Zoff de 1.143 minutos sem sofrer golos — um dos golos mais famosos da história dos Mundiais.', en: 'In 1974, striker Emmanuel Sanon ended Dino Zoff\'s world-record run of 1,143 minutes without conceding \u2014 one of the most famous goals in World Cup history.' } },
     { emoji: '\ud83c\udfd7\ufe0f', text: { pt: 'Devido a preocupações de segurança no Haiti, a equipa jogou todos os jogos de qualificação em terrenos neutros — o treinador Migné nunca sequer pôs os pés no Haiti.', en: 'Due to ongoing security concerns in Haiti, the team played every single qualifying match at neutral venues \u2014 coach Mign\u00e9 has never even set foot in Haiti.' } },

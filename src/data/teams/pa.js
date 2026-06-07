@@ -51,6 +51,19 @@ export default {
       { name: 'Tomas Rodriguez', club: 'Saprissa', caps: 10 },
     ],
   },
+  lineup: {
+    formation: '3-4-3',
+    xi: [
+      'Orlando Mosquera',
+      'Edgardo Farina', 'Andres Andrade', 'Jose Cordoba',
+      'Eric Davis', 'Anibal Godoy', 'Adalberto Carrasquilla', 'Amir Murillo',
+      'Yoel Barcenas', 'Jose Fajardo', 'Ismael Diaz',
+    ],
+    tacticalNote: {
+      pt: 'O Panamá de Christiansen arma-se numa linha de três defesas com alas (Murillo e Davis) a dar largura, enquanto Godoy e Carrasquilla controlam o meio-campo. Pressão física, transições rápidas pelas faixas e Fajardo a fixar a defesa adversária com Barcenas e Diaz a surgir do interior.',
+      en: 'Christiansen\'s Panama sets up in a back three with wing-backs (Murillo and Davis) providing width, while Godoy and Carrasquilla control midfield. Physical pressing, fast wide transitions, and Fajardo pinning the back line as Barcenas and Diaz dart in from inside.',
+    },
+  },
   funFacts: [
     { emoji: '🎉', text: { pt: 'A estreia do Panamá no Mundial de 2018 foi feriado nacional — o presidente declarou dia de folga quando se qualificaram ao vencer a Costa Rica.', en: 'Panama\'s 2018 World Cup debut was a national holiday — the president declared a day off when they qualified by beating Costa Rica.' } },
     { emoji: '⚽', text: { pt: 'Felipe Baloy marcou o primeiro golo de sempre do Panamá num Mundial — contra a Inglaterra em 2018, provocando celebrações selvagens apesar da derrota por 6-1.', en: 'Felipe Baloy scored Panama\'s first-ever World Cup goal — against England in 2018, sparking wild celebrations despite a 6-1 loss.' } },

@@ -59,6 +59,20 @@ export default {
       { name: 'Cho Gue-sung', club: 'FC Midtjylland', caps: 32 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Kim Seung-gyu',
+      'Lee Tae-seok', 'Cho Yu-min', 'Kim Min-jae', 'Seol Young-woo',
+      'Hwang In-beom', 'Paik Seung-ho',
+      'Son Heung-min', 'Lee Jae-sung', 'Lee Kang-in',
+      'Oh Hyeon-gyu',
+    ],
+    tacticalNote: {
+      pt: 'A Coreia do Sul de Hong Myung-bo organiza-se num 4-2-3-1 com Hwang In-beom e Paik Seung-ho a equilibrar o meio-campo, enquanto Lee Kang-in dita a criatividade e Son Heung-min ataca o espaço pela esquerda. A construção sai de Kim Min-jae, com transições rápidas a alimentar a referência Oh Hyeon-gyu.',
+      en: 'Hong Myung-bo\'s South Korea line up in a 4-2-3-1 with Hwang In-beom and Paik Seung-ho anchoring midfield, while Lee Kang-in dictates the creativity and Son Heung-min attacks space from the left. Build-up runs through Kim Min-jae, with quick transitions feeding the focal point Oh Hyeon-gyu.',
+    },
+  },
   funFacts: [
     { emoji: '🏅', text: { pt: 'A Coreia do Sul tornou-se a primeira (e ainda única) nação asiática a chegar às meias-finais de um Mundial, terminando em 4.º lugar em 2002 como co-anfitriã.', en: 'South Korea became the first (and still only) Asian nation to reach a World Cup semi-final, finishing 4th in 2002 as co-hosts.' } },
     { emoji: '🔥', text: { pt: 'Son Heung-min bateu o recorde de internacionalizações (137) anteriormente partilhado por Hong Myung-bo e Cha Bum-kun, e aproxima-se do recorde de 58 golos de Cha.', en: 'Son Heung-min broke the all-time caps record (137) previously shared by Hong Myung-bo and Cha Bum-kun, and is closing in on Cha\'s 58-goal record.' } },

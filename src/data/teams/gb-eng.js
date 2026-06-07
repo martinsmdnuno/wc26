@@ -51,6 +51,20 @@ export default {
       { name: 'Ivan Toney', club: 'Al-Ahli', caps: 9 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Jordan Pickford',
+      'Nico O\'Reilly', 'Marc Guehi', 'John Stones', 'Reece James',
+      'Declan Rice', 'Elliot Anderson',
+      'Marcus Rashford', 'Jude Bellingham', 'Bukayo Saka',
+      'Harry Kane',
+    ],
+    tacticalNote: {
+      pt: 'Tuchel arma a Inglaterra num 4-2-3-1 com Rice e Anderson a proteger a defesa, libertando Bellingham como 10 entre linhas. Saka e Rashford atacam a profundidade pelas alas, com Kane a fixar centrais e a baixar para criar superioridade.',
+      en: 'Tuchel sets England up in a 4-2-3-1 with Rice and Anderson screening the back line, freeing Bellingham as a roaming No.10. Saka and Rashford stretch the pitch from the flanks while Kane pins the centre-backs and drops in to link play.',
+    },
+  },
   funFacts: [
     { emoji: '🏆', text: { pt: 'A Inglaterra venceu o Mundial de 1966 em casa, batendo a Alemanha Ocidental por 4-2 na final em Wembley.', en: 'England won the World Cup in 1966 on home soil, beating West Germany 4-2 in the final at Wembley.' } },
     { emoji: '⚽', text: { pt: 'Geoff Hurst continua a ser o único jogador a marcar um hat-trick numa final do Mundial (1966).', en: 'Geoff Hurst remains the only player to score a hat-trick in a World Cup final (1966).' } },

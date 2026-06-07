@@ -59,6 +59,19 @@ export default {
       { name: 'Hamza Abdelkarim', club: 'Barcelona Atlètic', caps: 2 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Mohamed El-Shenawy',
+      'Ahmed Fattouh', 'Mohamed Abdel-Moneim', 'Yasser Ibrahim', 'Mohamed Hany',
+      'Emmam Ashour', 'Hamdi Fathy', 'Ahmed Sayed Zizo',
+      'Mahmoud Trezeguet', 'Omar Marmoush', 'Mohamed Salah',
+    ],
+    tacticalNote: {
+      pt: 'O Egito de Hossam Hassan assenta num bloco defensivo sólido e transições rápidas, com Hamdi Fathy a equilibrar o meio-campo e Salah, Marmoush e Trezeguet a explorarem o espaço nas costas da defesa adversária. Salah, capitão e referência, parte da direita para o interior como principal ameaça.',
+      en: 'Hossam Hassan\'s Egypt is built on a solid defensive block and quick transitions, with Hamdi Fathy anchoring midfield while Salah, Marmoush and Trezeguet exploit the space behind the opposition defence. Salah, the captain and talisman, drifts inside from the right as the main threat.',
+    },
+  },
   funFacts: [
     { emoji: '🏆', text: { pt: 'O Egito é a seleção mais titulada de África com 7 CAN — mais do que qualquer outro país do continente.', en: 'Egypt are the most decorated team in Africa with 7 AFCON titles — more than any other country on the continent.' } },
     { emoji: '⭐', text: { pt: 'Salah é o melhor marcador de sempre do Egito e carrega as esperanças de 100 milhões de egípcios cada vez que joga.', en: 'Salah is Egypt\'s all-time top scorer and carries the hopes of 100 million Egyptians every time he plays.' } },

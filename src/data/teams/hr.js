@@ -55,6 +55,20 @@ export default {
       { name: 'Marco Pašalić', club: 'Orlando City', caps: 5 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Dominik Livaković',
+      'Joško Gvardiol', 'Duje Ćaleta-Car', 'Marin Pongračić', 'Josip Stanišić',
+      'Mateo Kovačić', 'Luka Modrić',
+      'Ivan Perišić', 'Mario Pašalić', 'Andrej Kramarić',
+      'Ante Budimir',
+    ],
+    tacticalNote: {
+      pt: 'A Croácia organiza-se num 4-2-3-1 com Modrić e Kovačić a controlar o meio-campo e a construir a partir de trás, enquanto Gvardiol projeta-se pela esquerda. Pašalić liga o meio ao ataque, com Perišić e Kramarić a alimentar o ponta-de-lança Budimir.',
+      en: 'Croatia set up in a 4-2-3-1 with Modrić and Kovačić controlling midfield and dictating the build-up, while Gvardiol overlaps down the left. Pašalić links midfield to attack, with Perišić and Kramarić feeding lone striker Budimir.',
+    },
+  },
   funFacts: [
     { emoji: '🔥', text: { pt: 'A Croácia é a menor nação (pop. ~3,9 milhões) a chegar a uma final do Mundial (2018).', en: 'Croatia is the smallest nation (pop. ~3.9 million) ever to reach a World Cup final (2018).' } },
     { emoji: '⚽', text: { pt: 'Luka Modrić venceu a Bola de Ouro em 2018 e a Bola de Bronze em 2022 — o croata mais premiado na história dos Mundiais.', en: 'Luka Modrić won the 2018 Golden Ball and the 2022 Bronze Ball — the most decorated Croatian in World Cup history.' } },

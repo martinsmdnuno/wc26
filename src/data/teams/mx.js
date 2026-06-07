@@ -64,6 +64,20 @@ export default {
       { name: 'Guillermo Martínez', club: 'Pumas', caps: 4 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Guillermo Ochoa',
+      'Jesús Gallardo', 'Johan Vásquez', 'César Montes', 'Jorge Sánchez',
+      'Edson Álvarez', 'Erik Lira',
+      'César Huerta', 'Álvaro Fidalgo', 'Roberto Alvarado',
+      'Raúl Jiménez',
+    ],
+    tacticalNote: {
+      pt: 'Aguirre organiza o México num 4-2-3-1 que constrói desde trás, com Edson Álvarez e Erik Lira no duplo pivô a proteger a defesa e Álvaro Fidalgo como o 10 criativo. A ameaça vem da velocidade nas alas de Huerta e Alvarado e das transições verticais rápidas para Raúl Jiménez na frente.',
+      en: 'Aguirre sets Mexico up in a 4-2-3-1 that builds from the back, with Edson Álvarez and Erik Lira shielding the defence as a double pivot and Álvaro Fidalgo as the creative number 10. The threat comes from the wing pace of Huerta and Alvarado and quick vertical transitions to lead striker Raúl Jiménez.',
+    },
+  },
   funFacts: [
     { emoji: '🏟️', text: { pt: 'O Estádio Azteca será o primeiro recinto a acolher jogos em três Mundiais diferentes (1970, 1986, 2026).', en: 'The Azteca Stadium will be the first venue to host matches in three different World Cups (1970, 1986, 2026).' } },
     { emoji: '😤', text: { pt: 'A "maldição do quinto jogo" — o México foi eliminado nos oitavos de final em 7 edições consecutivas (1994–2018), sem nunca chegar às meias-finais.', en: 'The "curse of the fifth game" — Mexico were eliminated in the round of 16 in 7 consecutive editions (1994–2018), never reaching the semi-finals.' } },

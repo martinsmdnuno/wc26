@@ -51,6 +51,19 @@ export default {
       { name: 'Crysencio Summerville', club: 'West Ham United', caps: 2 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Bart Verbruggen',
+      'Micky van de Ven', 'Virgil van Dijk', 'Jan Paul van Hecke', 'Denzel Dumfries',
+      'Frenkie de Jong', 'Tijjani Reijnders', 'Ryan Gravenberch',
+      'Cody Gakpo', 'Memphis Depay', 'Donyell Malen',
+    ],
+    tacticalNote: {
+      pt: 'Koeman organiza a Holanda num 4-3-3 com Frenkie de Jong a comandar a construção e Reijnders e Gravenberch a darem energia ao meio-campo. Van Dijk lidera a defesa, os laterais Dumfries e Van de Ven dão amplitude, e Gakpo e Depay são a principal ameaça ofensiva.',
+      en: 'Koeman sets the Netherlands up in a 4-3-3 with Frenkie de Jong dictating the build-up and Reijnders and Gravenberch providing midfield energy. Van Dijk marshals the defence, full-backs Dumfries and Van de Ven supply width, and Gakpo and Depay are the main attacking threat.',
+    },
+  },
   funFacts: [
     { emoji: '🧡', text: { pt: 'Os holandeses inventaram o "Futebol Total" nos anos 1970 — cada jogador de campo podia jogar em qualquer posição, revolucionando o futebol para sempre.', en: 'The Dutch invented "Total Football" in the 1970s — every outfield player could play in any position, revolutionising the game forever.' } },
     { emoji: '⚽', text: { pt: 'O famoso drible de Johan Cruyff contra a Suécia no Mundial de 1974 ficou mundialmente conhecido como a "Volta de Cruyff".', en: 'Johan Cruyff\'s famous turn against Sweden at the 1974 World Cup became known worldwide as the "Cruyff Turn".' } },

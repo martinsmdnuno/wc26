@@ -58,6 +58,19 @@ export default {
       { name: 'Jose Manuel Lopez', club: 'Palmeiras', caps: 3 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Emiliano Martinez',
+      'Nicolas Tagliafico', 'Nicolas Otamendi', 'Cristian Romero', 'Nahuel Molina',
+      'Alexis Mac Allister', 'Enzo Fernandez', 'Rodrigo De Paul',
+      'Julian Alvarez', 'Lautaro Martinez', 'Lionel Messi',
+    ],
+    tacticalNote: {
+      pt: 'A Argentina de Scaloni joga num 4-3-3 equilibrado, com De Paul e Mac Allister a darem energia em redor de Enzo Fernandez na construção, enquanto Messi flutua da direita para o interior e Lautaro fixa a defesa adversária. Os laterais Molina e Tagliafico dão largura e profundidade.',
+      en: 'Scaloni\'s Argentina line up in a balanced 4-3-3, with De Paul and Mac Allister providing energy around Enzo Fernandez in build-up, while Messi drifts inside from the right and Lautaro pins the back line. Full-backs Molina and Tagliafico supply width and overlaps.',
+    },
+  },
   funFacts: [
     { emoji: '🐐', text: { pt: 'Lionel Messi pode tornar-se o primeiro jogador masculino a participar em 6 Mundiais diferentes (2006–2026).', en: 'Lionel Messi could become the first male player to appear in 6 different World Cups (2006-2026).' } },
     { emoji: '🏆', text: { pt: 'A Argentina venceu três troféus consecutivos: Copa América 2021, Mundial 2022 e Copa América 2024.', en: 'Argentina won three consecutive major trophies: Copa America 2021, World Cup 2022, and Copa America 2024.' } },

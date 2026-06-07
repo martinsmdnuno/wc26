@@ -53,6 +53,19 @@ export default {
       { name: 'Bamba Dieng', club: 'Lorient', caps: 12 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Édouard Mendy',
+      'El Hadji Malick Diouf', 'Kalidou Koulibaly', 'Moussa Niakhaté', 'Krépin Diatta',
+      'Habib Diarra', 'Idrissa Gueye', 'Pape Gueye',
+      'Iliman Ndiaye', 'Nicolas Jackson', 'Sadio Mané',
+    ],
+    tacticalNote: {
+      pt: 'Pape Thiaw aposta num 4-3-3 equilibrado, com Idrissa Gueye a dar segurança no meio-campo e os laterais a apoiar o ataque. Mané e Iliman Ndiaye dão velocidade nas alas para servir Nicolas Jackson.',
+      en: 'Pape Thiaw favours a balanced 4-3-3, with Idrissa Gueye anchoring midfield and the full-backs joining the attack. Mané and Iliman Ndiaye provide pace on the flanks to feed Nicolas Jackson.',
+    },
+  },
   funFacts: [
     { emoji: '🦁', text: { pt: 'Em 2002, na sua estreia no Mundial, o Senegal bateu a França campeã do mundo 1-0 no jogo de abertura — um dos maiores choques da história.', en: 'In 2002, on their World Cup debut, Senegal beat reigning champions France 1-0 in the opening match — one of the biggest shocks in history.' } },
     { emoji: '🏆', text: { pt: 'Mané marcou o penálti decisivo para vencer a CAN 2022 contra o Egito, o primeiro título continental do Senegal.', en: 'Mané scored the decisive penalty to win the 2022 AFCON against Egypt, Senegal\'s first continental title.' } },

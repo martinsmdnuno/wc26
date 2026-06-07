@@ -51,6 +51,19 @@ export default {
       { name: 'Deniz Gül', club: 'FC Porto', caps: 5 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Uğurcan Çakır',
+      'Ferdi Kadıoğlu', 'Çağlar Söyüncü', 'Merih Demiral', 'Zeki Çelik',
+      'İsmail Yüksek', 'Hakan Çalhanoğlu', 'Arda Güler',
+      'Kerem Aktürkoğlu', 'Kenan Yıldız', 'Barış Alper Yılmaz',
+    ],
+    tacticalNote: {
+      pt: 'Montella aposta num 4-3-3 equilibrado, com Çalhanoğlu a comandar o meio-campo e Arda Güler como camisa 8 criativo. À frente, a velocidade de Aktürkoğlu e Barış Alper Yılmaz pelas alas liberta Kenan Yıldız para finalizar.',
+      en: 'Montella favours a balanced 4-3-3, with Çalhanoğlu dictating from midfield and Arda Güler as a creative number 8. Up front, the pace of Aktürkoğlu and Barış Alper Yılmaz on the flanks frees Kenan Yıldız to finish.',
+    },
+  },
   funFacts: [
     { emoji: '⚡', text: { pt: 'Hakan Şükür marcou o golo mais rápido da história dos Mundiais — aos 10,8 segundos — no jogo pelo 3.º lugar contra a Coreia do Sul em 2002.', en: 'Hakan Şükür scored the fastest goal in World Cup history — at 10.8 seconds — in the 3rd-place match against South Korea in 2002.' } },
     { emoji: '🌟', text: { pt: 'Arda Güler tornou-se o mais jovem turco a marcar num grande torneio, com um golaço no Euro 2024 aos 19 anos.', en: 'Arda Güler became the youngest Turk to score at a major tournament, with a stunning goal at Euro 2024 aged 19.' } },

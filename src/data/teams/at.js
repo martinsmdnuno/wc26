@@ -53,6 +53,20 @@ export default {
       { name: 'Saša Kalajdžić', club: 'LASK', caps: 22 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Alexander Schlager',
+      'Phillipp Mwene', 'David Alaba', 'Kevin Danso', 'Stefan Posch',
+      'Nicolas Seiwald', 'Konrad Laimer',
+      'Patrick Wimmer', 'Marcel Sabitzer', 'Christoph Baumgartner',
+      'Michael Gregoritsch',
+    ],
+    tacticalNote: {
+      pt: 'A Áustria de Rangnick joga num 4-2-3-1 com pressão alta e gegenpressing agressivo, com Seiwald e Laimer a equilibrar o meio-campo e Alaba a comandar a linha defensiva alta. Sabitzer é o cérebro criativo atrás de Gregoritsch, com Baumgartner e Wimmer a darem profundidade e verticalidade pelas alas.',
+      en: 'Rangnick\'s Austria plays a 4-2-3-1 with a high line and aggressive gegenpressing, with Seiwald and Laimer balancing midfield and Alaba marshalling the high defensive line. Sabitzer is the creative brain behind Gregoritsch, while Baumgartner and Wimmer provide width and verticality from the flanks.',
+    },
+  },
   funFacts: [
     { emoji: '🏔️', text: { pt: 'A Áustria alcançou o 3.º lugar no Mundial de 1954, incluindo uma vitória por 7-5 sobre a Suíça — o jogo com mais golos da história dos Mundiais.', en: 'Austria reached 3rd place at the 1954 World Cup, including a 7-5 win over Switzerland — the highest-scoring match in World Cup history.' } },
     { emoji: '🔴', text: { pt: 'Ralf Rangnick, o "pai do gegenpressing", transformou a seleção com uma identidade tática clara de pressão alta — brilhou no Euro 2024 ao derrotar a Holanda na fase de grupos.', en: 'Ralf Rangnick, the "father of gegenpressing", transformed the national team with a clear high-pressing tactical identity — shone at Euro 2024 by beating the Netherlands in the group stage.' } },

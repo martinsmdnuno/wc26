@@ -51,6 +51,19 @@ export default {
       { name: 'Meschak Elia', club: 'Alanyaspor', caps: 35 },
     ],
   },
+  lineup: {
+    formation: '4-4-2',
+    xi: [
+      'Lionel Mpasi',
+      'Arthur Masuaku', 'Chancel Mbemba', 'Axel Tuanzebe', 'Aaron Wan-Bissaka',
+      'Théo Bongonda', 'Samuel Moutoussamy', 'Noah Sadiki', 'Meschak Elia',
+      'Yoane Wissa', 'Cédric Bakambu',
+    ],
+    tacticalNote: {
+      pt: 'Desabre organiza os Leopardos num 4-4-2 compacto, com dois blocos sólidos e transições verticais rápidas. Mbemba comanda a defesa, Sadiki e Moutoussamy seguram o meio-campo, e a velocidade de Wissa nas costas da defesa alimenta o ataque ao lado do experiente Bakambu.',
+      en: 'Desabre sets the Leopards up in a compact 4-4-2 with two solid banks and fast vertical transitions. Mbemba marshals the defence, Sadiki and Moutoussamy anchor midfield, and Wissa\'s pace in behind feeds the attack alongside the experienced Bakambu.',
+    },
+  },
   funFacts: [
     { emoji: '⏳', text: { pt: 'A RD Congo esperou 52 anos entre participações em Mundiais — a primeira foi como Zaire em 1974, o maior intervalo de qualquer nação regressada.', en: 'DR Congo waited 52 years between World Cup appearances — their first was as Zaire in 1974, making this the longest gap for any returning nation.' } },
     { emoji: '🦅', text: { pt: 'Conhecidos como "Les Léopards" (Os Leopardos), a equipa retira o seu nome do símbolo nacional do leopardo, representando poder e agilidade.', en: 'Known as "Les Léopards" (The Leopards), the team draws its nickname from the national symbol of the leopard, representing power and agility.' } },

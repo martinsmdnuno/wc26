@@ -51,6 +51,19 @@ export default {
       { name: 'Jeremy Arévalo', club: 'VfB Stuttgart', caps: 3 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Hernán Galíndez',
+      'Pervis Estupiñán', 'Piero Hincapié', 'Willian Pacho', 'Angelo Preciado',
+      'Alan Franco', 'Moisés Caicedo', 'Kendry Páez',
+      'Gonzalo Plata', 'Enner Valencia', 'Nilson Angulo',
+    ],
+    tacticalNote: {
+      pt: 'O Equador de Beccacece organiza-se num 4-3-3 compacto, com Caicedo a proteger a defesa mais sólida da CONMEBOL e a lançar as transições. Hincapié e Pacho garantem solidez atrás, enquanto Páez surge entre linhas e Plata e Angulo dão profundidade pelas alas para Enner Valencia finalizar.',
+      en: 'Beccacece\'s Ecuador set up in a compact 4-3-3, with Caicedo shielding CONMEBOL\'s best defence and igniting transitions. Hincapié and Pacho provide rock-solid cover, while Páez operates between the lines and Plata and Angulo stretch the wings to feed finisher Enner Valencia.',
+    },
+  },
   funFacts: [
     { emoji: '🌋', text: { pt: 'O Estádio Olímpico Atahualpa, em Quito (2.850 m de altitude), é uma das arenas mais altas do mundo e uma fortaleza para o Equador nas eliminatórias.', en: 'The Estadio Olímpico Atahualpa in Quito (2,850 m altitude) is one of the highest stadiums in the world and a fortress for Ecuador in qualifiers.' } },
     { emoji: '⚽', text: { pt: 'Enner Valencia é o melhor marcador de sempre do Equador em Mundiais, com 6 golos — marcou em 3 edições consecutivas (2014, 2022, 2026).', en: 'Enner Valencia is Ecuador\'s all-time top scorer at World Cups with 6 goals — he has scored in 3 consecutive editions (2014, 2022, 2026).' } },

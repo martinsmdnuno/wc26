@@ -51,6 +51,19 @@ export default {
       { name: 'Mohanad Ali', club: 'Dibba Al Fujairah', caps: 50 },
     ],
   },
+  lineup: {
+    formation: '4-4-2',
+    xi: [
+      'Jalal Hassan',
+      'Hussein Ali', 'Rebin Sulaka', 'Zaid Tahseen', 'Merchas Doski',
+      'Youssef Amyn', 'Amir Al Ammari', 'Ibrahim Bayesh', 'Zidane Iqbal',
+      'Ali Al Hamadi', 'Aymen Hussein',
+    ],
+    tacticalNote: {
+      pt: 'Sob Graham Arnold, o Iraque organiza-se num 4-4-2 compacto e disciplinado, defendendo em bloco e procurando transições rápidas. Zidane Iqbal e Amir Al Ammari controlam o meio-campo, com Aymen Hussein a fixar a defesa adversária e Ali Al Hamadi a explorar a profundidade.',
+      en: 'Under Graham Arnold, Iraq set up in a compact, disciplined 4-4-2, defending in a tight block and looking for quick transitions. Zidane Iqbal and Amir Al Ammari control midfield, with Aymen Hussein pinning the back line and Ali Al Hamadi running in behind.',
+    },
+  },
   funFacts: [
     { emoji: '🏆', text: { pt: 'O Iraque venceu a Taça Asiática de 2007 durante um período de guerra — um dos triunfos mais emocionantes da história do futebol.', en: 'Iraq won the 2007 AFC Asian Cup during a period of war — one of the most emotional triumphs in football history.' } },
     { emoji: '⏳', text: { pt: 'O Iraque esperou 40 anos entre participações em Mundiais — de México 1986 a EUA/Canadá/México 2026.', en: 'Iraq waited 40 years between World Cup appearances — from Mexico 1986 to USA/Canada/Mexico 2026.' } },

@@ -58,6 +58,19 @@ export default {
       { name: 'Víctor Muñoz', club: 'Osasuna', caps: 1 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Unai Simón',
+      'Marc Cucurella', 'Pau Cubarsí', 'Aymeric Laporte', 'Marcos Llorente',
+      'Pedri', 'Rodri', 'Fabián Ruiz',
+      'Nico Williams', 'Mikel Oyarzabal', 'Lamine Yamal',
+    ],
+    tacticalNote: {
+      pt: 'Espanha joga num 4-3-3 de posse dominante, com Rodri a ancorar o meio-campo e Pedri a orquestrar a construção entre linhas. A largura e o perigo vêm dos extremos Lamine Yamal e Nico Williams em duelos 1v1, com Oyarzabal a finalizar como ponta de lança móvel.',
+      en: 'Spain play a possession-dominant 4-3-3, with Rodri anchoring midfield and Pedri orchestrating build-up between the lines. Width and threat come from wingers Lamine Yamal and Nico Williams in 1v1 duels, with Oyarzabal finishing as a mobile centre-forward.',
+    },
+  },
   funFacts: [
     { emoji: '🧒', text: { pt: 'Lamine Yamal venceu o Euro 2024 um dia depois de fazer 17 anos — o mais jovem campeão europeu de sempre.', en: 'Lamine Yamal won Euro 2024 the day after turning 17 — the youngest European Championship winner ever.' } },
     { emoji: '🐙', text: { pt: 'O polvo Paul previu corretamente todos os resultados de Espanha no Mundial 2010, incluindo a vitória na final sobre os Países Baixos.', en: 'Paul the Octopus correctly predicted all of Spain\'s results at the 2010 World Cup, including the final win over the Netherlands.' } },

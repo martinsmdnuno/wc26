@@ -60,6 +60,20 @@ export default {
       { name: 'Maximilian Beier', club: 'Borussia Dortmund', caps: 6 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Manuel Neuer',
+      'David Raum', 'Nico Schlotterbeck', 'Jonathan Tah', 'Joshua Kimmich',
+      'Aleksandar Pavlović', 'Leon Goretzka',
+      'Leroy Sané', 'Florian Wirtz', 'Jamal Musiala',
+      'Kai Havertz',
+    ],
+    tacticalNote: {
+      pt: 'A Alemanha de Nagelsmann arma-se num 4-2-3-1 com Kimmich a recuar para lateral-direito e Pavlović e Goretzka a formarem o duplo pivô que dá liberdade a Wirtz e Musiala. A construção sai de trás com Schlotterbeck, e a ameaça nasce das combinações entre as alas e Havertz como ponta-de-lança móvel.',
+      en: 'Nagelsmann\'s Germany set up in a 4-2-3-1 with Kimmich tucking in at right-back and Pavlović and Goretzka anchoring a double pivot that frees Wirtz and Musiala. Build-up runs through Schlotterbeck from the back, with the threat coming from the wide interplay and Havertz as a mobile lone striker.',
+    },
+  },
   funFacts: [
     { emoji: '🏆', text: { pt: 'A Alemanha é tetracampeã mundial — só o Brasil (5) tem mais títulos.', en: 'Germany are 4-time World Champions — only Brazil (5) has more titles.' } },
     { emoji: '🔝', text: { pt: 'Miroslav Klose é o melhor marcador de sempre em Mundiais com 16 golos (2002–2014).', en: 'Miroslav Klose is the all-time World Cup top scorer with 16 goals (2002–2014).' } },

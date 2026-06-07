@@ -53,6 +53,19 @@ export default {
       { name: 'Gustavo Caballero', club: 'Portsmouth', caps: 5 },
     ],
   },
+  lineup: {
+    formation: '4-4-2',
+    xi: [
+      'Roberto Fernandez',
+      'Junior Alonso', 'Omar Alderete', 'Gustavo Gomez', 'Juan Jose Caceres',
+      'Miguel Almiron', 'Andres Cubas', 'Matias Galarza', 'Diego Gomez',
+      'Antonio Sanabria', 'Julio Enciso',
+    ],
+    tacticalNote: {
+      pt: 'Sob Alfaro, o Paraguai joga num 4-4-2 compacto e disciplinado, defendendo em dois blocos de quatro com Gomez e Alderete a comandar a linha. Recupera a bola e ataca em transição rápida, com Almiron e Enciso a darem largura e criatividade para Sanabria finalizar.',
+      en: 'Under Alfaro, Paraguay play a compact, disciplined 4-4-2, defending in two banks of four with Gomez and Alderete marshalling the line. They win the ball and break fast in transition, with Almiron and Enciso providing width and creativity to feed Sanabria.',
+    },
+  },
   funFacts: [
     { emoji: '🧤', text: { pt: 'O lendário guarda-redes paraguaio Jose Luis Chilavert marcou 62 golos na carreira — incluindo livres e penáltis — e é o único guarda-redes a marcar um hat-trick em eliminatórias de Mundiais.', en: 'Paraguay\'s legendary goalkeeper Jose Luis Chilavert scored 62 career goals — including free kicks and penalties — and is the only keeper to score a World Cup qualifying hat-trick.' } },
     { emoji: '🏠', text: { pt: 'O Paraguai venceu a Argentina e o Brasil em casa durante a qualificação para 2026 — a primeira vez que conseguiu esse feito numa única campanha.', en: 'Paraguay beat both Argentina and Brazil at home during 2026 qualifying — the first time they achieved that feat in a single campaign.' } },

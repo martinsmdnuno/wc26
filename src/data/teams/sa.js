@@ -55,6 +55,19 @@ export default {
       { name: 'Ayman Yahya', club: 'Al-Nassr', caps: 15 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Nawaf Al-Aqidi',
+      'Nawaf Boushal', 'Hassan Tambakti', 'Abdulelah Al-Amri', 'Moteb Al-Harbi',
+      'Mohammed Kanno', 'Abdullah Al-Khaibari', 'Nasser Al-Dawsari',
+      'Sultan Mandash', 'Firas Al-Buraikan', 'Salem Al-Dawsari',
+    ],
+    tacticalNote: {
+      pt: 'Bloco compacto e organizado que prioriza a solidez defensiva e ataca em transição rápida, com Kanno a equilibrar o meio-campo e Salem Al-Dawsari a inspirar o ataque pelas alas para Al-Buraikan.',
+      en: 'A compact, organised block that prioritises defensive solidity and attacks on quick transitions, with Kanno anchoring midfield and Salem Al-Dawsari inspiring the attack down the flanks for Al-Buraikan.',
+    },
+  },
   funFacts: [
     { emoji: '🤯', text: { pt: 'Em 2022, a Arábia Saudita chocou o mundo ao vencer a Argentina de Messi por 2-1 no jogo de abertura do grupo — uma das maiores surpresas da história dos Mundiais.', en: 'In 2022, Saudi Arabia shocked the world by beating Messi\'s Argentina 2-1 in the group opener — one of the biggest upsets in World Cup history.' } },
     { emoji: '🎉', text: { pt: 'Após a vitória sobre a Argentina, o príncipe herdeiro saudita declarou feriado nacional para celebrar o triunfo histórico.', en: 'After the victory over Argentina, the Saudi crown prince declared a national holiday to celebrate the historic triumph.' } },

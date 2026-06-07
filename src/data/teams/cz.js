@@ -56,6 +56,19 @@ export default {
       { name: 'Jan Kuchta', club: 'Sparta Prague', caps: 16 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Matěj Kovář',
+      'David Jurásek', 'Robin Hranáč', 'Ladislav Krejčí', 'Vladimír Coufal',
+      'Vladimír Darida', 'Tomáš Souček', 'Pavel Šulc',
+      'Lukáš Provod', 'Patrik Schick', 'Adam Hložek',
+    ],
+    tacticalNote: {
+      pt: 'A Chéquia de Koubek arma-se num 4-3-3 sólido e difícil de bater, com Souček a dominar o meio-campo e a ameaçar nas bolas paradas, e Šulc a ligar o jogo entre linhas. A construção é direta e procura a presença aérea de Schick na frente, com Provod e Hložek a darem largura e profundidade.',
+      en: 'Koubek\'s Czechia sets up in a solid, hard-to-beat 4-3-3, with Souček bossing midfield and threatening from set pieces, while Šulc links play between the lines. The build-up is direct, seeking Schick\'s aerial presence up top, with Provod and Hložek providing width and runs in behind.',
+    },
+  },
   funFacts: [
     { emoji: '🎯', text: { pt: 'Patrik Schick marcou um dos golos mais memoráveis do Euro 2020 — um remate do meio-campo contra a Escócia, de quase 50 metros.', en: 'Patrik Schick scored one of the most memorable goals at Euro 2020 — a strike from the halfway line against Scotland, from nearly 50 metres.' } },
     { emoji: '🏆', text: { pt: 'A antiga Checoslováquia venceu o Euro 1976, com o famoso penálti "panenka" de Antonín Panenka na final contra a Alemanha — que deu nome ao gesto técnico.', en: 'The former Czechoslovakia won Euro 1976, with Antonín Panenka\'s famous "panenka" penalty in the final against Germany — which gave the technique its name.' } },

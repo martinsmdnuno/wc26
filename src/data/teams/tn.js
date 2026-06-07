@@ -53,6 +53,20 @@ export default {
       { name: 'Rayan Elloumi', club: 'Vancouver Whitecaps', caps: 3 },
     ],
   },
+  lineup: {
+    formation: '4-2-3-1',
+    xi: [
+      'Aymen Dahmen',
+      'Ali Abdi', 'Montassar Talbi', 'Omar Rekik', 'Yan Valery',
+      'Ellyes Skhiri', 'Rani Khedira',
+      'Elias Achouri', 'Hannibal Mejbri', 'Sebastian Tounekti',
+      'Hazem Mastouri',
+    ],
+    tacticalNote: {
+      pt: 'A Tunísia de Lamouchi organiza-se num 4-2-3-1 sólido, ancorado pelo duplo pivô Skhiri-Khedira que protege uma defesa que não sofreu golos na qualificação. Hannibal Mejbri liga o meio-campo ao ataque, com Achouri e Tounekti a darem profundidade pelas alas.',
+      en: 'Lamouchi\'s Tunisia set up in a compact 4-2-3-1, anchored by the Skhiri-Khedira double pivot shielding a back line that conceded no goals in qualifying. Hannibal Mejbri links midfield to attack, with Achouri and Tounekti stretching play down the flanks.',
+    },
+  },
   funFacts: [
     { emoji: '🔒', text: { pt: 'A Tunísia tornou-se a primeira seleção da história a qualificar-se para um Mundial sem sofrer um único golo — 10 jogos, 0 golos sofridos na qualificação CAF 2026.', en: 'Tunisia became the first team in history to qualify for a World Cup without conceding a single goal — 10 matches, 0 goals against in the 2026 CAF qualifiers.' } },
     { emoji: '🇫🇷', text: { pt: 'No Mundial de 2022, a Tunísia venceu a campeã em título França por 1-0 na fase de grupos — o melhor momento das Águias de Cartago num Mundial.', en: 'At the 2022 World Cup, Tunisia beat reigning champions France 1-0 in the group stage — the Eagles of Carthage\'s finest World Cup moment.' } },

@@ -55,6 +55,19 @@ export default {
       { name: 'Ahmed Benbouali', club: 'Győri ETO', caps: 3 },
     ],
   },
+  lineup: {
+    formation: '4-3-3',
+    xi: [
+      'Luca Zidane',
+      'Rayan Aït-Nouri', 'Ramy Bensebaïni', 'Aïssa Mandi', 'Rafik Belghali',
+      'Hicham Boudaoui', 'Nabil Bentaleb', 'Fares Chaïbi',
+      'Mohamed Amoura', 'Ibrahim Maza', 'Riyad Mahrez',
+    ],
+    tacticalNote: {
+      pt: 'A Argélia de Petković organiza-se num 4-3-3 equilibrado, com Bentaleb a dar segurança no meio-campo e os laterais Aït-Nouri e Belghali a darem largura. A ameaça nasce nas transições rápidas, com a velocidade de Amoura e o talento de Mahrez a explorarem o espaço nas costas da defesa adversária.',
+      en: 'Petković\'s Algeria sets up in a balanced 4-3-3, with Bentaleb anchoring midfield and full-backs Aït-Nouri and Belghali providing the width. Their threat comes on fast transitions, with Amoura\'s pace and Mahrez\'s craft exploiting space in behind the opposition defence.',
+    },
+  },
   funFacts: [
     { emoji: '🏆', text: { pt: 'A Argélia venceu a CAN 2019 na conquista mais dominante da sua história — invicta em 7 jogos, incluindo uma final memorável contra o Senegal.', en: 'Algeria won AFCON 2019 in the most dominant run in their history — unbeaten in 7 matches, including a memorable final against Senegal.' } },
     { emoji: '⚽', text: { pt: 'Em 1982 derrotou a Alemanha Ocidental por 2-1 no Mundial — uma das maiores surpresas de sempre, mas foi eliminada pela infame "Vergonha de Gijón".', en: 'In 1982 they beat West Germany 2-1 at the World Cup — one of the biggest upsets ever, but were eliminated by the infamous "Disgrace of Gijón".' } },

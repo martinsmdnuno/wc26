@@ -53,6 +53,19 @@ export default {
       { name: 'Alexander Bernhardsson', club: 'Holstein Kiel', caps: 6 },
     ],
   },
+  lineup: {
+    formation: '3-4-3',
+    xi: [
+      'Kristoffer Nordfeldt',
+      'Victor Lindelof', 'Gustaf Lagerbielke', 'Isak Hien',
+      'Daniel Svensson', 'Jesper Karlstrom', 'Yasin Ayari', 'Gabriel Gudmundsson',
+      'Anthony Elanga', 'Viktor Gyokeres', 'Alexander Isak',
+    ],
+    tacticalNote: {
+      pt: 'Potter assenta numa defesa a tres com alas a subir no corredor, libertando Gyokeres como referencia e Isak e Elanga a atacar os espacos interiores. Com Ayari e Karlstrom a equilibrar o meio-campo, a Suecia procura transicoes rapidas para a sua dupla de luxo no ataque.',
+      en: 'Potter sets up with a back three and high wing-backs, freeing Gyokeres as the focal point while Isak and Elanga attack the inside channels. With Ayari and Karlstrom balancing midfield, Sweden look to spring quick transitions for their world-class strike pair.',
+    },
+  },
   funFacts: [
     { emoji: '🏠', text: { pt: 'A Suécia chegou à final do Mundial de 1958 como anfitriã, perdendo 5-2 para um Pelé de 17 anos e o Brasil — o melhor resultado de sempre do país.', en: 'Sweden reached the 1958 World Cup final as hosts, losing 5-2 to a 17-year-old Pele and Brazil — still their best-ever tournament finish.' } },
     { emoji: '🦁', text: { pt: 'Zlatan Ibrahimovic marcou 62 golos em 122 internacionalizações pela Suécia ao longo de duas décadas, retirando-se como um dos jogadores mais condecorados que nunca venceu um Mundial.', en: 'Zlatan Ibrahimovic scored 62 goals in 122 caps for Sweden across two decades, retiring as one of the most decorated players never to win a World Cup.' } },

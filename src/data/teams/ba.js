@@ -53,6 +53,19 @@ export default {
       { name: 'Jovo Lukić', club: 'Universitatea Cluj', caps: 2 },
     ],
   },
+  lineup: {
+    formation: '4-4-2',
+    xi: [
+      'Nikola Vasilj',
+      'Sead Kolašinac', 'Nikola Katić', 'Tarik Muharemović', 'Amar Dedić',
+      'Esmir Bajraktarević', 'Benjamin Tahirović', 'Armin Gigović', 'Amir Hadžiahmetović',
+      'Edin Džeko', 'Ermedin Demirović',
+    ],
+    tacticalNote: {
+      pt: 'A Bósnia alinha num 4-4-2 físico e de transições rápidas, com Tahirović e Gigović a controlarem o meio-campo e Kolašinac a apoiar no flanco esquerdo. Demirović faz o trabalho sujo para libertar o capitão Edin Džeko na área, ainda o foco ofensivo aos 40 anos.',
+      en: 'Bosnia line up in a physical, transition-heavy 4-4-2, with Tahirović and Gigović controlling midfield and Kolašinac driving down the left. Demirović does the dirty work to free captain Edin Džeko in the box, still the attacking focal point at 40.',
+    },
+  },
   funFacts: [
     { emoji: '🐉', text: { pt: 'Edin Džeko, aos 40 anos, continua a ser o capitão e melhor marcador de sempre da seleção com mais de 65 golos — uma lenda viva.', en: 'Edin Džeko, at 40, remains captain and all-time top scorer with over 65 goals — a living legend.' } },
     { emoji: '🇮🇹', text: { pt: 'Eliminou a Itália nos penáltis do play-off para o Mundial 2026 — a terceira vez que a Itália falha um Mundial consecutivamente.', en: 'Eliminated Italy on penalties in the 2026 World Cup playoff — the third time Italy have missed a World Cup in a row.' } },
