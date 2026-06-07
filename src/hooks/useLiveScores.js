@@ -59,28 +59,32 @@ export function useLiveScores() {
 }
 
 export function useCachedScores() {
-  const { activePoolId } = usePools();
   const [scores, setScores] = useState({});
 
   useEffect(() => {
-    if (!activePoolId) return;
     let cancelled = false;
     (async () => {
       try {
-        const snap = await getDocs(collection(db, 'pools', activePoolId, 'matches'));
+        // Source of truth for results is the admin-posted `matchResults`
+        // (keyed by matchId). Mapped to the shape BetCard/MatchCard expect.
+        const snap = await getDocs(collection(db, 'matchResults'));
         if (cancelled) return;
         const map = {};
         snap.docs.forEach((d) => {
-          map[d.id] = d.data();
+          const data = d.data();
+          map[d.id] = {
+            status: data.status || 'finished',
+            scoreHome: data.scoreA,
+            scoreAway: data.scoreB,
+          };
         });
         setScores(map);
       } catch {
-        // No cached scores yet / read not permitted — fall back to none.
         if (!cancelled) setScores({});
       }
     })();
     return () => { cancelled = true; };
-  }, [activePoolId]);
+  }, []);
 
   return scores;
 }
