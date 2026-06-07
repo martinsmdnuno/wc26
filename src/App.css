@@ -1288,9 +1288,20 @@
 
 .bets__view-toggle {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
   padding: 12px 16px 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.bets__view-toggle::-webkit-scrollbar {
+  display: none;
+}
+
+.bets__view-toggle .teams__view-chip {
+  flex: 0 0 auto;
 }
 
 .bets__list {
@@ -3069,10 +3080,20 @@
   border: 1px solid rgba(0, 0, 0, 0.12);
   background: var(--white);
   text-align: left;
+}
+
+.autocomplete__selected-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  text-align: left;
   cursor: pointer;
 }
 
-.autocomplete__selected:disabled {
+.autocomplete__selected-main:disabled {
   cursor: default;
   opacity: 0.85;
 }
@@ -3811,7 +3832,15 @@
   gap: 6px;
 }
 
+.bracket__team-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .bracket__team {
+  flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 8px;

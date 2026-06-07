@@ -81,9 +81,11 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
       <div className="bet-card__date">
         {dateStr} &middot; {match.kickoff_bst}
         {isLive && <span className="bet-card__live-badge">{t('live')}</span>}
-        {saving && <span className="bet-card__status">{t('saving')}</span>}
-        {saved && <span className="bet-card__status bet-card__status--saved">✓</span>}
-        {saveError && <span className="bet-card__status bet-card__status--error">{t('saveFailed')}</span>}
+        <span className="bet-card__status-live" aria-live="polite">
+          {saving && <span className="bet-card__status">{t('saving')}</span>}
+          {saved && <span className="bet-card__status bet-card__status--saved">✓</span>}
+          {saveError && <span className="bet-card__status bet-card__status--error">{t('saveFailed')}</span>}
+        </span>
       </div>
 
       {match.venue && match.venue !== 'TBD' && (

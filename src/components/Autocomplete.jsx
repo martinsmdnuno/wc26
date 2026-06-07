@@ -63,27 +63,30 @@ export default function Autocomplete({
   if (selected && !open) {
     return (
       <div className="autocomplete" ref={wrapRef}>
-        <button
-          type="button"
-          className="autocomplete__selected"
-          disabled={disabled}
-          onClick={() => disabled ? null : setOpen(true)}
-        >
-          <span className="autocomplete__selected-label">{selected.label}</span>
-          {selected.sublabel && (
-            <span className="autocomplete__selected-sub">{selected.sublabel}</span>
-          )}
+        <div className="autocomplete__selected">
+          <button
+            type="button"
+            className="autocomplete__selected-main"
+            disabled={disabled}
+            aria-label={placeholder || selected.label}
+            onClick={() => disabled ? null : setOpen(true)}
+          >
+            <span className="autocomplete__selected-label">{selected.label}</span>
+            {selected.sublabel && (
+              <span className="autocomplete__selected-sub">{selected.sublabel}</span>
+            )}
+          </button>
           {!disabled && (
-            <span
+            <button
+              type="button"
               className="autocomplete__clear"
-              role="button"
-              aria-label="clear"
-              onClick={(e) => { e.stopPropagation(); clear(); }}
+              aria-label="Limpar seleção"
+              onClick={clear}
             >
               ✕
-            </span>
+            </button>
           )}
-        </button>
+        </div>
       </div>
     );
   }
@@ -105,6 +108,7 @@ export default function Autocomplete({
         type="text"
         value={query}
         placeholder={placeholder}
+        aria-label={placeholder || 'Pesquisar'}
         autoComplete="off"
         onFocus={() => setOpen(true)}
         onChange={(e) => { setQuery(e.target.value); setOpen(true); setActive(0); }}

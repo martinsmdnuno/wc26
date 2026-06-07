@@ -126,23 +126,25 @@ export default function BracketPredictor() {
             const isWinner = winner === iso;
             const correct = isCorrect(m.phase, iso);
             return (
-              <button
-                className={`bracket__team ${isWinner ? 'bracket__team--win' : ''} ${resolved && isWinner ? (correct ? 'bracket__team--ok' : 'bracket__team--bad') : ''}`}
-                disabled={locked || !home || !away}
-                onClick={() => pickWinner(m.id, iso)}
-              >
-                <img src={flag(iso)} alt="" className="bracket__flag" />
-                <span className="bracket__team-name">{teamName(iso)}</span>
+              <div className="bracket__team-row">
+                <button
+                  className={`bracket__team ${isWinner ? 'bracket__team--win' : ''} ${resolved && isWinner ? (correct ? 'bracket__team--ok' : 'bracket__team--bad') : ''}`}
+                  disabled={locked || !home || !away}
+                  onClick={() => pickWinner(m.id, iso)}
+                >
+                  <img src={flag(iso)} alt="" className="bracket__flag" />
+                  <span className="bracket__team-name">{teamName(iso)}</span>
+                  {isWinner && <span className="bracket__check">→</span>}
+                </button>
                 {source?.type === 'group' && !locked && iso && (
-                  <span
+                  <button
+                    type="button"
                     className="bracket__clear"
-                    role="button"
-                    aria-label="clear"
-                    onClick={(e) => { e.stopPropagation(); assignSlot(m.id, key, null); }}
-                  >✕</span>
+                    aria-label="Limpar equipa"
+                    onClick={() => assignSlot(m.id, key, null)}
+                  >✕</button>
                 )}
-                {isWinner && <span className="bracket__check">→</span>}
-              </button>
+              </div>
             );
           };
 
