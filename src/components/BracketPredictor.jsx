@@ -33,10 +33,12 @@ export default function BracketPredictor() {
 
   const assignSlot = (matchId, key, iso) => {
     if (locked) return;
-    save(normalizePrediction({
-      slots: { ...pred.slots, [`${matchId}${key}`]: iso || undefined },
-      picks: pred.picks,
-    }));
+    // Build slots without ever storing `undefined` — Firestore rejects undefined
+    // values, which would throw on save. Clearing removes the key entirely.
+    const slots = { ...pred.slots };
+    if (iso) slots[`${matchId}${key}`] = iso;
+    else delete slots[`${matchId}${key}`];
+    save(normalizePrediction({ slots, picks: pred.picks }));
   };
 
   const pickWinner = (matchId, iso) => {
