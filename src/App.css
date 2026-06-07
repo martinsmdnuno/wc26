@@ -3933,10 +3933,18 @@
 .bkt-board {
   display: flex;
   align-items: stretch;
-  overflow-x: auto;
+  /* Self-contained scroll panel (both axes) so the tall bracket pans inside
+     its own box and never slides under the fixed bottom nav. */
+  overflow: auto;
+  max-height: 64vh;
+  max-height: 64dvh;
   gap: 0;
   padding: 4px 0 14px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  background: var(--off-white);
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .bkt-col {
@@ -3950,6 +3958,9 @@
 .bkt-col--champ { width: 150px; }
 
 .bkt-col-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   text-align: center;
   font-family: 'Oswald', sans-serif;
   font-size: 11px;
@@ -3957,7 +3968,8 @@
   letter-spacing: 0.05em;
   color: var(--gray);
   text-transform: uppercase;
-  padding: 0 0 8px;
+  padding: 6px 0 8px;
+  background: var(--off-white);
 }
 
 .bkt-col-body {
