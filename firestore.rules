@@ -55,7 +55,7 @@ service cloud.firestore {
         // award themselves points.
         allow create: if request.auth != null
           && request.auth.uid == request.resource.data.userId
-          && request.resource.data.pointsAwarded == null
+          && request.resource.data.get('pointsAwarded', null) == null
           && (request.resource.data.lockAt == null
               || request.time.toMillis() < request.resource.data.lockAt);
         // Owner edits their prediction (before kickoff, without touching the
@@ -63,7 +63,7 @@ service cloud.firestore {
         allow update: if request.auth != null
           && (
             (request.auth.uid == request.resource.data.userId
-              && request.resource.data.pointsAwarded == resource.data.pointsAwarded
+              && request.resource.data.get('pointsAwarded', null) == resource.data.get('pointsAwarded', null)
               && (request.resource.data.lockAt == null
                   || request.time.toMillis() < request.resource.data.lockAt))
             || isAdmin()
@@ -88,7 +88,7 @@ service cloud.firestore {
         allow create: if request.auth != null
           && request.auth.uid == uid
           && request.auth.uid == request.resource.data.userId
-          && request.resource.data.pointsAwarded == null
+          && request.resource.data.get('pointsAwarded', null) == null
           && request.time.toMillis() < 1781193600000;
         // Owner edits picks before the deadline (points unchanged); admin / pool
         // creator write awarded points on resolve.
@@ -96,7 +96,7 @@ service cloud.firestore {
           && (
             (request.auth.uid == uid
               && request.time.toMillis() < 1781193600000
-              && request.resource.data.pointsAwarded == resource.data.pointsAwarded)
+              && request.resource.data.get('pointsAwarded', null) == resource.data.get('pointsAwarded', null))
             || isAdmin()
             || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy);
         allow delete: if request.auth != null
@@ -134,13 +134,13 @@ service cloud.firestore {
         allow create: if request.auth != null
           && request.auth.uid == uid
           && request.auth.uid == request.resource.data.userId
-          && request.resource.data.pointsAwarded == null
+          && request.resource.data.get('pointsAwarded', null) == null
           && request.time.toMillis() < 1781193600000;
         allow update: if request.auth != null
           && (
             (request.auth.uid == uid
               && request.time.toMillis() < 1781193600000
-              && request.resource.data.pointsAwarded == resource.data.pointsAwarded)
+              && request.resource.data.get('pointsAwarded', null) == resource.data.get('pointsAwarded', null))
             || isAdmin()
             || request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy);
         allow delete: if request.auth != null
