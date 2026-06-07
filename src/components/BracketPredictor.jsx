@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useBracket } from '../hooks/useBracket';
 import { isSpecialLocked } from '../data/specialBets';
@@ -167,7 +168,7 @@ export default function BracketPredictor() {
         </div>
       </div>
 
-      {picking && (
+      {picking && createPortal(
         <div className="bkt-modal" onClick={() => setPicking(null)}>
           <div className="bkt-modal-sheet" onClick={(e) => e.stopPropagation()}>
             <div className="bkt-modal-head">
@@ -189,7 +190,8 @@ export default function BracketPredictor() {
               ))}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
