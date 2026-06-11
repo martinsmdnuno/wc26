@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import * as Sentry from '@sentry/react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useAuth } from '../hooks/useAuth';
 import { usePools } from '../hooks/usePools';
@@ -117,6 +118,15 @@ export default function HamburgerMenu({ onNavigate }) {
                   await signInWithGoogle();
                 } catch (err) {
                   console.error('Link error:', err);
+                  const cancelled = err.code === 'auth/popup-closed-by-user'
+                    || err.code === 'auth/cancelled-popup-request';
+                  if (!cancelled) {
+                    Sentry.captureException(err, {
+                      tags: { flow: 'google-link' },
+                      extra: { code: err.code, userAgent: navigator.userAgent },
+                    });
+                    alert(err.code === 'auth/popup-blocked' ? t('authPopupBlocked') : t('authGoogleError'));
+                  }
                 }
                 setLinkingAccount(false);
               }}

@@ -116,6 +116,11 @@
   transform: translateZ(0);
 }
 
+.bottom-nav--keyboard-open {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .bottom-nav__tab {
   display: flex;
   flex-direction: column;
