@@ -3,14 +3,15 @@ import schedule from '../data/schedule.json';
 import PhaseFilter from '../components/PhaseFilter';
 import MatchCard from '../components/MatchCard';
 import { useLanguage } from '../i18n/LanguageContext';
+import TimezoneNote from '../components/TimezoneNote';
+import { compareKickoff, groupMatchesByDate } from '../utils/matchOrder';
+import { kickoffMs } from '../utils/matchTime';
 
 function getNextMatchId(matches) {
-  const now = new Date();
-  for (const match of matches) {
-    const [h, m] = match.kickoff_bst.split(':').map(Number);
-    const matchDate = new Date(match.date + 'T00:00:00');
-    matchDate.setHours(h, m, 0, 0);
-    if (matchDate > now) return match.id;
+  const now = Date.now();
+  for (const match of [...matches].sort(compareKickoff)) {
+    const ms = kickoffMs(match);
+    if (ms != null && ms > now) return match.id;
   }
   return null;
 }
@@ -28,15 +29,10 @@ export default function Schedule({ onTeamClick }) {
   const allGroupMatches = schedule.phases.find((p) => p.id === 'group')?.matches || [];
   const nextMatchId = useMemo(() => getNextMatchId(allGroupMatches), []);
 
-  const matchesByDate = useMemo(() => {
-    if (!phase) return {};
-    const grouped = {};
-    for (const match of phase.matches) {
-      if (!grouped[match.date]) grouped[match.date] = [];
-      grouped[match.date].push(match);
-    }
-    return grouped;
-  }, [phase]);
+  const matchesByDate = useMemo(
+    () => (phase ? groupMatchesByDate(phase.matches) : {}),
+    [phase]
+  );
 
   return (
     <div className="schedule">
@@ -45,6 +41,8 @@ export default function Schedule({ onTeamClick }) {
         active={activePhase}
         onSelect={setActivePhase}
       />
+
+      <TimezoneNote />
 
       <div className="schedule__list">
         {Object.entries(matchesByDate).map(([date, matches]) => {

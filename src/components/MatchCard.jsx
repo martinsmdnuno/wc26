@@ -1,5 +1,6 @@
 import { useLanguage } from '../i18n/LanguageContext';
 import { downloadICS } from '../utils/calendar';
+import { kickoffDateStr, kickoffTimeStr } from '../utils/matchTime';
 
 function getFlagUrl(iso) {
   return `https://flagcdn.com/w80/${iso}.png`;
@@ -13,14 +14,11 @@ export default function MatchCard({ match, isNext, showCalButton = false, onTeam
   const homeName = hasTeams ? t(`team.${match.home_iso}`) : match.home;
   const awayName = hasTeams ? t(`team.${match.away_iso}`) : match.away;
 
-  const dateStr = (() => {
-    const d = new Date(match.date + 'T00:00:00');
-    return d.toLocaleDateString(t('dateLocale'), {
-      weekday: 'short',
-      day: 'numeric',
-      month: 'short',
-    });
-  })();
+  const dateStr = kickoffDateStr(match, t('dateLocale'), {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  });
 
   const handleAddToCalendar = (e) => {
     e.stopPropagation();
@@ -49,7 +47,7 @@ export default function MatchCard({ match, isNext, showCalButton = false, onTeam
       )}
 
       <div className="match-card__date">
-        {dateStr} &middot; {match.kickoff_bst}
+        {dateStr} &middot; {kickoffTimeStr(match)}
         {showCalButton && hasTeams && (
           <button
             className={`match-card__cal-pill ${isNext ? 'match-card__cal-pill--next' : ''}`}

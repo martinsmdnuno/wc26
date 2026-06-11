@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import schedule from '../data/schedule.json';
 import PitchLineup from '../components/PitchLineup';
 import { useLanguage } from '../i18n/LanguageContext';
+import { kickoffDateStr, kickoffTimeStr } from '../utils/matchTime';
 
 const teamModules = import.meta.glob('../data/teams/*.js', { eager: true });
 
@@ -72,11 +73,10 @@ export default function TeamProfile({ iso, onBack, onTeamClick }) {
               {matches.map((m) => {
                 const homeName = m.home_iso ? t(`team.${m.home_iso}`) : m.home;
                 const awayName = m.away_iso ? t(`team.${m.away_iso}`) : m.away;
-                const d = new Date(m.date + 'T00:00:00');
-                const dateStr = d.toLocaleDateString(t('dateLocale'), { day: 'numeric', month: 'short' });
+                const dateStr = kickoffDateStr(m, t('dateLocale'), { day: 'numeric', month: 'short' });
                 return (
                   <div key={m.id} className="team-profile__match-row">
-                    <span className="team-profile__match-date">{dateStr} · {m.kickoff_bst}</span>
+                    <span className="team-profile__match-date">{dateStr} · {kickoffTimeStr(m)}</span>
                     <span className="team-profile__match-teams">{homeName} vs {awayName}</span>
                     {m.venue && <span className="team-profile__match-venue">📍 {m.city}</span>}
                   </div>
@@ -234,8 +234,7 @@ export default function TeamProfile({ iso, onBack, onTeamClick }) {
             {matches.map((m) => {
               const homeName = m.home_iso ? t(`team.${m.home_iso}`) : m.home;
               const awayName = m.away_iso ? t(`team.${m.away_iso}`) : m.away;
-              const d = new Date(m.date + 'T00:00:00');
-              const dateStr = d.toLocaleDateString(t('dateLocale'), { day: 'numeric', month: 'short' });
+              const dateStr = kickoffDateStr(m, t('dateLocale'), { day: 'numeric', month: 'short' });
               const opponentIso = m.home_iso === iso ? m.away_iso : m.home_iso;
               return (
                 <button
@@ -243,7 +242,7 @@ export default function TeamProfile({ iso, onBack, onTeamClick }) {
                   className="team-profile__match-row"
                   onClick={() => opponentIso && onTeamClick(opponentIso)}
                 >
-                  <span className="team-profile__match-date">{dateStr} · {m.kickoff_bst}</span>
+                  <span className="team-profile__match-date">{dateStr} · {kickoffTimeStr(m)}</span>
                   <span className="team-profile__match-teams">
                     {homeName} <span className="team-profile__match-vs">vs</span> {awayName}
                   </span>

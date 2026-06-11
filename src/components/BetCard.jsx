@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { isMatchLocked } from '../data/matchLock';
+import { kickoffDateStr, kickoffTimeStr } from '../utils/matchTime';
 import MatchBets from './MatchBets';
 
 function getFlagUrl(iso) {
@@ -30,14 +31,11 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
   const [saveError, setSaveError] = useState(false);
   const debounceRef = useRef(null);
 
-  const dateStr = (() => {
-    const d = new Date(match.date + 'T00:00:00');
-    return d.toLocaleDateString(t('dateLocale'), {
-      weekday: 'short',
-      day: 'numeric',
-      month: 'short',
-    });
-  })();
+  const dateStr = kickoffDateStr(match, t('dateLocale'), {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  });
 
   const handleChange = useCallback(
     (side, value) => {
@@ -79,7 +77,7 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
       )}
 
       <div className="bet-card__date">
-        {dateStr} &middot; {match.kickoff_bst}
+        {dateStr} &middot; {kickoffTimeStr(match)}
         {isLive && <span className="bet-card__live-badge">{t('live')}</span>}
         <span className="bet-card__status-live" aria-live="polite">
           {saving && <span className="bet-card__status">{t('saving')}</span>}

@@ -7,6 +7,8 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { useBets, useMyBetsMap } from '../hooks/useBets';
 import { usePools } from '../hooks/usePools';
 import { useCachedScores } from '../hooks/useLiveScores';
+import { groupMatchesByDate } from '../utils/matchOrder';
+import TimezoneNote from '../components/TimezoneNote';
 
 // Lazy sub-views: Especiais/Bracket pull in the player index; defer them so the
 // default "Apostar" (match betting) tab stays in the light initial chunk.
@@ -31,15 +33,10 @@ export default function Bets({ onTeamClick }) {
 
   const phase = schedule.phases.find((p) => p.id === activePhase);
 
-  const matchesByDate = useMemo(() => {
-    if (!phase) return {};
-    const grouped = {};
-    for (const match of phase.matches) {
-      if (!grouped[match.date]) grouped[match.date] = [];
-      grouped[match.date].push(match);
-    }
-    return grouped;
-  }, [phase]);
+  const matchesByDate = useMemo(
+    () => (phase ? groupMatchesByDate(phase.matches) : {}),
+    [phase]
+  );
 
   const handleSave = async (matchId, scoreA, scoreB) => {
     await saveBet(matchId, scoreA, scoreB);
@@ -121,6 +118,8 @@ export default function Bets({ onTeamClick }) {
             active={activePhase}
             onSelect={setActivePhase}
           />
+
+          <TimezoneNote />
 
           {loading ? (
             <div className="bets__loading">{t('loading')}</div>

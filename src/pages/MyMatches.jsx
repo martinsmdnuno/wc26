@@ -4,6 +4,8 @@ import PhaseFilter from '../components/PhaseFilter';
 import MatchCard from '../components/MatchCard';
 import { useLanguage } from '../i18n/LanguageContext';
 import { downloadMultipleICS } from '../utils/calendar';
+import { groupMatchesByDate } from '../utils/matchOrder';
+import TimezoneNote from '../components/TimezoneNote';
 
 export default function MyMatches({ favorites, onNavigate, onTeamClick }) {
   const [activePhase, setActivePhase] = useState('group');
@@ -64,11 +66,7 @@ export default function MyMatches({ favorites, onNavigate, onTeamClick }) {
     );
   }
 
-  const matchesByDate = {};
-  for (const match of filteredMatches) {
-    if (!matchesByDate[match.date]) matchesByDate[match.date] = [];
-    matchesByDate[match.date].push(match);
-  }
+  const matchesByDate = groupMatchesByDate(filteredMatches);
 
   return (
     <div className="my-matches">
@@ -77,6 +75,8 @@ export default function MyMatches({ favorites, onNavigate, onTeamClick }) {
         active={activePhase}
         onSelect={setActivePhase}
       />
+
+      <TimezoneNote />
 
       {filteredMatches.length === 0 ? (
         <div className="my-matches__no-results">
