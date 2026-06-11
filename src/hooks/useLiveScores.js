@@ -76,6 +76,7 @@ export function useCachedScores() {
             status: data.status || 'finished',
             scoreHome: data.scoreA,
             scoreAway: data.scoreB,
+            scorers: data.scorers || [],
           };
         });
         setScores(map);
