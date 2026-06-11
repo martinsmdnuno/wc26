@@ -121,6 +121,7 @@ export const translations = {
 
     // Date locale
     dateLocale: 'pt-PT',
+    tzNote: 'Horários no fuso horário do teu dispositivo',
 
     // Language switcher
     language: 'Idioma',
@@ -463,6 +464,7 @@ export const translations = {
 
     // Date locale
     dateLocale: 'en-GB',
+    tzNote: 'Times shown in your device time zone',
 
     // Language switcher
     language: 'Language',
