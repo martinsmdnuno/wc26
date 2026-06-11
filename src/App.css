@@ -426,6 +426,54 @@
   flex-shrink: 0;
 }
 
+.match-card__score {
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--dark);
+  padding: 0 8px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.match-card__score-sep {
+  color: var(--gray);
+  padding: 0 5px;
+  font-weight: 500;
+}
+
+.match-card--next .match-card__score,
+.match-card--next .match-card__score-sep {
+  color: var(--white);
+}
+
+.match-card__scorers {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-strong);
+}
+
+.match-card__scorers-side {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.match-card__scorers-side--away {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.match-card__scorer {
+  font-size: 11.5px;
+  color: var(--gray);
+  line-height: 1.4;
+}
+
 /* ===== TEAMS ===== */
 .teams {
   padding: 16px;

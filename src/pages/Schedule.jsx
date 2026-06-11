@@ -6,6 +6,7 @@ import { useLanguage } from '../i18n/LanguageContext';
 import TimezoneNote from '../components/TimezoneNote';
 import { compareKickoff, groupMatchesByDate } from '../utils/matchOrder';
 import { kickoffMs } from '../utils/matchTime';
+import { useCachedScores } from '../hooks/useLiveScores';
 
 function getNextMatchId(matches) {
   const now = Date.now();
@@ -19,6 +20,7 @@ function getNextMatchId(matches) {
 export default function Schedule({ onTeamClick }) {
   const [activePhase, setActivePhase] = useState('group');
   const { t } = useLanguage();
+  const cachedScores = useCachedScores();
 
   const translatedPhases = useMemo(
     () => schedule.phases.map((p) => ({ ...p, name: t(`phase.${p.id}`) })),
@@ -60,6 +62,7 @@ export default function Schedule({ onTeamClick }) {
                 <MatchCard
                   key={match.id}
                   match={match}
+                  matchScore={cachedScores[String(match.id)]}
                   isNext={match.id === nextMatchId && activePhase === 'group'}
                   showCalButton
                   onTeamClick={onTeamClick}

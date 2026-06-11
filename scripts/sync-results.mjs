@@ -109,12 +109,22 @@ async function fetchFinished() {
       const scoreHome = parseInt(homeC.score, 10);
       const scoreAway = parseInt(awayC.score, 10);
       if (Number.isNaN(scoreHome) || Number.isNaN(scoreAway)) continue;
+      const scorers = (comp.details ?? [])
+        .filter((d) => d.scoringPlay && !d.shootout)
+        .map((d) => ({
+          name: d.athletesInvolved?.[0]?.displayName ?? '?',
+          minute: d.clock?.displayValue ?? '',
+          homeSide: String(d.team?.id) === String(homeC.id),
+          pen: !!d.penaltyKick,
+          og: !!d.ownGoal,
+        }));
       out.push({
         date: e.date,
         homeName: homeC.team?.displayName,
         awayName: awayC.team?.displayName,
         scoreHome,
         scoreAway,
+        scorers,
       });
     }
   }
@@ -194,12 +204,27 @@ for (const ev of finished) {
   const { match, swapped } = found;
   const scoreA = swapped ? ev.scoreAway : ev.scoreHome;
   const scoreB = swapped ? ev.scoreHome : ev.scoreAway;
+  // Scorers relative to the internal match: side 'A' = match.home.
+  const scorers = (ev.scorers ?? []).map((s) => ({
+    name: s.name,
+    minute: s.minute,
+    side: (s.homeSide !== swapped) ? 'A' : 'B',
+    pen: s.pen,
+    og: s.og,
+  }));
 
   const ref = db.collection('matchResults').doc(String(match.id));
   const existing = await ref.get();
   const cur = existing.exists ? existing.data() : null;
-  if (cur && cur.scoreA === scoreA && cur.scoreB === scoreB && cur.scored === true) {
-    continue; // already ingested and scored
+  const sameScore = cur && cur.scoreA === scoreA && cur.scoreB === scoreB;
+  if (sameScore && cur.scored === true && Array.isArray(cur.scorers)) {
+    continue; // already ingested, scored and with scorers
+  }
+  if (sameScore && cur.scored === true) {
+    // Backfill scorers only — points are already correct.
+    await ref.set({ scorers }, { merge: true });
+    console.log(`  match ${match.id}: backfilled ${scorers.length} scorer(s)`);
+    continue;
   }
 
   console.log(`  match ${match.id} ${match.home} vs ${match.away}: ${scoreA}-${scoreB}` +
@@ -209,6 +234,7 @@ for (const ev of finished) {
     matchId: match.id,
     scoreA,
     scoreB,
+    scorers,
     status: 'finished',
     updatedAt: new Date(),
     source: 'auto-espn',
