@@ -13,7 +13,7 @@ Mobile-first web app for the FIFA World Cup 2026 (USA, Canada & Mexico). Browse 
 
 ## Features
 
-- **Schedule** — All 104 matches across 7 phases, with venues and kick-off times (BST)
+- **Schedule** — All 104 matches across 7 phases, with venues; kick-off times and day grouping are shown **in your device's timezone**, and finished matches show the **final score and goalscorers**
 - **Teams** — 48 qualified teams browsable A-Z, by group, or by confederation, each with an **official 2026 squad** (announced call-ups)
 - **Favourites** — Star teams to filter their matches in "My Matches"; **synced to your account** across devices
 - **Calendar export** — Add single or bulk matches to your device calendar (ICS)
@@ -22,8 +22,9 @@ Mobile-first web app for the FIFA World Cup 2026 (USA, Canada & Mexico). Browse 
 - **Group stats & reveals** — After kick-off (matches) or the deadline (specials), see everyone's picks: pick distribution, consensus/contrarian badges, who-picked-what, per-match prediction breakdowns and a phase-by-phase recap
 - **Anti-cheat** — Other players' picks stay unreadable until the relevant deadline — enforced server-side in Firestore rules (no peeking via dev tools)
 - **Push notifications** — Optional, free web push: a match opening its predictions, a posted result, the specials deadline, and a heads-up about tomorrow's games
-- **Leaderboard** — Live ranking with points (5 exact / 3 outcome / 1 partial / 0 miss, plus 10 per special)
-- **Live scores** — Automatic results via football-data.org API
+- **Leaderboard** — Ranking with points (5 exact / 3 outcome / 1 partial / 0 miss, plus 10 per special), **updated automatically** as results land
+- **Automatic results** — A GitHub Actions cron (every 15 min) pulls finished matches and goalscorers from ESPN's public scoreboard, writes the results and scores every pool's bets — no manual entry
+- **Dark mode** — Follows the system preference (`prefers-color-scheme`)
 - **Bilingual** — Full Portuguese (PT) and English (EN) support
 
 ## Tech stack
@@ -32,11 +33,11 @@ Mobile-first web app for the FIFA World Cup 2026 (USA, Canada & Mexico). Browse 
 |-------|-----------|
 | Framework | React 19 |
 | Build | Vite 8 |
-| Styling | Vanilla CSS with custom properties |
+| Styling | Vanilla CSS with custom properties (light/dark themes) |
 | Auth | Firebase Auth (anonymous + Google / email linking) |
 | Database | Cloud Firestore (security rules enforce anti-cheat reveals) |
 | Push | Firebase Cloud Messaging + service worker |
-| Live scores | football-data.org API |
+| Results sync | ESPN public scoreboard + GitHub Actions cron + Firebase Admin SDK |
 | Deploy | GitHub Pages + Firestore rules, via GitHub Actions |
 | Notifications sender | GitHub Actions cron + Firebase Admin SDK (no Cloud Functions) |
 
@@ -68,11 +69,11 @@ npm run dev
 | `VITE_FIREBASE_MESSAGING_SENDER_ID` | Firebase messaging sender ID |
 | `VITE_FIREBASE_APP_ID` | Firebase app ID |
 | `VITE_FIREBASE_VAPID_KEY` | Web Push certificate public key (for notifications) |
-| `VITE_FOOTBALL_DATA_API_KEY` | football-data.org API key (free tier) |
+| `VITE_FOOTBALL_DATA_API_KEY` | football-data.org API key (optional — in-app live polling only; results come from the ESPN cron) |
 | `VITE_ADMIN_UID` | UID granted access to the admin panel |
 | `VITE_SENTRY_DSN` | Sentry DSN (optional, error reporting) |
 
-> **CI secrets:** the GitHub Actions workflows also need `FIREBASE_SERVICE_ACCOUNT` (a Firebase Admin SDK service-account JSON, with roles *Service Usage Consumer* + *Firebase Rules Admin*) to auto-deploy Firestore rules and send notifications.
+> **CI secrets:** the GitHub Actions workflows also need `FIREBASE_SERVICE_ACCOUNT` (a Firebase Admin SDK service-account JSON, with roles *Service Usage Consumer* + *Firebase Rules Admin*) to auto-deploy Firestore rules, send notifications and sync results.
 
 ## Project structure
 
@@ -91,7 +92,7 @@ src/
 │   ├── SpecialStats.jsx     # Special-bet distribution / ranking
 │   └── … (PoolManager, PoolSelector, TeamCard, AuthScreen, …)
 ├── data/
-│   ├── schedule.json        # All 104 matches with venues
+│   ├── schedule.json        # All 104 matches with venues (kickoffs in PT time, UTC+1)
 │   ├── teams/*.js           # 48 official squads + editorial data
 │   ├── specialBets.js       # Special categories, points, deadline
 │   ├── playerIndex.js       # Flat player/team index for autocomplete
@@ -114,12 +115,13 @@ src/
 │   ├── TeamProfile.jsx      # Team profile + official squad
 │   ├── admin/               # Admin: scores, special results, pools, users…
 │   └── … (Schedule, Teams, MyMatches, Rules, Missing)
-├── utils/                   # calendar (ICS), footballApi, scoring, logError
+├── utils/                   # calendar (ICS), matchTime (viewer-tz), scoring, logError
 └── firebase.js              # Firebase config, Firestore, Messaging
 
 public/firebase-messaging-sw.js   # FCM background service worker
 scripts/send-notifications.mjs    # Notification sender (GitHub Actions cron)
-.github/workflows/                # deploy (Pages + rules), notifications, health
+scripts/sync-results.mjs          # ESPN results + scorers + pool scoring (cron)
+.github/workflows/                # deploy (Pages + rules), notifications, sync-results, health
 firestore.rules                   # Security rules (incl. time-gated reveals)
 ```
 
@@ -133,7 +135,7 @@ firestore.rules                   # Security rules (incl. time-gated reveals)
 | **0** | Nothing correct | Predicted 0-0, result 2-1 |
 | **+10** | Each correct **special** bet | Top scorer / MVP / young player / surprise team |
 
-Tiebreak: total points > exact results > correct outcomes.
+Tiebreak: total points > exact results > correct outcomes. Scoring runs automatically ~15 min after each final whistle (manual override available in the admin panel).
 
 ## Screens
 
