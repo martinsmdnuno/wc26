@@ -43,6 +43,18 @@ const MATCH_BY_ID = Object.fromEntries(ALL_MATCHES.map((m) => [String(m.id), m])
 // ---- Build the list of pending events --------------------------------------
 const events = []; // { key, title, body, url, tag }
 
+// Test notification: TEST_MESSAGE env (workflow_dispatch input) sends one
+// immediately to every subscriber. Unique key per run, so it never dedupes.
+if (process.env.TEST_MESSAGE) {
+  events.push({
+    key: `test_${Date.now()}`,
+    title: '🧪 Teste — Mundial 2026',
+    body: process.env.TEST_MESSAGE,
+    url: '/',
+    tag: 'test',
+  });
+}
+
 // 0) Reminder ~1h before kickoff. The window only looks forward, so a sender
 // that was down never fires this after the match has already started.
 for (const m of ALL_MATCHES) {
