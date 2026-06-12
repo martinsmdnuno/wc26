@@ -3,6 +3,7 @@
 // (FIREBASE_SERVICE_ACCOUNT) covers Firestore + Messaging. No Cloud Functions.
 //
 // Triggers (each fired once, deduped via the `notificationLog/{key}` collection):
+//   - prekick_<id>   : ~1h before kickoff — last call to lock in a prediction
 //   - kickoff_<id>   : a match has kicked off (group predictions now visible)
 //   - result_<id>    : a result was posted
 //   - specials_reminder : ~24h before the specials deadline
@@ -41,6 +42,23 @@ const MATCH_BY_ID = Object.fromEntries(ALL_MATCHES.map((m) => [String(m.id), m])
 
 // ---- Build the list of pending events --------------------------------------
 const events = []; // { key, title, body, url, tag }
+
+// 0) Reminder ~1h before kickoff. The window only looks forward, so a sender
+// that was down never fires this after the match has already started.
+for (const m of ALL_MATCHES) {
+  if (!m.home_iso) continue;
+  const t = lockMs(m.date, m.kickoff_bst);
+  if (t == null) continue;
+  if (t > now && t <= now + HOUR) {
+    events.push({
+      key: `prekick_${m.id}`,
+      title: `⏰ ${m.home} x ${m.away} começa daqui a 1 hora`,
+      body: 'Não te esqueças de meter o teu palpite antes do apito!',
+      url: '/',
+      tag: `prekick_${m.id}`,
+    });
+  }
+}
 
 // 1) Kickoffs in the last 6h.
 for (const m of ALL_MATCHES) {
