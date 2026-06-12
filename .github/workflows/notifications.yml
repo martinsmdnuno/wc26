@@ -5,6 +5,11 @@ on:
     # Every 15 minutes. The script no-ops when there's nothing pending.
     - cron: '*/15 * * * *'
   workflow_dispatch:
+    inputs:
+      test_message:
+        description: 'Send a test notification with this text to all subscribers'
+        required: false
+        type: string
 
 jobs:
   notify:
@@ -17,6 +22,7 @@ jobs:
       - name: Send pending notifications
         env:
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          TEST_MESSAGE: ${{ inputs.test_message }}
         run: |
           if [ -z "$FIREBASE_SERVICE_ACCOUNT" ]; then
             echo "FIREBASE_SERVICE_ACCOUNT not set — skipping."
