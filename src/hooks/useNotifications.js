@@ -41,8 +41,17 @@ export function useNotifications() {
       if (!m) return;
       unsub = onMessage(m, (payload) => {
         const d = payload.data || {};
-        if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-          new Notification(d.title || 'Mundial 2026', { body: d.body || '', icon: '/icon-192.png' });
+        if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+        const title = d.title || 'Mundial 2026';
+        const opts = { body: d.body || '', icon: '/icon-192.png' };
+        try {
+          new Notification(title, opts);
+        } catch {
+          // iOS PWAs don't support the Notification constructor — show it via
+          // the service worker registration (created in enable()) instead.
+          navigator.serviceWorker?.getRegistration()
+            .then((reg) => reg?.showNotification(title, opts))
+            .catch(() => { /* no registration — nothing to show */ });
         }
       });
     });
