@@ -27,11 +27,34 @@ const initialPermission = () =>
   typeof Notification !== 'undefined' ? Notification.permission : 'default';
 
 export function useNotifications() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [supported, setSupported] = useState(false);
   const [permission, setPermission] = useState(initialPermission);
   const [busy, setBusy] = useState(false);
   const [enabled, setEnabled] = useState(() => !!storedToken());
+
+  // Reconcile: a device with permission granted whose token is listed in the
+  // user doc but that lost (or never had) the local marker — e.g. subscribed
+  // on a build that didn't store it — shows as ON without re-prompting.
+  // getToken with granted permission never prompts and returns the same token.
+  useEffect(() => {
+    if (!supported || enabled || !Array.isArray(profile?.fcmTokens) || profile.fcmTokens.length === 0) return undefined;
+    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return undefined;
+    let cancelled = false;
+    (async () => {
+      try {
+        const reg = await navigator.serviceWorker.getRegistration();
+        if (!reg?.active) return;
+        const m = await messagingPromise;
+        if (!m || !VAPID_KEY) return;
+        const token = await getToken(m, { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+        if (cancelled || !token || !profile.fcmTokens.includes(token)) return;
+        try { localStorage.setItem(TOKEN_KEY, token); } catch { /* storage unavailable */ }
+        setEnabled(true);
+      } catch { /* reconcile is best-effort */ }
+    })();
+    return () => { cancelled = true; };
+  }, [supported, enabled, profile]);
 
   useEffect(() => {
     let mounted = true;
@@ -65,28 +88,36 @@ export function useNotifications() {
     return () => { if (unsub) unsub(); };
   }, []);
 
+  // Returns null on success, an error string on failure (for the UI to show).
   const enable = useCallback(async () => {
-    if (!user) return;
+    if (!user) return null;
     setBusy(true);
     try {
-      const m = await messagingPromise;
-      if (!m || !VAPID_KEY) { setBusy(false); return; }
-
+      // The permission request MUST be the first thing in the tap handler:
+      // iOS discards the transient user activation across awaited I/O and then
+      // rejects the request without ever showing the dialog.
       const perm = await Notification.requestPermission();
       setPermission(perm);
-      if (perm !== 'granted') { setBusy(false); return; }
+      if (perm !== 'granted') { setBusy(false); return null; }
+
+      const m = await messagingPromise;
+      if (!m || !VAPID_KEY) { setBusy(false); return 'messaging unavailable'; }
 
       const reg = await navigator.serviceWorker.register(`/firebase-messaging-sw.js?${SW_QS}`);
+      // iOS: getToken against an installing worker can fail — wait until active.
+      await navigator.serviceWorker.ready;
       const token = await getToken(m, { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
-      if (token) {
-        await setDoc(doc(db, 'users', user.uid), { fcmTokens: arrayUnion(token) }, { merge: true });
-        try { localStorage.setItem(TOKEN_KEY, token); } catch { /* storage unavailable */ }
-        setEnabled(true);
-      }
+      if (!token) { setBusy(false); return 'no token'; }
+      await setDoc(doc(db, 'users', user.uid), { fcmTokens: arrayUnion(token) }, { merge: true });
+      try { localStorage.setItem(TOKEN_KEY, token); } catch { /* storage unavailable */ }
+      setEnabled(true);
+      setBusy(false);
+      return null;
     } catch (e) {
-      logError('NOTIF_ENABLE_FAILED', 'Falha ao ativar notificações', { e: String(e) });
+      logError('NOTIF_ENABLE_FAILED', 'Falha ao ativar notificações', { e: String(e), userId: user.uid });
+      setBusy(false);
+      return String(e?.message || e);
     }
-    setBusy(false);
   }, [user]);
 
   // Stops pushes to this device by removing its token from the user doc — the

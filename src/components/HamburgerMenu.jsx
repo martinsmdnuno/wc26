@@ -105,7 +105,11 @@ export default function HamburgerMenu({ onNavigate }) {
           {notifSupported && (
             <button
               className="hamburger-menu__item"
-              onClick={() => { if (notifEnabled) disableNotifs(); else enableNotifs(); }}
+              onClick={async () => {
+                if (notifEnabled) { disableNotifs(); return; }
+                const err = await enableNotifs();
+                if (err) alert(`${t('notifEnableFailed')}\n${err}`);
+              }}
               disabled={notifBusy || notifPermission === 'denied'}
             >
               <span>{notifEnabled ? '🔕' : '🔔'}</span>{' '}
