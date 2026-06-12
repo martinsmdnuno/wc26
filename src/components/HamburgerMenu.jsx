@@ -19,7 +19,14 @@ export default function HamburgerMenu({ onNavigate }) {
   const { t } = useLanguage();
   const { user, profile, isAnonymous, signInWithGoogle, signOutUser } = useAuth();
   const { activePool } = usePools();
-  const { supported: notifSupported, permission: notifPermission, busy: notifBusy, enable: enableNotifs } = useNotifications();
+  const {
+    supported: notifSupported,
+    permission: notifPermission,
+    busy: notifBusy,
+    enabled: notifEnabled,
+    enable: enableNotifs,
+    disable: disableNotifs,
+  } = useNotifications();
   const [linkingAccount, setLinkingAccount] = useState(false);
   const isAdmin = user?.uid && user.uid === import.meta.env.VITE_ADMIN_UID;
 
@@ -98,15 +105,15 @@ export default function HamburgerMenu({ onNavigate }) {
           {notifSupported && (
             <button
               className="hamburger-menu__item"
-              onClick={() => { if (notifPermission !== 'granted') enableNotifs(); }}
+              onClick={() => { if (notifEnabled) disableNotifs(); else enableNotifs(); }}
               disabled={notifBusy || notifPermission === 'denied'}
             >
-              <span>🔔</span>{' '}
-              {notifPermission === 'granted'
-                ? t('notifEnabled')
-                : notifPermission === 'denied'
-                  ? t('notifBlocked')
-                  : notifBusy ? t('saving') : t('notifEnable')}
+              <span>{notifEnabled ? '🔕' : '🔔'}</span>{' '}
+              {notifPermission === 'denied'
+                ? t('notifBlocked')
+                : notifBusy
+                  ? t('saving')
+                  : notifEnabled ? t('notifDisable') : t('notifEnable')}
             </button>
           )}
           {isAdmin && (
