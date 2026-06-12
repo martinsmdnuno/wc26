@@ -937,6 +937,48 @@
   background: rgba(0, 99, 65, 0.12);
 }
 
+.hamburger-menu__theme {
+  margin-top: 12px;
+  padding: 12px 8px 0;
+  border-top: 1px solid var(--border);
+}
+
+.hamburger-menu__theme-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hamburger-menu__theme-options {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.hamburger-menu__theme-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 4px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: var(--chip);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--dark);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.hamburger-menu__theme-btn--active {
+  border-color: var(--green-dark);
+  color: var(--green-dark);
+  font-weight: 600;
+}
+
 .hamburger-menu__account {
   margin-top: auto;
   padding-top: 16px;

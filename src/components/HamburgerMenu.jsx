@@ -1,13 +1,21 @@
 import { useState } from 'react';
 import * as Sentry from '@sentry/react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { getTheme, setTheme } from '../theme';
 import { useAuth } from '../hooks/useAuth';
 import { usePools } from '../hooks/usePools';
 import { useNotifications } from '../hooks/useNotifications';
 
+const THEME_OPTIONS = [
+  { value: 'system', icon: '🌗', labelKey: 'themeSystem' },
+  { value: 'light', icon: '☀️', labelKey: 'themeLight' },
+  { value: 'dark', icon: '🌙', labelKey: 'themeDark' },
+];
+
 export default function HamburgerMenu({ onNavigate }) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [theme, setThemeState] = useState(getTheme);
   const { t } = useLanguage();
   const { user, profile, isAnonymous, signInWithGoogle, signOutUser } = useAuth();
   const { activePool } = usePools();
@@ -107,6 +115,26 @@ export default function HamburgerMenu({ onNavigate }) {
             </button>
           )}
         </nav>
+
+        <div className="hamburger-menu__theme">
+          <span className="hamburger-menu__theme-label">{t('themeTitle')}</span>
+          <div className="hamburger-menu__theme-options" role="radiogroup" aria-label={t('themeTitle')}>
+            {THEME_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                role="radio"
+                aria-checked={theme === opt.value}
+                className={`hamburger-menu__theme-btn ${theme === opt.value ? 'hamburger-menu__theme-btn--active' : ''}`}
+                onClick={() => {
+                  setTheme(opt.value);
+                  setThemeState(opt.value);
+                }}
+              >
+                <span>{opt.icon}</span> {t(opt.labelKey)}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div className="hamburger-menu__account">
           {isAnonymous ? (
