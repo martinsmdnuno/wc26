@@ -222,6 +222,9 @@
 
 .schedule__day {
   margin-bottom: 20px;
+  /* Keep the day heading clear of the sticky header + phase filter when we
+     auto-scroll to today on open (scrollIntoView lands the day below them). */
+  scroll-margin-top: 130px;
 }
 
 .tz-note {

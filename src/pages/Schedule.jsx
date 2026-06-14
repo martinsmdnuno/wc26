@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import schedule from '../data/schedule.json';
 import PhaseFilter from '../components/PhaseFilter';
 import MatchCard from '../components/MatchCard';
@@ -16,6 +16,19 @@ function getNextMatchId(matches) {
   }
   return null;
 }
+
+// YYYY-MM-DD for "now" in the viewer's timezone — matches the day keys from
+// groupMatchesByDate so we can scroll to today's fixtures.
+function todayKey() {
+  const now = new Date();
+  const mo = String(now.getMonth() + 1).padStart(2, '0');
+  const da = String(now.getDate()).padStart(2, '0');
+  return `${now.getFullYear()}-${mo}-${da}`;
+}
+
+// Only auto-scroll once per app load, so returning to the tab doesn't yank the
+// view back to today after the user has scrolled away.
+let didInitialScroll = false;
 
 export default function Schedule({ onTeamClick }) {
   const [activePhase, setActivePhase] = useState('group');
@@ -35,6 +48,28 @@ export default function Schedule({ onTeamClick }) {
     () => (phase ? groupMatchesByDate(phase.matches) : {}),
     [phase]
   );
+
+  // Land on today's fixtures when the app opens. Day keys are chronological, so
+  // the target is the first day that is today-or-later (falling back to the last
+  // day once the phase is over). Skips when today is before the first day so we
+  // don't jump past the header needlessly.
+  const dayRefs = useRef({});
+  useEffect(() => {
+    if (didInitialScroll || activePhase !== 'group') return;
+    const dayKeys = Object.keys(matchesByDate);
+    if (dayKeys.length === 0) return;
+
+    const today = todayKey();
+    const idx = dayKeys.findIndex((k) => k >= today);
+    const target = idx === -1 ? dayKeys[dayKeys.length - 1] : dayKeys[idx];
+
+    didInitialScroll = true;
+    if (idx === 0) return; // already at/near the top
+    const el = dayRefs.current[target];
+    if (el) {
+      requestAnimationFrame(() => el.scrollIntoView({ block: 'start' }));
+    }
+  }, [matchesByDate, activePhase]);
 
   return (
     <div className="schedule">
@@ -56,7 +91,14 @@ export default function Schedule({ onTeamClick }) {
           });
 
           return (
-            <div key={date} className="schedule__day">
+            <div
+              key={date}
+              className="schedule__day"
+              ref={(el) => {
+                if (el) dayRefs.current[date] = el;
+                else delete dayRefs.current[date];
+              }}
+            >
               <h3 className="schedule__day-label">{label}</h3>
               {matches.map((match, i) => (
                 <MatchCard
