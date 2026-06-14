@@ -26,10 +26,6 @@ function todayKey() {
   return `${now.getFullYear()}-${mo}-${da}`;
 }
 
-// Only auto-scroll once per app load, so returning to the tab doesn't yank the
-// view back to today after the user has scrolled away.
-let didInitialScroll = false;
-
 export default function Schedule({ onTeamClick }) {
   const [activePhase, setActivePhase] = useState('group');
   const { t } = useLanguage();
@@ -49,27 +45,47 @@ export default function Schedule({ onTeamClick }) {
     [phase]
   );
 
-  // Land on today's fixtures when the app opens. Day keys are chronological, so
-  // the target is the first day that is today-or-later (falling back to the last
-  // day once the phase is over). Skips when today is before the first day so we
-  // don't jump past the header needlessly.
+  // Stop auto-pinning the moment the user scrolls/zooms themselves. wheel /
+  // touchmove / keydown only fire on real interaction — programmatic
+  // scrollIntoView below does not — so this never fights the user.
   const dayRefs = useRef({});
+  const userTookOverRef = useRef(false);
   useEffect(() => {
-    if (didInitialScroll || activePhase !== 'group') return;
+    const takeOver = () => { userTookOverRef.current = true; };
+    const opts = { passive: true };
+    window.addEventListener('wheel', takeOver, opts);
+    window.addEventListener('touchmove', takeOver, opts);
+    window.addEventListener('keydown', takeOver);
+    return () => {
+      window.removeEventListener('wheel', takeOver, opts);
+      window.removeEventListener('touchmove', takeOver, opts);
+      window.removeEventListener('keydown', takeOver);
+    };
+  }, []);
+
+  // Land on today's fixtures and keep them pinned to the top. Day keys are
+  // chronological, so the target is the first day that is today-or-later
+  // (falling back to the last day once the phase is over). This re-runs when
+  // cachedScores arrives: those async results add goal-scorer rows to earlier
+  // days, growing the content above today and pushing it down — re-pinning
+  // after that layout shift keeps today at the top instead of the bottom.
+  useEffect(() => {
+    if (userTookOverRef.current || activePhase !== 'group') return;
     const dayKeys = Object.keys(matchesByDate);
     if (dayKeys.length === 0) return;
 
     const today = todayKey();
     const idx = dayKeys.findIndex((k) => k >= today);
+    if (idx === 0) return; // first day is today/future → already at the top
     const target = idx === -1 ? dayKeys[dayKeys.length - 1] : dayKeys[idx];
 
-    didInitialScroll = true;
-    if (idx === 0) return; // already at/near the top
     const el = dayRefs.current[target];
     if (el) {
-      requestAnimationFrame(() => el.scrollIntoView({ block: 'start' }));
+      requestAnimationFrame(() => {
+        if (!userTookOverRef.current) el.scrollIntoView({ block: 'start' });
+      });
     }
-  }, [matchesByDate, activePhase]);
+  }, [matchesByDate, activePhase, cachedScores]);
 
   return (
     <div className="schedule">
