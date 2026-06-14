@@ -7,6 +7,7 @@ import { useLanguage } from '../i18n/LanguageContext';
 import { useBets, useMyBetsMap } from '../hooks/useBets';
 import { usePools } from '../hooks/usePools';
 import { useCachedScores } from '../hooks/useLiveScores';
+import { useScrollToToday } from '../hooks/useScrollToToday';
 import { groupMatchesByDate } from '../utils/matchOrder';
 import TimezoneNote from '../components/TimezoneNote';
 
@@ -37,6 +38,11 @@ export default function Bets({ onTeamClick }) {
     () => (phase ? groupMatchesByDate(phase.matches) : {}),
     [phase]
   );
+
+  // Land on today's fixtures, but only in the match-betting view and on the
+  // group phase. The list grows as bets + live scores load in, so the hook
+  // re-pins today to the top until it settles or the user scrolls.
+  const dayRefs = useScrollToToday(matchesByDate, view === 'bet' && activePhase === 'group');
 
   const handleSave = async (matchId, scoreA, scoreB) => {
     await saveBet(matchId, scoreA, scoreB);
@@ -134,7 +140,14 @@ export default function Bets({ onTeamClick }) {
                 });
 
                 return (
-                  <div key={date} className="schedule__day">
+                  <div
+                    key={date}
+                    className="schedule__day"
+                    ref={(el) => {
+                      if (el) dayRefs.current[date] = el;
+                      else delete dayRefs.current[date];
+                    }}
+                  >
                     <h3 className="schedule__day-label">{label}</h3>
                     {matches.map((match) => (
                       <BetCard
