@@ -73,7 +73,10 @@
 .app-main {
   flex: 1;
   padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
-  overflow-x: hidden;
+  /* `clip` (not `hidden`) prevents horizontal overflow WITHOUT turning this
+     into a scroll container — `hidden` would, which traps `position: sticky`
+     descendants (the Bolão view chips) so they never stick to the viewport. */
+  overflow-x: clip;
 }
 
 .page-wrapper {
@@ -92,7 +95,9 @@
 
 .page-enter-done {
   opacity: 1;
-  transform: translateX(0);
+  /* `none` at rest (not translateX(0)) so the wrapper isn't a transformed
+     containing block — keeps sticky descendants referencing the viewport. */
+  transform: none;
 }
 
 /* ===== BOTTOM NAV ===== */
