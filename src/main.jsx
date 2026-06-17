@@ -23,6 +23,13 @@ if (SENTRY_DSN) {
     integrations: [
       Sentry.browserTracingIntegration(),
     ],
+    // Stale chunk after a deploy — lazyWithReload recovers via a one-time
+    // reload, so these are expected noise rather than real errors.
+    ignoreErrors: [
+      'Importing a module script failed',
+      'Failed to fetch dynamically imported module',
+      'error loading dynamically imported module',
+    ],
   });
 }
 

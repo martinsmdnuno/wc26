@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect, lazy, Suspense } from 'react';
+import { useState, useCallback, useRef, useEffect, Suspense } from 'react';
 import BottomNav from './components/BottomNav';
 import Schedule from './pages/Schedule';
 import MyMatches from './pages/MyMatches';
@@ -13,16 +13,17 @@ import InstallBanner from './components/InstallBanner';
 import { useFavorites } from './hooks/useFavorites';
 import { useLanguage } from './i18n/LanguageContext';
 import { useAuth } from './hooks/useAuth';
+import lazyWithReload from './utils/lazyWithReload';
 import logo from './assets/logo.png';
 import './App.css';
 
 // Lazy-loaded pages — TeamProfile + Admin pull in the 48 team files / player
 // index, so deferring them (and the rarely-first Rules/Missing) keeps the
-// initial bundle light.
-const TeamProfile = lazy(() => import('./pages/TeamProfile'));
-const Admin = lazy(() => import('./pages/Admin'));
-const Rules = lazy(() => import('./pages/Rules'));
-const Missing = lazy(() => import('./pages/Missing'));
+// initial bundle light. lazyWithReload recovers from stale chunks after a deploy.
+const TeamProfile = lazyWithReload(() => import('./pages/TeamProfile'));
+const Admin = lazyWithReload(() => import('./pages/Admin'));
+const Rules = lazyWithReload(() => import('./pages/Rules'));
+const Missing = lazyWithReload(() => import('./pages/Missing'));
 
 const ADMIN_UID = import.meta.env.VITE_ADMIN_UID;
 
