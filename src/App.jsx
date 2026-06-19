@@ -39,7 +39,11 @@ export default function App() {
   const isAdmin = user?.uid && user.uid === ADMIN_UID;
 
   const navigate = useCallback((newPage) => {
-    if (newPage === page) return;
+    // Re-tapping the tab you're already on scrolls back to the top.
+    if (newPage === page) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     // Silent redirect for non-admin trying to access admin
     if (newPage === 'admin' && !isAdmin) {
       return;
