@@ -38,6 +38,9 @@ const ALIASES = {
   unitedstates: 'USA',
   usmnt: 'USA',
   bosniaandherzegovina: 'Bosnia',
+  // ESPN also renders Bosnia as "Bosnia & Herzegovina" / "Bosnia-Herzegovina";
+  // both normalize (non-letters stripped) to "bosniaherzegovina".
+  bosniaherzegovina: 'Bosnia',
   czechrepublic: 'Czechia',
   southkorea: 'South Korea',
   korearepublic: 'South Korea',
