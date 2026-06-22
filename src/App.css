@@ -395,6 +395,18 @@
   align-items: center;
   gap: 10px;
   flex: 1;
+  /* now a <button>: strip native chrome, keep the row layout */
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  min-width: 0;
+}
+
+.match-card__team:disabled {
+  cursor: default;
 }
 
 .match-card__team:last-child {
@@ -598,13 +610,13 @@
 
 .team-card__fav {
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: 0;
+  right: 0;
   font-size: 18px;
   color: var(--gray);
   padding: 4px;
-  min-width: 30px;
-  min-height: 30px;
+  min-width: 44px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -856,21 +868,30 @@
 
 .hamburger-menu__close {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 32px;
-  height: 32px;
+  top: 10px;
+  right: 10px;
+  /* 44x44 tap target; the visible 32px circle is drawn via ::before */
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 16px;
   color: var(--gray);
+}
+
+.hamburger-menu__close::before {
+  content: '';
+  position: absolute;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: var(--chip);
   transition: background 0.2s;
+  z-index: -1;
 }
 
-.hamburger-menu__close:active {
+.hamburger-menu__close:active::before {
   background: rgba(0, 0, 0, 0.1);
 }
 
@@ -1465,7 +1486,8 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 12px;
+  padding: 8px 12px;
+  min-height: 36px;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.12);
   color: rgba(255, 255, 255, 0.85);
@@ -2026,6 +2048,17 @@
   gap: 8px;
   flex: 1;
   min-width: 0;
+  /* now a <button>: strip native chrome, keep the row layout */
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+
+.bet-card__team:disabled {
+  cursor: default;
 }
 
 .bet-card__team--away {
@@ -2544,17 +2577,26 @@
 
 .install-banner__close {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 28px;
-  height: 28px;
+  top: 0;
+  right: 0;
+  /* 44x44 tap target; the visible 28px circle is drawn via ::before */
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 13px;
   color: var(--gray);
+}
+
+.install-banner__close::before {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: var(--chip);
+  z-index: -1;
 }
 
 .install-banner__content {
@@ -3235,8 +3277,13 @@
 .autocomplete__clear {
   font-size: 12px;
   color: var(--gray);
-  padding: 2px 6px;
   border-radius: 6px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .autocomplete__clear:hover {
