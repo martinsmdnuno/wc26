@@ -5,6 +5,7 @@ import { getTheme, setTheme } from '../theme';
 import { useAuth } from '../hooks/useAuth';
 import { usePools } from '../hooks/usePools';
 import { useNotifications } from '../hooks/useNotifications';
+import { useModalA11y } from '../hooks/useModalA11y';
 
 const THEME_OPTIONS = [
   { value: 'system', icon: '🌗', labelKey: 'themeSystem' },
@@ -29,6 +30,7 @@ export default function HamburgerMenu({ onNavigate }) {
   } = useNotifications();
   const [linkingAccount, setLinkingAccount] = useState(false);
   const isAdmin = user?.uid && user.uid === import.meta.env.VITE_ADMIN_UID;
+  const menuRef = useModalA11y({ active: open, onEscape: () => setOpen(false) });
 
   const handleNav = (page) => {
     setOpen(false);
@@ -71,7 +73,15 @@ export default function HamburgerMenu({ onNavigate }) {
 
       {open && <div className="hamburger-overlay" onClick={() => setOpen(false)} />}
 
-      <div className={`hamburger-menu ${open ? 'hamburger-menu--open' : ''}`}>
+      <div
+        className={`hamburger-menu ${open ? 'hamburger-menu--open' : ''}`}
+        ref={menuRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu"
+        aria-hidden={!open}
+        inert={!open}
+      >
         <button className="hamburger-menu__close" onClick={() => setOpen(false)} aria-label="Close menu">
           ✕
         </button>
