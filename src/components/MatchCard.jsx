@@ -70,11 +70,16 @@ export default function MatchCard({ match, matchScore, isNext, showCalButton = f
       )}
 
       <div className="match-card__teams">
-        <div className="match-card__team" onClick={() => hasTeams && onTeamClick?.(match.home_iso)} style={hasTeams && onTeamClick ? { cursor: 'pointer' } : undefined}>
+        <button
+          type="button"
+          className="match-card__team"
+          onClick={() => onTeamClick?.(match.home_iso)}
+          disabled={!hasTeams || !onTeamClick}
+        >
           {hasTeams ? (
             <img
               src={getFlagUrl(match.home_iso)}
-              alt={homeName}
+              alt=""
               className="match-card__flag match-card__flag--clickable"
               loading="lazy"
             />
@@ -82,7 +87,7 @@ export default function MatchCard({ match, matchScore, isNext, showCalButton = f
             <div className="match-card__flag-placeholder" />
           )}
           <span className="match-card__name">{homeName}</span>
-        </div>
+        </button>
 
         {isFinished ? (
           <span className="match-card__score">
@@ -92,11 +97,16 @@ export default function MatchCard({ match, matchScore, isNext, showCalButton = f
           <span className="match-card__vs">{t('vs')}</span>
         )}
 
-        <div className="match-card__team" onClick={() => hasTeams && onTeamClick?.(match.away_iso)} style={hasTeams && onTeamClick ? { cursor: 'pointer' } : undefined}>
+        <button
+          type="button"
+          className="match-card__team"
+          onClick={() => onTeamClick?.(match.away_iso)}
+          disabled={!hasTeams || !onTeamClick}
+        >
           {hasTeams ? (
             <img
               src={getFlagUrl(match.away_iso)}
-              alt={awayName}
+              alt=""
               className="match-card__flag match-card__flag--clickable"
               loading="lazy"
             />
@@ -104,7 +114,7 @@ export default function MatchCard({ match, matchScore, isNext, showCalButton = f
             <div className="match-card__flag-placeholder" />
           )}
           <span className="match-card__name">{awayName}</span>
-        </div>
+        </button>
       </div>
 
       {isFinished && (scorersA.length > 0 || scorersB.length > 0) && (

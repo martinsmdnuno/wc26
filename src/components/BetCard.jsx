@@ -93,19 +93,25 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
       )}
 
       <div className="bet-card__teams">
-        <div className="bet-card__team" onClick={() => hasTeams && onTeamClick?.(match.home_iso)} style={hasTeams && onTeamClick ? { cursor: 'pointer' } : undefined}>
+        <button
+          type="button"
+          className="bet-card__team"
+          onClick={() => onTeamClick?.(match.home_iso)}
+          disabled={!hasTeams || !onTeamClick}
+        >
           {hasTeams ? (
-            <img src={getFlagUrl(match.home_iso)} alt={homeName} className="match-card__flag match-card__flag--clickable" loading="lazy" />
+            <img src={getFlagUrl(match.home_iso)} alt="" className="match-card__flag match-card__flag--clickable" loading="lazy" />
           ) : (
             <div className="match-card__flag-placeholder" />
           )}
           <span className="match-card__name">{homeName}</span>
-        </div>
+        </button>
 
         <div className="bet-card__scores">
           <input
             className="bet-card__input"
             type="number"
+            inputMode="numeric"
             min="0"
             value={scoreA}
             onChange={(e) => handleChange('home', e.target.value)}
@@ -116,6 +122,7 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
           <input
             className="bet-card__input"
             type="number"
+            inputMode="numeric"
             min="0"
             value={scoreB}
             onChange={(e) => handleChange('away', e.target.value)}
@@ -124,14 +131,19 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
           />
         </div>
 
-        <div className="bet-card__team bet-card__team--away" onClick={() => hasTeams && onTeamClick?.(match.away_iso)} style={hasTeams && onTeamClick ? { cursor: 'pointer' } : undefined}>
+        <button
+          type="button"
+          className="bet-card__team bet-card__team--away"
+          onClick={() => onTeamClick?.(match.away_iso)}
+          disabled={!hasTeams || !onTeamClick}
+        >
           <span className="match-card__name">{awayName}</span>
           {hasTeams ? (
-            <img src={getFlagUrl(match.away_iso)} alt={awayName} className="match-card__flag match-card__flag--clickable" loading="lazy" />
+            <img src={getFlagUrl(match.away_iso)} alt="" className="match-card__flag match-card__flag--clickable" loading="lazy" />
           ) : (
             <div className="match-card__flag-placeholder" />
           )}
-        </div>
+        </button>
       </div>
 
       {isFinished && matchScore?.scoreHome != null && (
