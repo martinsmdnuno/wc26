@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useLanguage } from '../i18n/LanguageContext';
 
 // iOS Safari anchors position:fixed elements to the visual viewport, so the
@@ -22,6 +22,7 @@ function useKeyboardOpen() {
 export default function BottomNav({ active, onNavigate, favoriteCount }) {
   const { t } = useLanguage();
   const keyboardOpen = useKeyboardOpen();
+  const reduceMotion = useReducedMotion();
 
   const tabs = [
     { id: 'schedule', label: t('navSchedule'), icon: '🏆' },
@@ -42,7 +43,7 @@ export default function BottomNav({ active, onNavigate, favoriteCount }) {
           {tab.id === 'my-matches' && favoriteCount > 0 && (
             <motion.span
               className="bottom-nav__badge"
-              initial={{ scale: 0 }}
+              initial={reduceMotion ? false : { scale: 0 }}
               animate={{ scale: 1 }}
               key={favoriteCount}
             >

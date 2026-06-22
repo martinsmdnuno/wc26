@@ -98,3 +98,26 @@ button {
 img {
   display: block;
 }
+
+/* Visible keyboard-focus ring. Only applies to keyboard navigation (not mouse
+   or touch), so it doesn't intrude on pointer users. Inputs that set their own
+   focus border/box-shadow in App.css keep those as their indicator. */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Respect users who ask the OS to minimise motion: near-instant transitions
+   and a single iteration for any looping animation (CSS keyframes + the page
+   transitions / framer-motion fallbacks). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
