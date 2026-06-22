@@ -576,12 +576,28 @@
   background: var(--surface);
   border-radius: 8px;
   padding: 14px 8px 10px;
+  position: relative;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.team-card__main {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  position: relative;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  width: 100%;
+  /* it's a <button>: strip native chrome, keep the column layout */
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+}
+
+.team-card__main:disabled {
+  cursor: default;
 }
 
 .team-card__flag {
@@ -1069,7 +1085,7 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--gold);
+  color: var(--gold-text);
   margin-bottom: 12px;
 }
 
@@ -1085,7 +1101,7 @@
 
 .rules__list li::before {
   content: '•';
-  color: var(--gold);
+  color: var(--gold-text);
   font-weight: 700;
   margin-right: 8px;
 }
@@ -1101,7 +1117,7 @@
 
 .rules__list--ordered li::before {
   content: counter(rules-counter) '.';
-  color: var(--gold);
+  color: var(--gold-text);
   font-weight: 700;
   margin-right: 8px;
 }
@@ -1449,6 +1465,87 @@
   text-align: center;
   padding: 40px 20px;
   color: var(--gray);
+}
+
+/* ===== SKELETON (loading placeholder) ===== */
+.skeleton-card {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.skeleton-line,
+.skeleton-flag,
+.skeleton-score {
+  background: var(--chip);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Sheen sweep; frozen by the global prefers-reduced-motion rule. */
+.skeleton-line::after,
+.skeleton-flag::after,
+.skeleton-score::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.18),
+    transparent
+  );
+  animation: skeleton-sheen 1.3s infinite;
+}
+
+@keyframes skeleton-sheen {
+  100% { transform: translateX(100%); }
+}
+
+.skeleton-line--date {
+  width: 45%;
+  height: 11px;
+  margin-bottom: 14px;
+}
+
+.skeleton-line--name {
+  width: 64px;
+  height: 13px;
+}
+
+.skeleton-teams {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skeleton-team {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.skeleton-team--away {
+  flex-direction: row-reverse;
+}
+
+.skeleton-flag {
+  width: 36px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.skeleton-score {
+  width: 52px;
+  height: 30px;
+  border-radius: 8px;
+  flex-shrink: 0;
 }
 
 .bets__no-pool {
@@ -4467,6 +4564,33 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  /* shared by the <span> and, when navigable, a <button> with this class:
+     reset native chrome but keep the weight/size from this rule */
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+}
+
+/* Team name as a keyboard-focusable link inside standings/stats tables */
+.group-table__team-link {
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .stats-scorers__pens {

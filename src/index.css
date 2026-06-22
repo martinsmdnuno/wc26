@@ -11,6 +11,9 @@
   --green-mid: #00A651;
   --gold: #C9A84C;
   --gold-light: #E8C97A;
+  /* Gold legible as *text* on light surfaces (>=4.5:1). --gold itself is a
+     decorative/accent tone and fails AA for small text on white. */
+  --gold-text: #8A6D1E;
   --dark: #1A1A1A;
   --gray: #6B7280;
   --border: rgba(0, 0, 0, 0.06);
@@ -37,6 +40,7 @@
     --off-white: #131417;
     --green-dark: #0F8C5F;
     --gold: #D6B65F;
+    --gold-text: #D6B65F;
     --dark: #ECEDEE;
     --gray: #A2A8B3;
     --border: rgba(255, 255, 255, 0.09);
@@ -52,6 +56,7 @@
   --off-white: #131417;
   --green-dark: #0F8C5F;
   --gold: #D6B65F;
+  --gold-text: #D6B65F;
   --dark: #ECEDEE;
   --gray: #A2A8B3;
   --border: rgba(255, 255, 255, 0.09);

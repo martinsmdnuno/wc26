@@ -2,6 +2,7 @@ import { useState, useMemo, Suspense } from 'react';
 import schedule from '../data/schedule.json';
 import PhaseFilter from '../components/PhaseFilter';
 import BetCard from '../components/BetCard';
+import SkeletonBetList from '../components/SkeletonBetCard';
 import PoolManager from '../components/PoolManager';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useBets, useMyBetsMap } from '../hooks/useBets';
@@ -130,7 +131,7 @@ export default function Bets({ onTeamClick }) {
           <TimezoneNote />
 
           {loading ? (
-            <div className="bets__loading">{t('loading')}</div>
+            <SkeletonBetList />
           ) : (
             <div className="bets__list">
               {Object.entries(matchesByDate).map(([date, matches]) => {
