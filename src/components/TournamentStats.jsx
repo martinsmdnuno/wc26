@@ -33,7 +33,17 @@ export default function TournamentStats({ scores, onTeamClick }) {
                 ) : (
                   <span className="stats-scorers__flag stats-scorers__flag--unknown" />
                 )}
-                <span className="stats-scorers__name">{s.name}</span>
+                {s.teamIso ? (
+                  <button
+                    type="button"
+                    className="stats-scorers__name"
+                    onClick={(e) => { e.stopPropagation(); onTeamClick?.(s.teamIso); }}
+                  >
+                    {s.name}
+                  </button>
+                ) : (
+                  <span className="stats-scorers__name">{s.name}</span>
+                )}
                 {s.pens > 0 && (
                   <span className="stats-scorers__pens">{s.pens} {t('statsPenAbbr')}</span>
                 )}
@@ -69,7 +79,17 @@ export default function TournamentStats({ scores, onTeamClick }) {
                   <td className="group-table__pos">{idx + 1}</td>
                   <td className="group-table__team">
                     <img src={flagUrl(r.iso)} alt="" loading="lazy" />
-                    <span>{t(`team.${r.iso}`)}</span>
+                    {onTeamClick ? (
+                      <button
+                        type="button"
+                        className="group-table__team-link"
+                        onClick={(e) => { e.stopPropagation(); onTeamClick(r.iso); }}
+                      >
+                        {t(`team.${r.iso}`)}
+                      </button>
+                    ) : (
+                      <span>{t(`team.${r.iso}`)}</span>
+                    )}
                   </td>
                   <td>{r.played}</td>
                   <td>{r.ga}</td>

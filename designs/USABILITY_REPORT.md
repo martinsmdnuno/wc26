@@ -7,6 +7,8 @@
 
 > Este documento é vivo. À medida que os pontos forem resolvidos, marca a checkbox e referencia o commit/PR.
 
+> **Estado (2026-06-22):** ✅ Todos os pontos resolvidos — Sprint 1 (foco/modais, `:focus-visible`, reduced-motion), Sprint 2 (alvos de toque, equipas como `<button>`, `inputmode`, autocomplete) e Sprint 3 (follow-up `TeamCard`/tabelas, contraste do dourado, skeletons).
+
 ---
 
 ## 1. Sumário executivo
@@ -119,7 +121,8 @@ E no framer-motion usar `useReducedMotion()` para anular `animate`.
 **Onde:** `BetCard.jsx:96,127`; `MatchCard.jsx:73,95` (`<div className="…__team" onClick>` + `cursor:pointer`)
 **Problema:** Navega para o perfil da equipa mas não é focável nem ativável por teclado/leitor de ecrã. (É a única exceção ao "0 div clicável".)
 **Fix:** Converter em `<button type="button">` com `aria-label={`Ver perfil de ${homeName}`}` e remover o `style={{cursor:'pointer'}}`.
-> ✅ **Resolvido (Sprint 2)** — `BetCard` e `MatchCard` usam `<button>` (nome acessível vem do texto da equipa; bandeira passou a `alt=""` decorativa; `disabled` quando knockout/sem handler). **Follow-up:** `TeamCard` (card inteiro clicável) e as células `group-table__team` (`GroupTable`/`TournamentStats`) continuam `div`/`td` com `onClick` — mesmo padrão, fora do âmbito do Sprint 2.
+> ✅ **Resolvido (Sprint 2)** — `BetCard` e `MatchCard` usam `<button>` (nome acessível vem do texto da equipa; bandeira passou a `alt=""` decorativa; `disabled` quando knockout/sem handler).
+> ✅ **Follow-up resolvido (Sprint 3)** — `TeamCard` reestruturado em `team-card__main` (`<button>`) + botão de favorito irmão (sem aninhar botões); `GroupTable` e `TournamentStats` (top scorers + defesas) com o nome da equipa como `<button>` focável (`group-table__team-link`/`stats-scorers__name`), `stopPropagation` para o `onClick` da linha continuar a servir o rato.
 - [x] Resolvido
 
 ---
@@ -143,7 +146,8 @@ E no framer-motion usar `useReducedMotion()` para anular `animate`.
 **Onde:** `.rules__section-title` ([App.css:1051](src/App.css)) usa `var(--gold)` (~#C9A84C) sobre `--surface` (branco) ≈ **3.5:1** (falha AA para texto < 18pt).
 **Nota:** Já existe o tom escuro `#8B7226`/`#8a6d1e` usado corretamente nos badges (`App.css:1121, 2117, 3415`).
 **Fix:** usar o dourado escuro para *texto* em fundo claro (manter o dourado claro só para fundos escuros / acentos grandes).
-- [ ] Resolvido
+> ✅ **Resolvido (Sprint 3)** — novo token `--gold-text` (`#8A6D1E` em claro ≈ 4.6:1, `#D6B65F` em escuro) aplicado a `.rules__section-title` e aos marcadores das listas de regras. O `--gold` continua para acentos/fundos escuros.
+- [x] Resolvido
 
 ### 4.4 Modais sem `role`/labels ARIA
 **Onde:** `ConfirmModal.jsx`, `HamburgerMenu.jsx`
@@ -154,7 +158,8 @@ E no framer-motion usar `useReducedMotion()` para anular `animate`.
 **Onde:** `Bets.jsx`, `MyMatches.jsx`
 **Problema:** texto simples durante o fetch; sem indicação da estrutura.
 **Fix:** componente `SkeletonCard` (3–4 placeholders) — perceção de velocidade melhor. *(Cosmético, não bloqueia.)*
-- [ ] Resolvido
+> ✅ **Resolvido (Sprint 3)** — `SkeletonBetCard`/`SkeletonBetList` (5 placeholders com a silhueta do `BetCard` + sheen, congelado por reduced-motion) no estado de loading do `Bets.jsx`. `MyMatches.jsx` não tem fetch assíncrono (parte do schedule local + favoritos), por isso não precisa.
+- [x] Resolvido
 
 ### 4.6 Foco inicial no `ConfirmModal`
 **Onde:** `ConfirmModal.jsx`
