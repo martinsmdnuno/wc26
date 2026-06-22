@@ -112,13 +112,15 @@ E no framer-motion usar `useReducedMotion()` para anular `animate`.
 
 **Problema:** Abaixo do mínimo recomendado de 44×44px (WCAG 2.5.5 / iOS HIG). Botão de favorito a 30px é o mais sensível.
 **Fix:** `min-width: 44px; min-height: 44px;` (a área de toque pode exceder o ícone visual via padding/`::before` transparente para não engordar o layout).
-- [ ] Resolvido
+> ✅ **Resolvido (Sprint 2)** — `.team-card__fav` → 44px; `.hamburger-menu__close` e `.install-banner__close` mantêm o círculo visível (32/28px via `::before`) com área de toque 44px; `.autocomplete__clear` → 44px; `.pool-selector__trigger` → 36px.
+- [x] Resolvido
 
 ### 3.5 Cartões de equipa "clicáveis" não acessíveis por teclado
 **Onde:** `BetCard.jsx:96,127`; `MatchCard.jsx:73,95` (`<div className="…__team" onClick>` + `cursor:pointer`)
 **Problema:** Navega para o perfil da equipa mas não é focável nem ativável por teclado/leitor de ecrã. (É a única exceção ao "0 div clicável".)
 **Fix:** Converter em `<button type="button">` com `aria-label={`Ver perfil de ${homeName}`}` e remover o `style={{cursor:'pointer'}}`.
-- [ ] Resolvido
+> ✅ **Resolvido (Sprint 2)** — `BetCard` e `MatchCard` usam `<button>` (nome acessível vem do texto da equipa; bandeira passou a `alt=""` decorativa; `disabled` quando knockout/sem handler). **Follow-up:** `TeamCard` (card inteiro clicável) e as células `group-table__team` (`GroupTable`/`TournamentStats`) continuam `div`/`td` com `onClick` — mesmo padrão, fora do âmbito do Sprint 2.
+- [x] Resolvido
 
 ---
 
@@ -127,13 +129,15 @@ E no framer-motion usar `useReducedMotion()` para anular `animate`.
 ### 4.1 Placares sem `inputmode="numeric"`
 **Onde:** `BetCard.jsx:106–124` (`<input type="number">`)
 **Fix:** adicionar `inputmode="numeric"` (teclado numérico no telemóvel; só são precisos inteiros 0–N).
-- [ ] Resolvido
+> ✅ **Resolvido (Sprint 2)** — `inputMode="numeric"` nos dois inputs de placar do `BetCard`.
+- [x] Resolvido
 
 ### 4.2 Autocomplete sem roles de listbox
 **Onde:** `Autocomplete.jsx`
 **Problema:** setas funcionam, mas a lista/itens não expõem `role="listbox"`/`role="option"` nem `aria-selected`/`aria-activedescendant` — leitores de ecrã não anunciam o item ativo.
 **Fix:** `role="listbox"` na `<ul>`, `role="option" aria-selected={i===active}` nos `<li>`, e `aria-activedescendant` no input.
-- [ ] Resolvido
+> ✅ **Resolvido (Sprint 2)** — input com `role="combobox"` + `aria-expanded`/`aria-controls`/`aria-autocomplete`/`aria-activedescendant`; `<ul role="listbox">` e `<li role="option" aria-selected>` com ids únicos via `useId`.
+- [x] Resolvido
 
 ### 4.3 Contraste do dourado como texto em fundo claro
 **Onde:** `.rules__section-title` ([App.css:1051](src/App.css)) usa `var(--gold)` (~#C9A84C) sobre `--surface` (branco) ≈ **3.5:1** (falha AA para texto < 18pt).
@@ -161,9 +165,9 @@ E no framer-motion usar `useReducedMotion()` para anular `animate`.
 
 ## 5. Prioridade BAIXA 🟢
 
-- **`.pool-selector__trigger`** ([App.css:1468](src/App.css)) ~28px de altura — aumentar padding para margem de segurança.
-- **`.autocomplete__clear`** ([App.css:3237](src/App.css)) sem `min-*` explícito — garantir 44px.
-- **`:focus-visible` no `.lang-switcher`** ([App.css:37](src/App.css)) — adicionar anel.
+- ✅ **`.pool-selector__trigger`** — agora `min-height: 36px` (Sprint 2).
+- ✅ **`.autocomplete__clear`** — agora 44×44px (Sprint 2).
+- ✅ **`:focus-visible` no `.lang-switcher`** — coberto pelo `:focus-visible` global (Sprint 1).
 
 ---
 
