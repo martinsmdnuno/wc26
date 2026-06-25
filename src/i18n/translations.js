@@ -145,6 +145,9 @@ export const translations = {
     lbTabKnockout: 'Eliminatórias',
     lbTabSpecial: 'Especiais',
     lbTabTotal: 'Total',
+    lbFieldExact: 'Exatos',
+    lbFieldOutcome: 'Resultados',
+    lbHistoryTitle: 'Histórico de ajustes',
 
     // Special bets (tournament-wide)
     specialTab: 'Especiais',
@@ -513,6 +516,9 @@ export const translations = {
     lbTabKnockout: 'Knockouts',
     lbTabSpecial: 'Specials',
     lbTabTotal: 'Total',
+    lbFieldExact: 'Exact',
+    lbFieldOutcome: 'Outcomes',
+    lbHistoryTitle: 'Adjustment history',
 
     // Special bets (tournament-wide)
     specialTab: 'Specials',

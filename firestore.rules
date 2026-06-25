@@ -114,6 +114,16 @@ service cloud.firestore {
               || isAdmin());
       }
 
+      // Audit trail of MANUAL leaderboard adjustments. Read by everyone for
+      // transparency; written only by the pool creator / admin (and the Admin
+      // SDK, which bypasses rules). This is the visible "histórico de ajustes".
+      match /adjustments/{adjId} {
+        allow read: if request.auth != null;
+        allow create, update, delete: if request.auth != null
+          && (request.auth.uid == get(/databases/$(database)/documents/pools/$(poolId)).data.createdBy
+              || isAdmin());
+      }
+
       // Live-score cache for the pool, written by clients from the public
       // scores feed and read by all members. Members write; everyone reads.
       match /matches/{matchId} {
