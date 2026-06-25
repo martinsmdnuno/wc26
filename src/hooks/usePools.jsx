@@ -127,6 +127,8 @@ export function PoolProvider({ children }) {
       totalPoints: 0,
       exactResultsCount: 0,
       correctOutcomeCount: 0,
+      groupPoints: 0,
+      knockoutPoints: 0,
     });
 
     // Add pool to user's pools array
@@ -169,6 +171,8 @@ export function PoolProvider({ children }) {
       totalPoints: 0,
       exactResultsCount: 0,
       correctOutcomeCount: 0,
+      groupPoints: 0,
+      knockoutPoints: 0,
     });
 
     // Add pool to user's pools array

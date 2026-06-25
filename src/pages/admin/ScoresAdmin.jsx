@@ -4,6 +4,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { calculatePoints } from '../../utils/scoring';
+import { matchSegment } from '../../utils/phases';
 import schedule from '../../data/schedule.json';
 import { logError } from '../../utils/logError';
 
@@ -97,6 +98,9 @@ export default function ScoresAdmin() {
         // or recalculating a result never double-counts. The previous bet type
         // is derived from its previous points (5=exact, 3=outcome, else none).
         const deltas = {}; // uid -> { points, exact, outcome }
+        // All bets here are for the same match, so they share one segment;
+        // route the match-points delta to that segment's bucket too.
+        const segment = matchSegment(match.id); // 'group' | 'knockout'
 
         for (const betDoc of betsSnap.docs) {
           const bet = betDoc.data();
@@ -127,6 +131,7 @@ export default function ScoresAdmin() {
               totalPoints: increment(d.points),
               exactResultsCount: increment(d.exact),
               correctOutcomeCount: increment(d.outcome),
+              [segment === 'group' ? 'groupPoints' : 'knockoutPoints']: increment(d.points),
             });
           } else {
             let nickname = '';
@@ -139,6 +144,8 @@ export default function ScoresAdmin() {
               totalPoints: Math.max(0, d.points),
               exactResultsCount: Math.max(0, d.exact),
               correctOutcomeCount: Math.max(0, d.outcome),
+              groupPoints: segment === 'group' ? Math.max(0, d.points) : 0,
+              knockoutPoints: segment === 'knockout' ? Math.max(0, d.points) : 0,
             });
           }
         }

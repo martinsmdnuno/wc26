@@ -2777,6 +2777,40 @@
   padding: 16px;
 }
 
+.leaderboard__tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  background: var(--bg-subtle, rgba(0, 0, 0, 0.04));
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.leaderboard__tab {
+  flex: 1;
+  min-height: 44px;
+  padding: 8px 6px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--gray);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.leaderboard__tab--active {
+  background: var(--card-bg, #fff);
+  color: var(--text, #111);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.leaderboard__tab:focus-visible {
+  outline: 2px solid var(--green, #006341);
+  outline-offset: 2px;
+}
+
 .leaderboard__loading,
 .leaderboard__empty {
   text-align: center;

@@ -141,6 +141,10 @@ export const translations = {
     player: 'Jogador',
     you: 'tu',
     leaderboardEmpty: 'Ainda não há apostas no teu grupo.',
+    lbTabGroup: 'Grupos',
+    lbTabKnockout: 'Eliminatórias',
+    lbTabSpecial: 'Especiais',
+    lbTabTotal: 'Total',
 
     // Special bets (tournament-wide)
     specialTab: 'Especiais',
@@ -505,6 +509,10 @@ export const translations = {
     player: 'Player',
     you: 'you',
     leaderboardEmpty: 'No bets in your group yet.',
+    lbTabGroup: 'Groups',
+    lbTabKnockout: 'Knockouts',
+    lbTabSpecial: 'Specials',
+    lbTabTotal: 'Total',
 
     // Special bets (tournament-wide)
     specialTab: 'Specials',
