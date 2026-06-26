@@ -83,6 +83,20 @@ export function resolveKnockout(results) {
   return resolved;
 }
 
+// Like resolveKnockout, but also derives the certain winner of each knockout
+// match and the champion (winner of the final). Used by the read-only bracket.
+export function resolveWinners(results) {
+  const teams = resolveKnockout(results);
+  const winners = {};
+  for (const pid of KNOCKOUT_PHASES) {
+    for (const m of phaseById[pid]?.matches || []) {
+      winners[m.id] = outcome(m.id, teams, results)?.winner || null;
+    }
+  }
+  const finalMatch = phaseById.final?.matches?.[0];
+  return { teams, winners, champion: finalMatch ? winners[finalMatch.id] || null : null };
+}
+
 // Human-friendly label for an unresolved slot, e.g. "1.º Grupo A",
 // "Melhor 3.º (C/E/F/H/I)", "Venc. jogo 73". Needs the i18n `t`.
 export function slotLabel(str, t) {

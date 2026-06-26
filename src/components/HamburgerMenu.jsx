@@ -118,6 +118,9 @@ export default function HamburgerMenu({ onNavigate }) {
         )}
 
         <nav className="hamburger-menu__nav">
+          <button className="hamburger-menu__item" onClick={() => handleNav('my-matches')}>
+            <span>⭐</span> {t('navMyMatches')}
+          </button>
           <button className="hamburger-menu__item" onClick={() => handleNav('pools')}>
             <span>🎱</span> {t('poolMyPools')}
           </button>
