@@ -6,6 +6,8 @@ import { useAuth } from '../hooks/useAuth';
 import { usePools } from '../hooks/usePools';
 import { useNotifications } from '../hooks/useNotifications';
 import { useModalA11y } from '../hooks/useModalA11y';
+import Avatar from './Avatar';
+import ProfileModal from './ProfileModal';
 
 const THEME_OPTIONS = [
   { value: 'system', icon: '🌗', labelKey: 'themeSystem' },
@@ -29,6 +31,7 @@ export default function HamburgerMenu({ onNavigate }) {
     disable: disableNotifs,
   } = useNotifications();
   const [linkingAccount, setLinkingAccount] = useState(false);
+  const [editingProfile, setEditingProfile] = useState(false);
   const isAdmin = user?.uid && user.uid === import.meta.env.VITE_ADMIN_UID;
   const menuRef = useModalA11y({ active: open, onEscape: () => setOpen(false) });
 
@@ -86,15 +89,27 @@ export default function HamburgerMenu({ onNavigate }) {
           ✕
         </button>
         {profile && (
-          <div className="hamburger-menu__profile">
-            <span className="hamburger-menu__avatar">{profile.nickname?.charAt(0).toUpperCase()}</span>
+          <button
+            type="button"
+            className="hamburger-menu__profile hamburger-menu__profile--btn"
+            onClick={() => { setOpen(false); setEditingProfile(true); }}
+            aria-label={t('editProfileTitle')}
+          >
+            <Avatar
+              nickname={profile.nickname}
+              avatar={profile.avatar}
+              customPhotoURL={profile.customPhotoURL}
+              avatarKind={profile.avatarKind}
+              className="hamburger-menu__avatar"
+            />
             <div>
               <span className="hamburger-menu__nick">{profile.nickname}</span>
               {activePool && (
                 <span className="hamburger-menu__group">{activePool.name}</span>
               )}
             </div>
-          </div>
+            <span className="hamburger-menu__profile-edit" aria-hidden="true">✏️</span>
+          </button>
         )}
 
         <nav className="hamburger-menu__nav">
@@ -201,6 +216,8 @@ export default function HamburgerMenu({ onNavigate }) {
           )}
         </div>
       </div>
+
+      {editingProfile && <ProfileModal onClose={() => setEditingProfile(false)} />}
     </>
   );
 }
