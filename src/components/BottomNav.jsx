@@ -5,15 +5,42 @@ import { useLanguage } from '../i18n/LanguageContext';
 // iOS Safari anchors position:fixed elements to the visual viewport, so the
 // keyboard pushes the nav to the middle of the screen, over the content.
 // While the keyboard is open the nav is useless anyway — hide it.
+//
+// The hidden state is anchored to whether a text field is actually focused, not
+// just to the viewport height. On an installed iOS PWA the visualViewport
+// `resize` doesn't fire reliably when the keyboard dismisses (e.g. the focused
+// input is unmounted as a modal closes), which used to leave the nav stuck
+// hidden forever. Keying off `focusout` guarantees it always comes back.
+const isTextField = (el) =>
+  !!el && typeof el.matches === 'function' &&
+  el.matches('input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]), textarea, [contenteditable=""], [contenteditable=true]');
+
 function useKeyboardOpen() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const vv = window.visualViewport;
-    if (!vv) return undefined;
-    const onResize = () => setOpen(window.innerHeight - vv.height > 150);
-    vv.addEventListener('resize', onResize);
-    return () => vv.removeEventListener('resize', onResize);
+    let raf = 0;
+    const update = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const focused = isTextField(document.activeElement);
+        const vv = window.visualViewport;
+        const shrunk = vv ? window.innerHeight - vv.height > 150 : false;
+        // Hide only while a text field holds focus AND the viewport shrank.
+        // Either condition dropping (notably focus on close) brings the nav back.
+        setOpen(focused && shrunk);
+      });
+    };
+
+    window.visualViewport?.addEventListener('resize', update);
+    document.addEventListener('focusin', update);
+    document.addEventListener('focusout', update);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.visualViewport?.removeEventListener('resize', update);
+      document.removeEventListener('focusin', update);
+      document.removeEventListener('focusout', update);
+    };
   }, []);
 
   return open;
