@@ -15,11 +15,16 @@ const THEME_OPTIONS = [
   { value: 'dark', icon: '🌙', labelKey: 'themeDark' },
 ];
 
+const LANG_OPTIONS = [
+  { value: 'pt-PT', icon: '🇵🇹', label: 'PT' },
+  { value: 'en-GB', icon: '🇬🇧', label: 'EN' },
+];
+
 export default function HamburgerMenu({ onNavigate }) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [theme, setThemeState] = useState(getTheme);
-  const { t } = useLanguage();
+  const { t, lang, setLang } = useLanguage();
   const { user, profile, isAnonymous, signInWithGoogle, signOutUser } = useAuth();
   const { activePool } = usePools();
   const {
@@ -151,6 +156,23 @@ export default function HamburgerMenu({ onNavigate }) {
             </button>
           )}
         </nav>
+
+        <div className="hamburger-menu__theme">
+          <span className="hamburger-menu__theme-label">{t('langTitle')}</span>
+          <div className="hamburger-menu__theme-options" role="radiogroup" aria-label={t('langTitle')}>
+            {LANG_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                role="radio"
+                aria-checked={lang === opt.value}
+                className={`hamburger-menu__theme-btn ${lang === opt.value ? 'hamburger-menu__theme-btn--active' : ''}`}
+                onClick={() => setLang(opt.value)}
+              >
+                <span>{opt.icon}</span> {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div className="hamburger-menu__theme">
           <span className="hamburger-menu__theme-label">{t('themeTitle')}</span>

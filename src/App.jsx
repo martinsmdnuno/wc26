@@ -9,7 +9,6 @@ import NotificationCenter from './components/NotificationCenter';
 import PoolSelector from './components/PoolSelector';
 import PoolManager from './components/PoolManager';
 import AuthScreen from './components/AuthScreen';
-import LanguageSwitcher from './components/LanguageSwitcher';
 import InstallBanner from './components/InstallBanner';
 import { useFavorites } from './hooks/useFavorites';
 import { useLanguage } from './i18n/LanguageContext';
@@ -131,7 +130,6 @@ export default function App() {
             <span className="app-header__year">{t('appYear')}</span>
           </h1>
           {profile?.nickname && <NotificationCenter />}
-          <LanguageSwitcher />
         </div>
         {profile?.nickname && (
           <PoolSelector onManagePools={() => navigate('pools')} />
