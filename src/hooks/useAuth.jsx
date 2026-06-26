@@ -414,6 +414,26 @@ export function AuthProvider({ children }) {
     setProfile((prev) => ({ ...prev, nickname }));
   }, [user]);
 
+  // Edit profile after onboarding: nickname and/or avatar. Denormalized fields
+  // (nickname, avatar, customPhotoURL, avatarKind) are mirrored into the user's
+  // leaderboard entry in every pool so the change shows up everywhere.
+  const updateUserProfile = useCallback(async (fields) => {
+    if (!user) return;
+    const allowed = ['nickname', 'avatar', 'customPhotoURL', 'avatarKind'];
+    const update = {};
+    for (const k of allowed) if (fields[k] !== undefined) update[k] = fields[k];
+    if (Object.keys(update).length === 0) return;
+
+    await updateDoc(doc(db, 'users', user.uid), update);
+    setProfile((prev) => ({ ...prev, ...update }));
+
+    const pools = profile?.pools || [];
+    await Promise.all(pools.map((poolId) =>
+      setDoc(doc(db, 'pools', poolId, 'leaderboard', user.uid), update, { merge: true })
+        .catch(() => { /* best-effort per pool */ })
+    ));
+  }, [user, profile]);
+
   const isAnonymous = user?.isAnonymous ?? true;
 
   return (
@@ -423,6 +443,7 @@ export function AuthProvider({ children }) {
       loading,
       isAnonymous,
       saveProfile,
+      updateUserProfile,
       signInWithGoogle,
       signInWithEmail,
       signOutUser,

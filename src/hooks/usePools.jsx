@@ -305,9 +305,13 @@ export function PoolProvider({ children }) {
     for (const uid of members) {
       const userSnap = await getDoc(doc(db, 'users', uid));
       const lbSnap = await getDoc(doc(db, 'pools', poolId, 'leaderboard', uid));
+      const u = userSnap.exists() ? userSnap.data() : {};
       result.push({
         uid,
-        nickname: userSnap.exists() ? userSnap.data().nickname : '?',
+        nickname: userSnap.exists() ? u.nickname : '?',
+        avatar: u.avatar || '',
+        customPhotoURL: u.customPhotoURL || '',
+        avatarKind: u.avatarKind || '',
         totalPoints: lbSnap.exists() ? lbSnap.data().totalPoints || 0 : 0,
         isAdmin: pool.createdBy === uid,
       });

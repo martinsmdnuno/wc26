@@ -2888,6 +2888,124 @@
   font-style: italic;
 }
 
+/* Profile (nickname + avatar) editing */
+.hamburger-menu__profile--btn {
+  width: 100%;
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.hamburger-menu__profile-edit {
+  margin-left: auto;
+  font-size: 15px;
+  opacity: 0.6;
+}
+
+.profile-modal {
+  text-align: left;
+  max-height: 88vh;
+  overflow-y: auto;
+}
+
+.profile-modal__preview {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0 16px;
+}
+
+.profile-modal__preview-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--green-dark);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  font-weight: 700;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.profile-modal__section-label {
+  margin: 16px 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray);
+}
+
+.profile-modal__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.profile-modal__emoji {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.profile-modal__emoji--active {
+  border-color: var(--green, #006341);
+  background: rgba(0, 99, 65, 0.1);
+}
+
+.profile-modal__emoji:focus-visible {
+  outline: 2px solid var(--green, #006341);
+  outline-offset: 2px;
+}
+
+.profile-modal__actions-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.profile-modal__secondary {
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text, #111);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.profile-modal__cancel {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: var(--gray);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .leaderboard__loading,
 .leaderboard__empty {
   text-align: center;
