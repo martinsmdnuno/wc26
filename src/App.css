@@ -3109,6 +3109,22 @@
   border-bottom: 1px solid var(--border);
 }
 
+.notif-item--release {
+  background: rgba(0, 99, 65, 0.06);
+}
+
+.notif-item__tag {
+  align-self: flex-start;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--green, #006341);
+  background: rgba(0, 99, 65, 0.12);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
 .notif-item__title {
   font-size: 14px;
   font-weight: 600;

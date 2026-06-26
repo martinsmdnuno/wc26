@@ -175,6 +175,7 @@ export const translations = {
     notifEmpty: 'Sem notificações.',
     notifClear: 'Limpar',
     notifNow: 'agora',
+    notifRelease: 'Novidades',
 
     // Special bets (tournament-wide)
     specialTab: 'Especiais',
@@ -573,6 +574,7 @@ export const translations = {
     notifEmpty: 'No notifications.',
     notifClear: 'Clear',
     notifNow: 'now',
+    notifRelease: "What's new",
 
     // Special bets (tournament-wide)
     specialTab: 'Specials',

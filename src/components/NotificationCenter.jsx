@@ -93,7 +93,10 @@ export default function NotificationCenter() {
             ) : (
               <ul className="notif-panel__list">
                 {visible.map((n) => (
-                  <li key={n.id} className="notif-item">
+                  <li key={n.id} className={`notif-item ${n.type === 'release' ? 'notif-item--release' : ''}`}>
+                    {n.type === 'release' && (
+                      <span className="notif-item__tag">🆕 {t('notifRelease')}</span>
+                    )}
                     <span className="notif-item__title">{n.title}</span>
                     {n.body && <span className="notif-item__body">{n.body}</span>}
                     <span className="notif-item__time">{timeAgo(toMs(n.createdAt), t)}</span>
