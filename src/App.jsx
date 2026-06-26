@@ -123,13 +123,19 @@ export default function App() {
     <div className="app">
       <header className="app-header" ref={headerRef}>
         <div className="app-header__content">
-          {profile?.nickname && <HamburgerMenu onNavigate={navigate} />}
-          <img src={logo} alt="Mundial 2026" className="app-header__logo" />
-          <h1 className="app-header__title">
-            <span className="app-header__mundial">{t('appTitle')}</span>{' '}
-            <span className="app-header__year">{t('appYear')}</span>
-          </h1>
-          {profile?.nickname && <NotificationCenter />}
+          <div className="app-header__side app-header__side--left">
+            {profile?.nickname && <HamburgerMenu onNavigate={navigate} />}
+          </div>
+          <div className="app-header__brand">
+            <img src={logo} alt="Mundial 2026" className="app-header__logo" />
+            <h1 className="app-header__title">
+              <span className="app-header__mundial">{t('appTitle')}</span>{' '}
+              <span className="app-header__year">{t('appYear')}</span>
+            </h1>
+          </div>
+          <div className="app-header__side app-header__side--right">
+            {profile?.nickname && <NotificationCenter />}
+          </div>
         </div>
         {profile?.nickname && (
           <PoolSelector onManagePools={() => navigate('pools')} />
