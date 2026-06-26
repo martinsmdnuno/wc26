@@ -27,6 +27,10 @@ const Missing = lazyWithReload(() => import('./pages/Missing'));
 
 const ADMIN_UID = import.meta.env.VITE_ADMIN_UID;
 
+// Pages reachable via a #hash deep link (notification targets). 'admin' is gated
+// separately on isAdmin; 'team' needs an iso and is reached in-app, not by hash.
+const HASH_PAGES = new Set(['schedule', 'my-matches', 'teams', 'bets', 'pools', 'rules']);
+
 export default function App() {
   const [page, setPage] = useState('schedule');
   const [animClass, setAnimClass] = useState('page-enter-done');
@@ -96,17 +100,37 @@ export default function App() {
     return () => ro.disconnect();
   }, [profile?.nickname]);
 
-  // Handle #admin hash navigation
+  // Hash-based deep links — used by notification clicks (e.g. /#bets) so a tapped
+  // push lands on the relevant page instead of just opening the home screen.
   useEffect(() => {
     const handleHash = () => {
-      if (window.location.hash === '#admin' && isAdmin) {
-        setPage('admin');
+      const target = window.location.hash.replace(/^#/, '');
+      if (!target) return;
+      if (target === 'admin') {
+        if (isAdmin) setPage('admin');
+        return;
       }
+      if (HASH_PAGES.has(target)) setPage(target);
     };
     handleHash();
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
   }, [isAdmin]);
+
+  // The service worker posts here when a background notification is clicked while
+  // a window is already open. Apply the target's hash → the listener above routes.
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) return;
+    const onMessage = (e) => {
+      if (e.data?.type !== 'notif-nav' || !e.data.url) return;
+      const i = e.data.url.indexOf('#');
+      const hash = i >= 0 ? e.data.url.slice(i) : '';
+      if (hash && window.location.hash !== hash) window.location.hash = hash;
+      else if (hash) window.dispatchEvent(new HashChangeEvent('hashchange'));
+    };
+    navigator.serviceWorker.addEventListener('message', onMessage);
+    return () => navigator.serviceWorker.removeEventListener('message', onMessage);
+  }, []);
 
   if (loading) {
     return (
