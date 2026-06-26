@@ -19,6 +19,16 @@ const GROUP_MATCHES = phaseById.group?.matches || [];
 // All knockout phases in bracket order so winner feeders resolve front-to-back.
 const KNOCKOUT_PHASES = ['r32', 'r16', 'qf', 'sf', '3rd', 'final'];
 
+const KO_BY_ID = Object.fromEntries(
+  KNOCKOUT_PHASES.flatMap((pid) => (phaseById[pid]?.matches || []).map((m) => [m.id, m]))
+);
+
+// Raw home/away slot strings for a knockout match (e.g. ['2A', '3C/E/F/H/I']).
+export function matchSlots(id) {
+  const m = KO_BY_ID[id];
+  return m ? [m.home, m.away] : [null, null];
+}
+
 // Parse a slot string into a structured source.
 //   'W73' -> winner of match 73    'L101' -> loser of match 101
 //   '1C'  -> 1st of group C        '3C/E/F/H/I' -> a best-third pool
@@ -96,6 +106,42 @@ export function resolveWinners(results) {
   const finalMatch = phaseById.final?.matches?.[0];
   return { teams, winners, champion: finalMatch ? winners[finalMatch.id] || null : null };
 }
+
+// Winner-feeder match ids for a knockout match: [homeFeeder, awayFeeder] (null
+// for group slots, i.e. the R32).
+function feederIds(id) {
+  const w = (s) => {
+    const p = parseSlot(s);
+    return p && p.type === 'winner' ? p.match : null;
+  };
+  const [h, a] = matchSlots(id);
+  return [w(h), w(a)];
+}
+
+// Walk one half of the bracket from its semi-final root, collecting the match
+// ids of each round in top-to-bottom order (home feeder first) so columns line
+// up pair-by-pair toward the centre.
+function halfFromRoot(sfId) {
+  const rounds = { sf: sfId == null ? [] : [sfId], qf: [], r16: [], r32: [] };
+  const order = ['sf', 'qf', 'r16', 'r32'];
+  for (let i = 0; i < order.length - 1; i++) {
+    for (const id of rounds[order[i]]) {
+      const [h, a] = feederIds(id);
+      if (h != null) rounds[order[i + 1]].push(h);
+      if (a != null) rounds[order[i + 1]].push(a);
+    }
+  }
+  return rounds;
+}
+
+// Static split of the bracket into its two halves + the final, derived from the
+// schedule's feeder graph. The final's home feeder is the left half, away the right.
+export const BRACKET_SIDES = (() => {
+  const finalMatch = phaseById.final?.matches?.[0];
+  if (!finalMatch) return { finalId: null, left: halfFromRoot(null), right: halfFromRoot(null) };
+  const [leftRoot, rightRoot] = feederIds(finalMatch.id);
+  return { finalId: finalMatch.id, left: halfFromRoot(leftRoot), right: halfFromRoot(rightRoot) };
+})();
 
 // Human-friendly label for an unresolved slot, e.g. "1.º Grupo A",
 // "Melhor 3.º (C/E/F/H/I)", "Venc. jogo 73". Needs the i18n `t`.
