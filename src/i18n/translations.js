@@ -136,6 +136,8 @@ export const translations = {
 
     // Bets / Bolão
     navBets: 'Bolão',
+    navBracket: 'Quadro',
+    bracketActualIntro: 'O quadro do torneio preenche-se automaticamente com as equipas já apuradas. Os palpites do bracket continuam no Bolão.',
     betTab: 'Apostar',
     rankingTab: 'Ranking',
     goals: 'golos',
@@ -524,6 +526,8 @@ export const translations = {
 
     // Bets / Pool
     navBets: 'Pool',
+    navBracket: 'Bracket',
+    bracketActualIntro: 'The tournament bracket fills in automatically with the teams already through. Your bracket predictions stay in the Pool.',
     betTab: 'Bet',
     rankingTab: 'Ranking',
     goals: 'goals',

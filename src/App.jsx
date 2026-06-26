@@ -4,6 +4,7 @@ import Schedule from './pages/Schedule';
 import MyMatches from './pages/MyMatches';
 import Teams from './pages/Teams';
 import Bets from './pages/Bets';
+import Bracket from './pages/Bracket';
 import HamburgerMenu from './components/HamburgerMenu';
 import NotificationCenter from './components/NotificationCenter';
 import PoolSelector from './components/PoolSelector';
@@ -29,7 +30,7 @@ const ADMIN_UID = import.meta.env.VITE_ADMIN_UID;
 
 // Pages reachable via a #hash deep link (notification targets). 'admin' is gated
 // separately on isAdmin; 'team' needs an iso and is reached in-app, not by hash.
-const HASH_PAGES = new Set(['schedule', 'my-matches', 'teams', 'bets', 'pools', 'rules']);
+const HASH_PAGES = new Set(['schedule', 'bracket', 'my-matches', 'teams', 'bets', 'pools', 'rules']);
 
 export default function App() {
   const [page, setPage] = useState('schedule');
@@ -186,6 +187,7 @@ export default function App() {
                   />
                 )}
                 {page === 'bets' && <Bets onTeamClick={navigateToTeam} />}
+                {page === 'bracket' && <Bracket onTeamClick={navigateToTeam} />}
                 {page === 'team' && (
                   <TeamProfile
                     iso={teamIso}
@@ -206,7 +208,6 @@ export default function App() {
           <BottomNav
             active={page === 'team' ? prevPageRef.current : page}
             onNavigate={navigate}
-            favoriteCount={favorites.length}
           />
         </>
       )}
