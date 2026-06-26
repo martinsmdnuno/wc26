@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useModalA11y } from '../hooks/useModalA11y';
@@ -19,6 +19,22 @@ export default function ProfileModal({ onClose }) {
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+
+  // Freeze the background page while the modal is open so scrolling the legend
+  // list past its end doesn't chain into the page behind (iOS-safe).
+  useEffect(() => {
+    const y = window.scrollY;
+    const b = document.body;
+    const prev = { position: b.style.position, top: b.style.top, width: b.style.width, overflow: b.style.overflow };
+    b.style.position = 'fixed';
+    b.style.top = `-${y}px`;
+    b.style.width = '100%';
+    b.style.overflow = 'hidden';
+    return () => {
+      Object.assign(b.style, prev);
+      window.scrollTo(0, y);
+    };
+  }, []);
 
   const pickLegend = (file) => setSel({ avatarKind: 'legend', avatar: legendValue(file) });
   const clearAvatar = () => setSel({ avatarKind: 'initial', avatar: '' });
