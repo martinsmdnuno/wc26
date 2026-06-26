@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../hooks/useAuth';
 import { usePools } from '../hooks/usePools';
@@ -16,11 +16,30 @@ const TABS = [
   { id: 'total', labelKey: 'lbTabTotal', field: 'totalPoints' },
 ];
 
+// Fields an adjustment can touch, with their i18n label keys. Used to render
+// only the values that actually changed in the audit history.
+const ADJ_FIELDS = [
+  { key: 'totalPoints', labelKey: 'lbTabTotal' },
+  { key: 'groupPoints', labelKey: 'lbTabGroup' },
+  { key: 'knockoutPoints', labelKey: 'lbTabKnockout' },
+  { key: 'specialPoints', labelKey: 'lbTabSpecial' },
+  { key: 'exactResultsCount', labelKey: 'lbFieldExact' },
+  { key: 'correctOutcomeCount', labelKey: 'lbFieldOutcome' },
+];
+
+function adjustmentDate(at) {
+  const d = at?.toDate ? at.toDate() : (at ? new Date(at) : null);
+  if (!d || isNaN(d)) return '';
+  return d.toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
 export default function Leaderboard() {
   const { user } = useAuth();
   const { activePoolId } = usePools();
   const { t } = useLanguage();
   const [entries, setEntries] = useState([]);
+  const [adjustments, setAdjustments] = useState([]);
+  const [historyOpen, setHistoryOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState(defaultLeaderboardTab);
   const tabRefs = useRef([]);
@@ -33,6 +52,13 @@ export default function Leaderboard() {
       if (cancelled) return;
       setEntries(snap.docs.map((d) => ({ uid: d.id, ...d.data() })));
       setLoading(false);
+      // Manual-adjustment audit trail (best-effort; absent on older pools).
+      try {
+        const adjSnap = await getDocs(
+          query(collection(db, 'pools', activePoolId, 'adjustments'), orderBy('at', 'desc'))
+        );
+        if (!cancelled) setAdjustments(adjSnap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      } catch { /* no adjustments / not readable — hide the section */ }
     })();
     return () => { cancelled = true; };
   }, [activePoolId]);
@@ -129,6 +155,47 @@ export default function Leaderboard() {
           );
         })}
       </div>
+
+      {adjustments.length > 0 && (
+        <div className="leaderboard__history">
+          <button
+            type="button"
+            className="leaderboard__history-toggle"
+            aria-expanded={historyOpen}
+            aria-controls="lb-history-list"
+            onClick={() => setHistoryOpen((o) => !o)}
+          >
+            <span>⚖️ {t('lbHistoryTitle')} ({adjustments.length})</span>
+            <span aria-hidden="true">{historyOpen ? '▾' : '▸'}</span>
+          </button>
+
+          {historyOpen && (
+            <ul id="lb-history-list" className="leaderboard__history-list">
+              {adjustments.map((a) => {
+                const changed = ADJ_FIELDS
+                  .map((f) => ({ ...f, before: a.before?.[f.key], after: a.after?.[f.key] }))
+                  .filter((f) => f.after != null && f.before !== f.after);
+                return (
+                  <li key={a.id} className="leaderboard__history-item">
+                    <div className="leaderboard__history-head">
+                      <strong>{a.nickname || a.uid}</strong>
+                      <span className="leaderboard__history-date">{adjustmentDate(a.at)}</span>
+                    </div>
+                    <div className="leaderboard__history-changes">
+                      {changed.length > 0 ? changed.map((f) => (
+                        <span key={f.key} className="leaderboard__history-delta">
+                          {t(f.labelKey)} {f.before ?? 0}→{f.after}
+                        </span>
+                      )) : <span className="leaderboard__history-delta">—</span>}
+                    </div>
+                    {a.reason && <p className="leaderboard__history-reason">{a.reason}</p>}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      )}
     </div>
   );
 }
