@@ -19,7 +19,7 @@ export const LEGEND_PHOTOS = [
   { file: 'lev-yashin', name: 'Lev Yashin', tagline: 'A Aranha Negra' },
   { file: 'ferenc-puskas', name: 'Ferenc Puskás', tagline: 'O Major Galopante' },
   { file: 'ronaldinho', name: 'Ronaldinho', tagline: 'O Bruxo' },
-  { file: 'marega', name: 'Marega', tagline: 'O Deus do Dragão' },
-  { file: 'freddy-adu', name: 'Freddy Adu', tagline: 'O Novo Pelé (que não foi)' },
+  { file: 'marega', name: 'Marega', tagline: 'O Deus do Dragão (Lenda dos Memes)' },
+  { file: 'freddy-adu', name: 'Freddy Adu', tagline: 'O Novo Pelé (Que não foi)' },
   { file: 'xandao', name: 'Xandão', tagline: 'O Xerife do Alvalade' },
 ];
