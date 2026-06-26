@@ -119,8 +119,9 @@
   padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
   box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
   z-index: 100;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  /* No `transform: translateZ(0)` here: an own-element transform makes iOS
+     Safari mis-anchor a position:fixed element (it floats mid-screen / scrolls
+     with the content instead of sticking to the viewport bottom). */
 }
 
 .bottom-nav--keyboard-open {
