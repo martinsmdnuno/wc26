@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useModalA11y } from '../hooks/useModalA11y';
@@ -58,7 +59,10 @@ export default function ProfileModal({ onClose }) {
     }
   };
 
-  return (
+  // Rendered into <body> via a portal so the overlay escapes the header's
+  // stacking context (z-index 100, same as the bottom nav, which would
+  // otherwise paint over the modal's footer).
+  return createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <div
         className="modal profile-modal"
@@ -139,6 +143,7 @@ export default function ProfileModal({ onClose }) {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
