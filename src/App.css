@@ -2944,7 +2944,48 @@
 .profile-modal__grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
+  justify-content: center;
+}
+
+.profile-modal__legend-caption {
+  text-align: center;
+  margin: 4px 0 14px;
+  font-size: 13px;
+  color: var(--gray);
+}
+
+.profile-modal__legend {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: border-color 0.15s, transform 0.1s;
+}
+
+.profile-modal__legend--active {
+  border-color: var(--green, #006341);
+}
+
+.profile-modal__legend:active {
+  transform: scale(0.94);
+}
+
+.profile-modal__legend:focus-visible {
+  outline: 2px solid var(--green, #006341);
+  outline-offset: 2px;
+}
+
+.profile-modal__legend-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
 }
 
 .profile-modal__emoji {

@@ -1,72 +1,29 @@
-import { useState, useRef } from 'react';
-import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../firebase';
+import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useModalA11y } from '../hooks/useModalA11y';
-import { LEGEND_AVATARS } from '../utils/avatars';
+import { LEGEND_PHOTOS } from '../utils/legends';
 import Avatar from './Avatar';
 
-// Downscale to a small square JPEG before upload — keeps avatars tiny and
-// dodges the Storage 2 MB rule regardless of the source photo's size.
-function resizeImage(file, max = 256) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      const scale = Math.min(max / img.width, max / img.height, 1);
-      const w = Math.round(img.width * scale);
-      const h = Math.round(img.height * scale);
-      const canvas = document.createElement('canvas');
-      canvas.width = w;
-      canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('toBlob'))), 'image/jpeg', 0.85);
-    };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('load')); };
-    img.src = url;
-  });
-}
+const legendValue = (file) => `legend:${file}`;
 
 export default function ProfileModal({ onClose }) {
-  const { user, profile, updateUserProfile } = useAuth();
+  const { profile, updateUserProfile } = useAuth();
   const { t } = useLanguage();
   const ref = useModalA11y({ onEscape: onClose });
-  const fileInput = useRef(null);
 
   const [nickname, setNickname] = useState(profile?.nickname || '');
   const [sel, setSel] = useState({
-    avatarKind: profile?.avatarKind || (profile?.avatar ? 'emoji' : 'initial'),
+    avatarKind: profile?.avatarKind || (profile?.avatar ? 'legend' : 'initial'),
     avatar: profile?.avatar || '',
-    customPhotoURL: profile?.customPhotoURL || '',
   });
-  const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const pickEmoji = (emoji) => setSel((s) => ({ ...s, avatarKind: 'emoji', avatar: emoji }));
-  const clearAvatar = () => setSel((s) => ({ ...s, avatarKind: 'initial', avatar: '' }));
+  const selectedLegend = LEGEND_PHOTOS.find((l) => legendValue(l.file) === sel.avatar);
 
-  const handleFile = async (e) => {
-    const file = e.target.files?.[0];
-    e.target.value = '';
-    if (!file || !user) return;
-    if (!file.type.startsWith('image/')) { setError(t('avatarErrorType')); return; }
-    setError('');
-    setUploading(true);
-    try {
-      const blob = await resizeImage(file);
-      const path = `avatars/${user.uid}/avatar.jpg`;
-      const sref = storageRef(storage, path);
-      await uploadBytes(sref, blob, { contentType: 'image/jpeg' });
-      const url = await getDownloadURL(sref);
-      setSel({ avatarKind: 'photo', avatar: '', customPhotoURL: url });
-    } catch {
-      setError(t('avatarErrorUpload'));
-    }
-    setUploading(false);
-  };
+  const pickLegend = (file) => setSel({ avatarKind: 'legend', avatar: legendValue(file) });
+  const clearAvatar = () => setSel({ avatarKind: 'initial', avatar: '' });
 
   const handleSave = async () => {
     const trimNick = nickname.trim();
@@ -77,8 +34,8 @@ export default function ProfileModal({ onClose }) {
       await updateUserProfile({
         nickname: trimNick,
         avatarKind: sel.avatarKind,
-        avatar: sel.avatarKind === 'emoji' ? sel.avatar : '',
-        customPhotoURL: sel.avatarKind === 'photo' ? sel.customPhotoURL : (sel.customPhotoURL || ''),
+        avatar: sel.avatar,
+        customPhotoURL: '',
       });
       onClose();
     } catch {
@@ -102,11 +59,15 @@ export default function ProfileModal({ onClose }) {
           <Avatar
             nickname={nickname}
             avatar={sel.avatar}
-            customPhotoURL={sel.customPhotoURL}
             avatarKind={sel.avatarKind}
             className="profile-modal__preview-avatar"
           />
         </div>
+        {selectedLegend && (
+          <p className="profile-modal__legend-caption">
+            <strong>{selectedLegend.name}</strong> · {selectedLegend.tagline}
+          </p>
+        )}
 
         <label className="modal__label">
           {t('nicknameLabel')}
@@ -121,46 +82,31 @@ export default function ProfileModal({ onClose }) {
 
         <p className="profile-modal__section-label">{t('avatarLegendsLabel')}</p>
         <div className="profile-modal__grid" role="radiogroup" aria-label={t('avatarLegendsLabel')}>
-          {LEGEND_AVATARS.map((a) => {
-            const active = sel.avatarKind === 'emoji' && sel.avatar === a.emoji;
+          {LEGEND_PHOTOS.map((l) => {
+            const active = sel.avatar === legendValue(l.file);
             return (
               <button
-                key={a.emoji}
+                key={l.file}
                 type="button"
                 role="radio"
                 aria-checked={active}
-                title={t(a.labelKey)}
-                aria-label={t(a.labelKey)}
-                className={`profile-modal__emoji ${active ? 'profile-modal__emoji--active' : ''}`}
-                onClick={() => pickEmoji(a.emoji)}
+                title={`${l.name} · ${l.tagline}`}
+                aria-label={`${l.name}, ${l.tagline}`}
+                className={`profile-modal__legend ${active ? 'profile-modal__legend--active' : ''}`}
+                onClick={() => pickLegend(l.file)}
               >
-                <span aria-hidden="true">{a.emoji}</span>
+                <Avatar avatar={legendValue(l.file)} className="profile-modal__legend-img" />
               </button>
             );
           })}
         </div>
 
         <div className="profile-modal__actions-row">
-          <button
-            type="button"
-            className="profile-modal__secondary"
-            onClick={() => fileInput.current?.click()}
-            disabled={uploading}
-          >
-            {uploading ? t('avatarUploading') : `📷 ${t('avatarUploadBtn')}`}
-          </button>
           {sel.avatarKind !== 'initial' && (
             <button type="button" className="profile-modal__secondary" onClick={clearAvatar}>
               {t('avatarRemoveBtn')}
             </button>
           )}
-          <input
-            ref={fileInput}
-            type="file"
-            accept="image/*"
-            onChange={handleFile}
-            style={{ display: 'none' }}
-          />
         </div>
 
         {error && <p className="modal__error">{error}</p>}
@@ -169,7 +115,7 @@ export default function ProfileModal({ onClose }) {
           <button type="button" className="profile-modal__cancel" onClick={onClose} disabled={saving}>
             {t('cancel')}
           </button>
-          <button type="button" className="modal__btn" onClick={handleSave} disabled={saving || uploading}>
+          <button type="button" className="modal__btn" onClick={handleSave} disabled={saving}>
             {saving ? t('saving') : t('save')}
           </button>
         </div>
