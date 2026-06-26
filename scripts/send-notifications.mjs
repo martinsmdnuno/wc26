@@ -204,6 +204,16 @@ for (const ev of events) {
   }
 
   await logRef.set({ sentAt: FieldValue.serverTimestamp(), title: ev.title, recipients: sent });
+  // Mirror into the in-app notification feed (read by NotificationCenter).
+  // Keyed by ev.key so re-runs never duplicate.
+  await db.collection('notifications').doc(ev.key).set({
+    title: ev.title,
+    body: ev.body || '',
+    url: ev.url || '',
+    tag: ev.tag || '',
+    type: ev.key.split('_')[0],
+    createdAt: FieldValue.serverTimestamp(),
+  });
   if (bad.length) await removeBadTokens(bad);
   console.log(`Sent "${ev.key}" to ${sent} device(s); pruned ${bad.length} stale token(s).`);
 }
