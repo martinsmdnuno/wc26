@@ -2949,6 +2949,7 @@
   flex: 1 1 auto;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   padding: 4px 20px 8px;
 }
 
