@@ -182,7 +182,9 @@
 .phase-filter {
   padding: 12px 0;
   position: sticky;
-  top: 52px;
+  /* Stick right below the dynamic-height header (grows with the notification
+     bell / pool selector); a hardcoded value drifts when the header changes. */
+  top: var(--header-h, 52px);
   z-index: 50;
   background: var(--off-white);
 }
