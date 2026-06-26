@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 import { usePools } from '../hooks/usePools';
 import { useLanguage } from '../i18n/LanguageContext';
 import { defaultLeaderboardTab } from '../utils/phases';
+import Avatar from './Avatar';
 
 // Each tab ranks by its own points field. 'total' is the headline ranking;
 // 'group'/'knockout' come from match bets bucketed by phase; 'special' from
@@ -141,7 +142,13 @@ export default function Leaderboard() {
                 {i < 3 ? medals[i] : i + 1}
               </span>
               <span className="leaderboard__col leaderboard__col--name">
-                <span className="leaderboard__avatar">{entry.nickname?.charAt(0).toUpperCase()}</span>
+                <Avatar
+                  nickname={entry.nickname}
+                  avatar={entry.avatar}
+                  customPhotoURL={entry.customPhotoURL}
+                  avatarKind={entry.avatarKind}
+                  className="leaderboard__avatar"
+                />
                 {entry.nickname}
                 {isMe && <span className="leaderboard__me-badge">{t('you')}</span>}
               </span>
