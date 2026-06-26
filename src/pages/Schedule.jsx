@@ -8,6 +8,7 @@ import { compareKickoff, groupMatchesByDate } from '../utils/matchOrder';
 import { kickoffMs } from '../utils/matchTime';
 import { useCachedScores } from '../hooks/useLiveScores';
 import { useScrollToToday } from '../hooks/useScrollToToday';
+import { resolveKnockout } from '../utils/knockout';
 
 function getNextMatchId(matches) {
   const now = Date.now();
@@ -22,6 +23,8 @@ export default function Schedule({ onTeamClick }) {
   const [activePhase, setActivePhase] = useState('group');
   const { t } = useLanguage();
   const cachedScores = useCachedScores();
+  // Fill knockout fixtures with the teams already certain from group results.
+  const resolvedKO = useMemo(() => resolveKnockout(cachedScores), [cachedScores]);
 
   const translatedPhases = useMemo(
     () => schedule.phases.map((p) => ({ ...p, name: t(`phase.${p.id}`) })),
@@ -78,6 +81,8 @@ export default function Schedule({ onTeamClick }) {
                   isNext={match.id === nextMatchId && activePhase === 'group'}
                   showCalButton
                   onTeamClick={onTeamClick}
+                  resolvedHome={resolvedKO[match.id]?.home}
+                  resolvedAway={resolvedKO[match.id]?.away}
                   index={i}
                 />
               ))}
