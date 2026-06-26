@@ -18,6 +18,12 @@ const db = getFirestore();
 const schedule = JSON.parse(readFileSync(new URL('../src/data/schedule.json', import.meta.url)));
 const ALL_MATCHES = schedule.phases.flatMap((p) => p.matches);
 
+// Phase buckets (mirrors src/utils/phases.js): group stage vs knockout, so the
+// leaderboard's per-phase rankings stay in sync with the headline total.
+const GROUP_MATCH_IDS = new Set(
+  (schedule.phases.find((p) => p.id === 'group')?.matches || []).map((m) => m.id)
+);
+
 // Kickoff (UTC ms): schedule stores Portugal time (UTC+1 during the tournament).
 function kickoffMs(m) {
   const [y, mo, d] = m.date.split('-').map(Number);
@@ -145,6 +151,9 @@ function calculatePoints(predA, predB, actualA, actualB) {
 
 async function scoreMatch(matchId, scoreA, scoreB) {
   const pools = await db.collection('pools').get();
+  // All bets here are for one match, so they share a phase bucket.
+  const segment = GROUP_MATCH_IDS.has(matchId) ? 'group' : 'knockout';
+  const segField = segment === 'group' ? 'groupPoints' : 'knockoutPoints';
   let scoredBets = 0;
   for (const poolDoc of pools.docs) {
     const betsSnap = await poolDoc.ref.collection('bets').where('matchId', '==', matchId).get();
@@ -175,6 +184,7 @@ async function scoreMatch(matchId, scoreA, scoreB) {
           totalPoints: (lbSnap.data().totalPoints ?? 0) + d.points,
           exactResultsCount: (lbSnap.data().exactResultsCount ?? 0) + d.exact,
           correctOutcomeCount: (lbSnap.data().correctOutcomeCount ?? 0) + d.outcome,
+          [segField]: (lbSnap.data()[segField] ?? 0) + d.points,
         });
       } else {
         let nickname = '';
@@ -187,6 +197,8 @@ async function scoreMatch(matchId, scoreA, scoreB) {
           totalPoints: Math.max(0, d.points),
           exactResultsCount: Math.max(0, d.exact),
           correctOutcomeCount: Math.max(0, d.outcome),
+          groupPoints: segment === 'group' ? Math.max(0, d.points) : 0,
+          knockoutPoints: segment === 'knockout' ? Math.max(0, d.points) : 0,
         });
       }
     }
