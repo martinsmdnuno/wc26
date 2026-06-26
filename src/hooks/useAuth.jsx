@@ -434,6 +434,18 @@ export function AuthProvider({ children }) {
     ));
   }, [user, profile]);
 
+  // Per-user notification-center state: `notificationsSeenAt` clears the unread
+  // badge; `notificationsClearedAt` hides everything older from the inbox.
+  const markNotifications = useCallback(async (fields) => {
+    if (!user) return;
+    const update = {};
+    if (fields.seenAt !== undefined) update.notificationsSeenAt = fields.seenAt;
+    if (fields.clearedAt !== undefined) update.notificationsClearedAt = fields.clearedAt;
+    if (Object.keys(update).length === 0) return;
+    setProfile((prev) => ({ ...prev, ...update }));
+    await updateDoc(doc(db, 'users', user.uid), update).catch(() => {});
+  }, [user]);
+
   const isAnonymous = user?.isAnonymous ?? true;
 
   return (
@@ -444,6 +456,7 @@ export function AuthProvider({ children }) {
       isAnonymous,
       saveProfile,
       updateUserProfile,
+      markNotifications,
       signInWithGoogle,
       signInWithEmail,
       signOutUser,

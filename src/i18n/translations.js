@@ -171,6 +171,11 @@ export const translations = {
     avatarStar: 'A Estrela',
     avatarBull: 'O Touro',
     avatarBall: 'Bola',
+    notifTitle: 'Notificações',
+    notifEmpty: 'Sem notificações.',
+    notifClear: 'Limpar',
+    notifNow: 'agora',
+    notifRelease: 'Novidades',
 
     // Special bets (tournament-wide)
     specialTab: 'Especiais',
@@ -565,6 +570,11 @@ export const translations = {
     avatarStar: 'The Star',
     avatarBull: 'The Bull',
     avatarBall: 'Footy',
+    notifTitle: 'Notifications',
+    notifEmpty: 'No notifications.',
+    notifClear: 'Clear',
+    notifNow: 'now',
+    notifRelease: "What's new",
 
     // Special bets (tournament-wide)
     specialTab: 'Specials',

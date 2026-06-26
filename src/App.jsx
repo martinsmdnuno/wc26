@@ -5,6 +5,7 @@ import MyMatches from './pages/MyMatches';
 import Teams from './pages/Teams';
 import Bets from './pages/Bets';
 import HamburgerMenu from './components/HamburgerMenu';
+import NotificationCenter from './components/NotificationCenter';
 import PoolSelector from './components/PoolSelector';
 import PoolManager from './components/PoolManager';
 import AuthScreen from './components/AuthScreen';
@@ -129,6 +130,7 @@ export default function App() {
             <span className="app-header__mundial">{t('appTitle')}</span>{' '}
             <span className="app-header__year">{t('appYear')}</span>
           </h1>
+          {profile?.nickname && <NotificationCenter />}
           <LanguageSwitcher />
         </div>
         {profile?.nickname && (

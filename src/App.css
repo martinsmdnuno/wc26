@@ -3006,6 +3006,141 @@
   cursor: pointer;
 }
 
+/* Notification center */
+.notif-bell {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notif-bell__badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: #e2342f;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notif-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+}
+
+.notif-panel {
+  position: absolute;
+  top: calc(100% - 4px);
+  right: 8px;
+  z-index: 61;
+  width: min(320px, calc(100vw - 24px));
+  max-height: 70vh;
+  overflow-y: auto;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
+
+.notif-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--card-bg, #fff);
+}
+
+.notif-panel__title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.notif-panel__clear {
+  border: none;
+  background: transparent;
+  color: var(--green, #006341);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 32px;
+}
+
+.notif-panel__empty {
+  padding: 24px 14px;
+  text-align: center;
+  color: var(--gray);
+  font-size: 13px;
+}
+
+.notif-panel__list {
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+}
+
+.notif-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.notif-item:not(:last-child) {
+  border-bottom: 1px solid var(--border);
+}
+
+.notif-item--release {
+  background: rgba(0, 99, 65, 0.06);
+}
+
+.notif-item__tag {
+  align-self: flex-start;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--green, #006341);
+  background: rgba(0, 99, 65, 0.12);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.notif-item__title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.notif-item__body {
+  font-size: 13px;
+  color: var(--gray);
+}
+
+.notif-item__time {
+  font-size: 11px;
+  color: var(--gray);
+  align-self: flex-end;
+}
+
 .leaderboard__loading,
 .leaderboard__empty {
   text-align: center;

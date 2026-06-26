@@ -172,6 +172,15 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Tournament-wide notification feed (kickoffs, results, reminders). Written
+    // only by the server (Admin SDK bypasses rules); everyone can read it for
+    // the in-app notification center. "Clear" is per-user (a timestamp on the
+    // user doc), so the feed itself is read-only to clients.
+    match /notifications/{notifId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
     // Special-bet correct answers (tournament-wide): admin writes, all read
     match /specialResults/{docId} {
       allow read: if request.auth != null;
