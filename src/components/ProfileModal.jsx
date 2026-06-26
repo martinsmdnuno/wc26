@@ -20,8 +20,6 @@ export default function ProfileModal({ onClose }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  const selectedLegend = LEGEND_PHOTOS.find((l) => legendValue(l.file) === sel.avatar);
-
   const pickLegend = (file) => setSel({ avatarKind: 'legend', avatar: legendValue(file) });
   const clearAvatar = () => setSel({ avatarKind: 'initial', avatar: '' });
 
@@ -45,71 +43,76 @@ export default function ProfileModal({ onClose }) {
   };
 
   return (
-    <div className="modal-overlay">
+    <div className="modal-overlay" onClick={onClose}>
       <div
         className="modal profile-modal"
         ref={ref}
         role="dialog"
         aria-modal="true"
         aria-labelledby="profile-modal-title"
+        onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="modal__title" id="profile-modal-title">{t('editProfileTitle')}</h2>
-
-        <div className="profile-modal__preview">
-          <Avatar
-            nickname={nickname}
-            avatar={sel.avatar}
-            avatarKind={sel.avatarKind}
-            className="profile-modal__preview-avatar"
-          />
+        <div className="profile-modal__head">
+          <h2 className="modal__title" id="profile-modal-title">{t('editProfileTitle')}</h2>
+          <button type="button" className="profile-modal__close" onClick={onClose} aria-label={t('close')}>✕</button>
         </div>
-        {selectedLegend && (
-          <p className="profile-modal__legend-caption">
-            <strong>{selectedLegend.name}</strong> · {selectedLegend.tagline}
-          </p>
-        )}
 
-        <label className="modal__label">
-          {t('nicknameLabel')}
-          <input
-            className="modal__input"
-            type="text"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-            maxLength={20}
-          />
-        </label>
+        <div className="profile-modal__scroll">
+          <div className="profile-modal__preview">
+            <Avatar
+              nickname={nickname}
+              avatar={sel.avatar}
+              avatarKind={sel.avatarKind}
+              className="profile-modal__preview-avatar"
+            />
+          </div>
 
-        <p className="profile-modal__section-label">{t('avatarLegendsLabel')}</p>
-        <div className="profile-modal__grid" role="radiogroup" aria-label={t('avatarLegendsLabel')}>
-          {LEGEND_PHOTOS.map((l) => {
-            const active = sel.avatar === legendValue(l.file);
-            return (
-              <button
-                key={l.file}
-                type="button"
-                role="radio"
-                aria-checked={active}
-                title={`${l.name} · ${l.tagline}`}
-                aria-label={`${l.name}, ${l.tagline}`}
-                className={`profile-modal__legend ${active ? 'profile-modal__legend--active' : ''}`}
-                onClick={() => pickLegend(l.file)}
-              >
-                <Avatar avatar={legendValue(l.file)} className="profile-modal__legend-img" />
+          <label className="modal__label">
+            {t('nicknameLabel')}
+            <input
+              className="modal__input"
+              type="text"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              maxLength={20}
+            />
+          </label>
+
+          <div className="profile-modal__section-head">
+            <span className="profile-modal__section-label">{t('avatarLegendsLabel')}</span>
+            {sel.avatarKind !== 'initial' && (
+              <button type="button" className="profile-modal__clear" onClick={clearAvatar}>
+                {t('avatarRemoveBtn')}
               </button>
-            );
-          })}
+            )}
+          </div>
+
+          <ul className="profile-modal__legend-list" role="radiogroup" aria-label={t('avatarLegendsLabel')}>
+            {LEGEND_PHOTOS.map((l) => {
+              const active = sel.avatar === legendValue(l.file);
+              return (
+                <li key={l.file}>
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    className={`profile-modal__legend-row ${active ? 'profile-modal__legend-row--active' : ''}`}
+                    onClick={() => pickLegend(l.file)}
+                  >
+                    <Avatar avatar={legendValue(l.file)} className="profile-modal__row-avatar" />
+                    <span className="profile-modal__row-text">
+                      <strong>{l.name}</strong>
+                      <span className="profile-modal__row-tagline">{l.tagline}</span>
+                    </span>
+                    {active && <span className="profile-modal__row-check" aria-hidden="true">✓</span>}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
         </div>
 
-        <div className="profile-modal__actions-row">
-          {sel.avatarKind !== 'initial' && (
-            <button type="button" className="profile-modal__secondary" onClick={clearAvatar}>
-              {t('avatarRemoveBtn')}
-            </button>
-          )}
-        </div>
-
-        {error && <p className="modal__error">{error}</p>}
+        {error && <p className="modal__error profile-modal__error">{error}</p>}
 
         <div className="profile-modal__footer">
           <button type="button" className="profile-modal__cancel" onClick={onClose} disabled={saving}>
