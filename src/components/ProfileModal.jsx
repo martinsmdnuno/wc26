@@ -21,20 +21,14 @@ export default function ProfileModal({ onClose }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  // Freeze the background page while the modal is open so scrolling the legend
-  // list past its end doesn't chain into the page behind (iOS-safe).
+  // Lock background scroll while the modal is open. Plain overflow:hidden (not
+  // position:fixed) so the fixed bottom-nav isn't displaced — combined with the
+  // portal + overscroll-behavior on the overlay, this stops scroll chaining.
   useEffect(() => {
-    const y = window.scrollY;
     const b = document.body;
-    const prev = { position: b.style.position, top: b.style.top, width: b.style.width, overflow: b.style.overflow };
-    b.style.position = 'fixed';
-    b.style.top = `-${y}px`;
-    b.style.width = '100%';
+    const prev = b.style.overflow;
     b.style.overflow = 'hidden';
-    return () => {
-      Object.assign(b.style, prev);
-      window.scrollTo(0, y);
-    };
+    return () => { b.style.overflow = prev; };
   }, []);
 
   const pickLegend = (file) => setSel({ avatarKind: 'legend', avatar: legendValue(file) });
