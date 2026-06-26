@@ -2805,8 +2805,8 @@
 }
 
 .leaderboard__tab--active {
-  background: var(--card-bg, #fff);
-  color: var(--text, #111);
+  background: var(--surface);
+  color: var(--dark);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
@@ -2879,7 +2879,7 @@
 .leaderboard__history-delta {
   font-size: 12px;
   font-weight: 600;
-  color: var(--text, #111);
+  color: var(--dark);
   background: rgba(0, 99, 65, 0.08);
   padding: 2px 8px;
   border-radius: 6px;
@@ -3151,7 +3151,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   background: transparent;
-  color: var(--text, #111);
+  color: var(--dark);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -3224,7 +3224,7 @@
   width: min(320px, calc(100vw - 24px));
   max-height: 70vh;
   overflow-y: auto;
-  background: var(--card-bg, #fff);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
@@ -3238,12 +3238,13 @@
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
-  background: var(--card-bg, #fff);
+  background: var(--surface);
 }
 
 .notif-panel__title {
   font-size: 14px;
   font-weight: 700;
+  color: var(--dark);
 }
 
 .notif-panel__clear {
@@ -3283,6 +3284,17 @@
 
 .notif-item--release {
   background: rgba(0, 99, 65, 0.06);
+}
+
+.notif-item--link {
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.notif-item--link:hover,
+.notif-item--link:focus-visible {
+  background: rgba(0, 99, 65, 0.08);
+  outline: none;
 }
 
 .notif-item__tag {

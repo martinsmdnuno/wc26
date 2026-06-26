@@ -66,7 +66,7 @@ for (const m of ALL_MATCHES) {
       key: `prekick_${m.id}`,
       title: `⏰ ${m.home} x ${m.away} começa daqui a 1 hora`,
       body: 'Não te esqueças de meter o teu palpite antes do apito!',
-      url: '/',
+      url: '/#bets',
       tag: `prekick_${m.id}`,
     });
   }
@@ -82,7 +82,7 @@ for (const m of ALL_MATCHES) {
       key: `kickoff_${m.id}`,
       title: `⚽ Começou: ${m.home} x ${m.away}`,
       body: 'Já podes ver os palpites do grupo!',
-      url: '/',
+      url: '/#bets',
       tag: `kickoff_${m.id}`,
     });
   }
@@ -102,7 +102,7 @@ for (const docSnap of resultsSnap.docs) {
     key: `result_${docSnap.id}`,
     title: `📊 Resultado: ${home} ${r.scoreA}-${r.scoreB} ${away}`,
     body: 'Vê quem acertou no Bolão.',
-    url: '/',
+    url: '/#bets',
     tag: `result_${docSnap.id}`,
   });
 }
@@ -113,7 +113,7 @@ if (now >= SPECIAL_DEADLINE - 24 * HOUR && now < SPECIAL_DEADLINE) {
     key: 'specials_reminder',
     title: '⏳ Últimas horas para os Especiais!',
     body: 'Fecha hoje a aposta de marcador, MVP, jovem e seleção surpresa.',
-    url: '/',
+    url: '/#bets',
     tag: 'specials_reminder',
   });
 }
@@ -129,7 +129,7 @@ if (utcHour >= 18 && utcHour <= 20) {
       key: `daily_${tomorrow}`,
       title: `📅 Amanhã há ${count} jogo${count === 1 ? '' : 's'}`,
       body: 'Mete os teus palpites antes do apito!',
-      url: '/',
+      url: '/#bets',
       tag: `daily_${tomorrow}`,
     });
   }

@@ -52,6 +52,21 @@ export default function NotificationCenter() {
     markNotifications({ clearedAt: Date.now() });
   };
 
+  // Tapping a feed item jumps to its target page (same #hash deep links as the
+  // push notifications). App.jsx's hashchange listener does the actual routing.
+  const handleItemClick = (url) => {
+    setOpen(false);
+    if (!url) return;
+    const i = url.indexOf('#');
+    const hash = i >= 0 ? url.slice(i) : '';
+    if (!hash) return;
+    if (window.location.hash === hash) {
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
+    } else {
+      window.location.hash = hash;
+    }
+  };
+
   return (
     <>
       <button
@@ -92,16 +107,29 @@ export default function NotificationCenter() {
               <p className="notif-panel__empty">{t('notifEmpty')}</p>
             ) : (
               <ul className="notif-panel__list">
-                {visible.map((n) => (
-                  <li key={n.id} className={`notif-item ${n.type === 'release' ? 'notif-item--release' : ''}`}>
-                    {n.type === 'release' && (
-                      <span className="notif-item__tag">🆕 {t('notifRelease')}</span>
-                    )}
-                    <span className="notif-item__title">{n.title}</span>
-                    {n.body && <span className="notif-item__body">{n.body}</span>}
-                    <span className="notif-item__time">{timeAgo(toMs(n.createdAt), t)}</span>
-                  </li>
-                ))}
+                {visible.map((n) => {
+                  const i = (n.url || '').indexOf('#');
+                  const hasLink = i >= 0 && n.url.slice(i).length > 1;
+                  return (
+                    <li
+                      key={n.id}
+                      className={`notif-item ${n.type === 'release' ? 'notif-item--release' : ''} ${hasLink ? 'notif-item--link' : ''}`}
+                      role={hasLink ? 'button' : undefined}
+                      tabIndex={hasLink ? 0 : undefined}
+                      onClick={hasLink ? () => handleItemClick(n.url) : undefined}
+                      onKeyDown={hasLink ? (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleItemClick(n.url); }
+                      } : undefined}
+                    >
+                      {n.type === 'release' && (
+                        <span className="notif-item__tag">🆕 {t('notifRelease')}</span>
+                      )}
+                      <span className="notif-item__title">{n.title}</span>
+                      {n.body && <span className="notif-item__body">{n.body}</span>}
+                      <span className="notif-item__time">{timeAgo(toMs(n.createdAt), t)}</span>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>
