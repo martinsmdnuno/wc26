@@ -20,9 +20,6 @@ function kickoffMs(m) {
   return Date.UTC(y, mo - 1, d, h - 1, mi);
 }
 
-const KNOCKOUT_MATCHES = schedule.phases.filter((p) => p.id !== 'group').flatMap((p) => p.matches);
-const FIRST_KNOCKOUT_MS = KNOCKOUT_MATCHES.reduce((min, m) => Math.min(min, kickoffMs(m)), Infinity);
-
 // Last group kickoff + ~2h: the moment the group stage is, for all practical
 // purposes, finished. Gates the "Oráculo da Circunvalação" certificate so we
 // never crown a leader mid-stage.
@@ -38,12 +35,11 @@ const finalMatch = schedule.phases.find((p) => p.id === 'final')?.matches[0];
 const TOURNAMENT_END_MS = finalMatch ? kickoffMs(finalMatch) + 3 * 60 * 60 * 1000 : Infinity;
 
 // Which leaderboard tab to open on, following the tournament's current phase:
-// group stage → 'group'; once knockouts begin → 'knockout'; after the final
-// ends → 'total'. The per-segment tabs always stay available regardless.
+// group stage → 'group'; once the group stage is over → 'knockout'; after the
+// final ends → 'total'. The per-segment tabs always stay available regardless.
 export function defaultLeaderboardTab(now = Date.now()) {
   if (now >= TOURNAMENT_END_MS) return 'total';
-  if (now >= FIRST_KNOCKOUT_MS) return 'knockout';
-  return 'group';
+  return currentPhase(now) === 'group' ? 'group' : 'knockout';
 }
 
 // Each phase (schedule order) with the moment it is "done" — ~2.5h after its
