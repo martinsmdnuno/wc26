@@ -92,7 +92,7 @@ service cloud.firestore {
           && request.auth.uid == request.resource.data.userId
           && request.resource.data.get('pointsAwarded', null) == null
           && (request.time.toMillis() < 1781193600000
-              || (request.auth.token.email in ['22444@aegmmaia.pt', 'tatianalopes4@hotmail.com']
+              || (request.auth.token.email in ['22444@aegmmaia.pt', 'tatianalopes4@hotmail.com', 'ricardojbd@gmail.com']
                   && request.time.toMillis() < 1782774000000
                   && get(/databases/$(database)/documents/pools/$(poolId)).data.get('inviteCode', '') == 'WC26-GXFD'));
         // Owner edits picks before the deadline (points unchanged); admin / pool
@@ -103,7 +103,7 @@ service cloud.firestore {
             (request.auth.uid == uid
               && request.resource.data.get('pointsAwarded', null) == resource.data.get('pointsAwarded', null)
               && (request.time.toMillis() < 1781193600000
-                  || (request.auth.token.email in ['22444@aegmmaia.pt', 'tatianalopes4@hotmail.com']
+                  || (request.auth.token.email in ['22444@aegmmaia.pt', 'tatianalopes4@hotmail.com', 'ricardojbd@gmail.com']
                       && request.time.toMillis() < 1782774000000
                       && get(/databases/$(database)/documents/pools/$(poolId)).data.get('inviteCode', '') == 'WC26-GXFD')))
             || isAdmin()
