@@ -27,7 +27,7 @@ export function isSpecialLocked(now = new Date()) {
 // matching deadline is also enforced in firestore.rules, keyed by e-mail.
 export const SPECIAL_EXCEPTION = {
   poolCode: 'WC26-GXFD',
-  emails: ['22444@aegmmaia.pt', 'tatianalopes4@hotmail.com'],
+  emails: ['22444@aegmmaia.pt', 'tatianalopes4@hotmail.com', 'ricardojbd@gmail.com'],
   deadline: '2026-06-29T23:00:00Z',
 };
 
