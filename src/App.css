@@ -1155,7 +1155,7 @@
 
 .rules__point-badge--3 {
   background: rgba(201, 168, 76, 0.15);
-  color: #8B7226;
+  color: var(--gold-text);
 }
 
 .rules__point-badge--1 {
@@ -1164,8 +1164,8 @@
 }
 
 .rules__point-badge--0 {
-  background: rgba(211, 47, 47, 0.08);
-  color: #D32F2F;
+  background: var(--danger-soft);
+  color: var(--danger);
 }
 
 .rules__example {
@@ -1276,7 +1276,7 @@
 
 .modal__error {
   font-size: 13px;
-  color: #D32F2F;
+  color: var(--danger);
   text-align: center;
 }
 
@@ -1905,7 +1905,7 @@
 }
 
 .pool-admin__action--danger {
-  color: #D32F2F;
+  color: var(--danger);
 }
 
 .pool-admin__loading {
@@ -1991,8 +1991,8 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(211, 47, 47, 0.08);
-  color: #D32F2F;
+  background: var(--danger-soft);
+  color: var(--danger);
   font-size: 14px;
   font-weight: 700;
   display: flex;
@@ -2041,7 +2041,7 @@
 }
 
 .confirm-modal__btn--danger {
-  background: #D32F2F;
+  background: var(--danger);
   color: var(--white);
 }
 
@@ -2088,7 +2088,7 @@
 }
 
 .bet-card--live {
-  border-left-color: #D32F2F;
+  border-left-color: var(--danger);
 }
 
 .bet-card--finished {
@@ -2106,7 +2106,7 @@
 }
 
 .bet-card__live-badge {
-  background: #D32F2F;
+  background: var(--danger);
   color: var(--white);
   font-size: 10px;
   font-weight: 700;
@@ -2245,7 +2245,7 @@
 
 .bet-card__points--3 {
   background: rgba(201, 168, 76, 0.15);
-  color: #8B7226;
+  color: var(--gold-text);
 }
 
 .bet-card__points--1 {
@@ -2254,8 +2254,8 @@
 }
 
 .bet-card__points--0 {
-  background: rgba(211, 47, 47, 0.08);
-  color: #D32F2F;
+  background: var(--danger-soft);
+  color: var(--danger);
 }
 
 /* ===== TEAM PROFILE ===== */
@@ -3768,7 +3768,7 @@
 }
 
 .admin__btn--danger {
-  background: #D32F2F;
+  background: var(--danger);
   color: var(--white);
 }
 
@@ -3869,8 +3869,8 @@
 }
 
 .admin__badge--error {
-  background: rgba(211, 47, 47, 0.1);
-  color: #D32F2F;
+  background: var(--danger-soft);
+  color: var(--danger);
 }
 
 .admin__badge--resolved {
@@ -5228,7 +5228,7 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--white);
-  background: #E5534B;
+  background: var(--danger);
   padding: 1px 5px;
   border-radius: 999px;
   animation: pulse 1.6s ease-in-out infinite;
@@ -5627,7 +5627,7 @@
   animation: toast-in 0.18s ease;
 }
 
-.toast--error { border-left-color: #E5534B; }
+.toast--error { border-left-color: var(--danger); }
 .toast--success { border-left-color: var(--green-mid); }
 .toast--info { border-left-color: var(--gold); }
 
