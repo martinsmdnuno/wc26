@@ -45,3 +45,30 @@ export function defaultLeaderboardTab(now = Date.now()) {
   if (now >= FIRST_KNOCKOUT_MS) return 'knockout';
   return 'group';
 }
+
+// Each phase (schedule order) with the moment it is "done" — ~2.5h after its
+// last kickoff (last match's final whistle, with margin).
+const PHASE_ENDS = schedule.phases
+  .filter((p) => p.matches?.length)
+  .map((p) => ({
+    id: p.id,
+    end: p.matches.reduce((max, m) => Math.max(max, kickoffMs(m)), 0) + 2.5 * 60 * 60 * 1000,
+  }));
+
+// The phase the tournament is currently in: the first one not yet finished.
+// Drives the default selected phase across the app (calendar, bets, my matches,
+// summary). The day the group stage ends, this flips to 'r32' — so the calendar
+// opens on the round of 32 — and advances round by round from there.
+export function currentPhase(now = Date.now()) {
+  const cur = PHASE_ENDS.find((p) => now < p.end);
+  return cur ? cur.id : (PHASE_ENDS[PHASE_ENDS.length - 1]?.id || 'group');
+}
+
+// currentPhase restricted to the read-only bracket's rounds (no group / 3rd):
+// up to the round of 32 → 'r32'; the 3rd-place day maps to the final.
+export function currentBracketPhase(now = Date.now()) {
+  const p = currentPhase(now);
+  if (p === 'group') return 'r32';
+  if (p === '3rd') return 'final';
+  return p;
+}
