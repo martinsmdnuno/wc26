@@ -4,8 +4,9 @@ import { db } from '../firebase';
 import { useAuth } from '../hooks/useAuth';
 import { usePools } from '../hooks/usePools';
 import { useLanguage } from '../i18n/LanguageContext';
-import { defaultLeaderboardTab } from '../utils/phases';
+import { defaultLeaderboardTab, groupStageComplete } from '../utils/phases';
 import Avatar from './Avatar';
+import GroupChampionCertificate from './GroupChampionCertificate';
 
 // Each tab ranks by its own points field. 'total' is the headline ranking;
 // 'group'/'knockout' come from match bets bucketed by phase; 'special' from
@@ -43,6 +44,7 @@ export default function Leaderboard() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState(defaultLeaderboardTab);
+  const [certOpen, setCertOpen] = useState(false);
   const tabRefs = useRef([]);
 
   useEffect(() => {
@@ -91,6 +93,14 @@ export default function Leaderboard() {
 
   const medals = ['🥇', '🥈', '🥉'];
 
+  // The "Oráculo da Circunvalação": top of the Groups ranking, but only once the
+  // group stage is actually over and there are points to speak of — so we never
+  // crown a mid-stage leader.
+  const groupChampion =
+    tab === 'group' && groupStageComplete() && (ranked[0]?.groupPoints || 0) > 0
+      ? ranked[0]
+      : null;
+
   // Roving-tabindex arrow navigation across the tab strip.
   const onTabKeyDown = (e, i) => {
     if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
@@ -124,6 +134,22 @@ export default function Leaderboard() {
       </div>
 
       <div id="lb-panel" role="tabpanel" aria-labelledby={`lb-tab-${tab}`}>
+        {groupChampion && (
+          <div className="leaderboard__oracle">
+            <span className="leaderboard__oracle-icon" aria-hidden="true">🔮</span>
+            <span className="leaderboard__oracle-text">
+              <strong>{groupChampion.nickname}</strong> {t('lbOracleBanner')}
+            </span>
+            <button
+              type="button"
+              className="leaderboard__oracle-btn"
+              onClick={() => setCertOpen(true)}
+            >
+              {t('lbViewCertificate')}
+            </button>
+          </div>
+        )}
+
         <div className="leaderboard__header">
           <span className="leaderboard__col leaderboard__col--pos">#</span>
           <span className="leaderboard__col leaderboard__col--name">{t('player')}</span>
@@ -151,6 +177,16 @@ export default function Leaderboard() {
                 />
                 {entry.nickname}
                 {isMe && <span className="leaderboard__me-badge">{t('you')}</span>}
+                {groupChampion?.uid === entry.uid && (
+                  <button
+                    type="button"
+                    className="leaderboard__oracle-tag"
+                    onClick={() => setCertOpen(true)}
+                    title={t('lbViewCertificate')}
+                  >
+                    🔮 {t('lbOracleTag')}
+                  </button>
+                )}
               </span>
               <span className="leaderboard__col leaderboard__col--exact">
                 {entry.exactResultsCount || 0}
@@ -202,6 +238,10 @@ export default function Leaderboard() {
             </ul>
           )}
         </div>
+      )}
+
+      {certOpen && groupChampion && (
+        <GroupChampionCertificate winner={groupChampion} onClose={() => setCertOpen(false)} />
       )}
     </div>
   );
