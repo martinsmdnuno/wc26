@@ -173,6 +173,9 @@ export const translations = {
     certPrize: 'Uma garrafa de bolhinhas 🍾 (das com bolhas a sério, não da gasosa)',
     certNostradamus: 'Atenção: o título de Nostradamus continua reservado para quem vencer o Mundial inteiro. Até lá, bebe as bolhinhas devagarinho — a profecia ainda vai a meio.',
     certClose: 'Fechar',
+
+    // Toasts
+    toastSaveError: 'Não foi possível guardar. Verifica a ligação e tenta de novo.',
     editProfileTitle: 'Editar perfil',
     avatarLegendsLabel: 'Escolhe uma lenda',
     avatarRemoveBtn: 'Sem avatar',
@@ -579,6 +582,9 @@ export const translations = {
     certPrize: 'A bottle of bubbles 🍾 (the proper fizzy kind, not lemonade)',
     certNostradamus: 'Note: the title of Nostradamus stays reserved for whoever wins the whole World Cup. Until then, sip the bubbles slowly — the prophecy is only halfway done.',
     certClose: 'Close',
+
+    // Toasts
+    toastSaveError: 'Could not save. Check your connection and try again.',
     editProfileTitle: 'Edit profile',
     avatarLegendsLabel: 'Pick a legend',
     avatarRemoveBtn: 'No avatar',

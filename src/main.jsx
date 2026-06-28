@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/react'
 import { LanguageProvider } from './i18n/LanguageContext'
 import { AuthProvider } from './hooks/useAuth'
 import { PoolProvider } from './hooks/usePools'
+import { ToastProvider } from './hooks/useToast'
 import ErrorBoundary from './components/ErrorBoundary'
 import { applyTheme, getTheme } from './theme'
 import './index.css'
@@ -39,7 +40,9 @@ createRoot(document.getElementById('root')).render(
       <LanguageProvider>
         <AuthProvider>
           <PoolProvider>
-            <App />
+            <ToastProvider>
+              <App />
+            </ToastProvider>
           </PoolProvider>
         </AuthProvider>
       </LanguageProvider>
