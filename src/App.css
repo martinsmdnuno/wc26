@@ -2220,6 +2220,57 @@
   color: var(--gray);
 }
 
+/* Knockout extra prediction (advancer / how it ends) — shown on a 90' draw */
+.bet-card__ko {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.bet-card__ko-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bet-card__ko-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray);
+}
+.bet-card__ko-opts {
+  display: flex;
+  gap: 6px;
+}
+.bet-card__ko-opt {
+  flex: 1;
+  min-height: var(--h-control-sm);
+  padding: 7px 10px;
+  border-radius: var(--r-pill);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bet-card__ko-opt--on {
+  color: var(--white);
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+}
+.bet-card__ko-summary {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--gray);
+}
+
 .bet-card__result {
   display: flex;
   align-items: center;

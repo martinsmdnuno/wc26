@@ -52,11 +52,17 @@ export default function Bets({ onTeamClick }) {
   // load in, so the hook re-pins today to the top until it settles or the user scrolls.
   const dayRefs = useScrollToToday(matchesByDate, view === 'bet' && activePhase === currentPhase());
 
-  const handleSave = async (matchId, scoreA, scoreB) => {
-    await saveBet(matchId, scoreA, scoreB);
+  const handleSave = async (matchId, scoreA, scoreB, extra = {}) => {
+    await saveBet(matchId, scoreA, scoreB, extra);
     setBetsMap((prev) => ({
       ...prev,
-      [matchId]: { ...prev[matchId], predictedScoreA: scoreA, predictedScoreB: scoreB },
+      [matchId]: {
+        ...prev[matchId],
+        predictedScoreA: scoreA,
+        predictedScoreB: scoreB,
+        predictedAdvancer: extra.predictedAdvancer ?? null,
+        predictedDecidedBy: extra.predictedDecidedBy ?? null,
+      },
     }));
   };
 
