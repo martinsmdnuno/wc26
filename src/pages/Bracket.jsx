@@ -21,7 +21,7 @@ export default function Bracket({ onTeamClick }) {
   const { teams, winners, champion } = useMemo(() => resolveWinners(scores), [scores]);
   const [phase, setPhase] = useState('r32');
 
-  const teamRow = (iso, raw, win, key) => {
+  const teamRow = (iso, raw, win, key, score) => {
     if (!iso) {
       return (
         <span key={key} className="kbr-t kbr-t--ph">
@@ -41,6 +41,7 @@ export default function Bracket({ onTeamClick }) {
       >
         <img src={flag(iso)} alt="" className="kbr-fl" />
         <span className="kbr-name">{t(`team.${iso}`)}</span>
+        {score != null && <span className="kbr-score">{score}</span>}
       </button>
     );
   };
@@ -49,10 +50,15 @@ export default function Bracket({ onTeamClick }) {
     const [rawH, rawA] = matchSlots(id);
     const tt = teams[id] || {};
     const win = winners[id];
+    const r = scores[id];
+    const live = r?.status === 'live';
+    const showScore = r && r.scoreHome != null && r.scoreAway != null
+      && (r.status === 'finished' || live);
     return (
-      <div className="kbr-box">
-        {teamRow(tt.home, rawH, win, 'h')}
-        {teamRow(tt.away, rawA, win, 'a')}
+      <div className={`kbr-box ${live ? 'kbr-box--live' : ''}`}>
+        {live && <span className="kbr-live">{t('live')}</span>}
+        {teamRow(tt.home, rawH, win, 'h', showScore ? r.scoreHome : null)}
+        {teamRow(tt.away, rawA, win, 'a', showScore ? r.scoreAway : null)}
       </div>
     );
   };
