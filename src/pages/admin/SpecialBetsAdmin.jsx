@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import {
-  collection, getDocs, doc, getDoc, setDoc, updateDoc, increment, serverTimestamp,
+  collection, getDocs, doc, getDoc, setDoc, updateDoc, increment, serverTimestamp, query, where,
 } from 'firebase/firestore';
 import { db } from '../../firebase';
 import Autocomplete from '../../components/Autocomplete';
-import { SPECIAL_CATEGORIES, SPECIAL_POINTS } from '../../data/specialBets';
+import { SPECIAL_CATEGORIES, SPECIAL_POINTS, SPECIAL_EXCEPTION } from '../../data/specialBets';
 import { optionsFor } from '../../data/playerIndex';
 import { SPECIAL_RESULTS_DOC } from '../../hooks/useSpecialBets';
 import { logError } from '../../utils/logError';
@@ -53,6 +53,15 @@ export default function SpecialBetsAdmin() {
         { merge: true }
       );
 
+      // One-off exception: special points of these users (in the exception pool)
+      // are kept in `specialPoints` but EXCLUDED from `totalPoints`, and logged in
+      // the adjustments history. Resolve their uids by e-mail.
+      let excludedUids = new Set();
+      try {
+        const us = await getDocs(query(collection(db, 'users'), where('email', 'in', SPECIAL_EXCEPTION.emails)));
+        excludedUids = new Set(us.docs.map((d) => d.id));
+      } catch { /* best-effort; exclusion just won't apply if this fails */ }
+
       // 2. Recalculate this category across every pool, crediting the delta so
       //    re-resolving with a corrected answer stays idempotent.
       let credited = 0;
@@ -66,6 +75,9 @@ export default function SpecialBetsAdmin() {
           const isHit = bet.picks?.[cat.id] && bet.picks[cat.id] === correctId;
           const newAward = isHit ? SPECIAL_POINTS : 0;
           const delta = newAward - prevAward;
+          // Excluded = the exception users, only in the exception pool.
+          const isExcluded = poolDoc.data().inviteCode === SPECIAL_EXCEPTION.poolCode
+            && excludedUids.has(bet.userId);
 
           if (delta !== 0 || prevAward !== newAward) {
             await setDoc(
@@ -78,10 +90,10 @@ export default function SpecialBetsAdmin() {
             const lbRef = doc(db, 'pools', poolId, 'leaderboard', bet.userId);
             const lbSnap = await getDoc(lbRef);
             if (lbSnap.exists()) {
-              await updateDoc(lbRef, {
-                totalPoints: increment(delta),
-                specialPoints: increment(delta),
-              });
+              // Excluded users: track specialPoints but keep it OUT of the total.
+              await updateDoc(lbRef, isExcluded
+                ? { specialPoints: increment(delta) }
+                : { totalPoints: increment(delta), specialPoints: increment(delta) });
             } else {
               let nickname = '';
               try {
@@ -90,12 +102,32 @@ export default function SpecialBetsAdmin() {
               } catch { /* nickname is best-effort */ }
               await setDoc(lbRef, {
                 nickname,
-                totalPoints: Math.max(0, delta),
+                totalPoints: isExcluded ? 0 : Math.max(0, delta),
                 exactResultsCount: 0,
                 correctOutcomeCount: 0,
                 specialPoints: Math.max(0, delta),
               });
             }
+          }
+          // Log the exception in the adjustments history (idempotent per user).
+          if (isExcluded) {
+            let nickname = '';
+            try {
+              const us = await getDoc(doc(db, 'users', bet.userId));
+              if (us.exists()) nickname = us.data().nickname || '';
+            } catch { /* nickname is best-effort */ }
+            await setDoc(
+              doc(db, 'pools', poolId, 'adjustments', `special-exception-${bet.userId}`),
+              {
+                uid: bet.userId,
+                nickname,
+                at: serverTimestamp(),
+                reason: 'Exceção: palpites especiais reabertos por extensão de prazo (até 29/jun); os pontos especiais deste utilizador NÃO entram na contabilização final (total).',
+                before: {},
+                after: {},
+              },
+              { merge: true }
+            );
           }
           if (newAward > 0) credited += 1;
         }

@@ -3,20 +3,26 @@ import Autocomplete from './Autocomplete';
 import SpecialStats from './SpecialStats';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useToast } from '../hooks/useToast';
+import { useAuth } from '../hooks/useAuth';
+import { usePools } from '../hooks/usePools';
 import { useSpecialBets } from '../hooks/useSpecialBets';
 import { useSpecialStats } from '../hooks/useSpecialStats';
-import { SPECIAL_CATEGORIES, SPECIAL_POINTS, isSpecialLocked } from '../data/specialBets';
+import { SPECIAL_CATEGORIES, SPECIAL_POINTS, isSpecialLocked, isSpecialExceptionActive } from '../data/specialBets';
 import { optionsFor, lookupOption } from '../data/playerIndex';
 
 export default function SpecialBets() {
   const { t } = useLanguage();
   const toast = useToast();
+  const { user } = useAuth();
+  const { activePool } = usePools();
   const { picks, results, loading, savePick } = useSpecialBets();
   const [savingId, setSavingId] = useState(null);
   const [savedId, setSavedId] = useState(null);
   const [view, setView] = useState('mine'); // 'mine' | 'group'
 
-  const locked = isSpecialLocked();
+  // Global lock, unless this user has the one-off late-extension exception.
+  const locked = isSpecialLocked()
+    && !isSpecialExceptionActive(activePool?.inviteCode, user?.email);
   const { members, loading: statsLoading } = useSpecialStats(view === 'group');
 
   const handleChange = async (categoryId, optionId) => {
