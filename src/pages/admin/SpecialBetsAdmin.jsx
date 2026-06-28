@@ -124,7 +124,7 @@ export default function SpecialBetsAdmin() {
                 uid: bet.userId,
                 nickname,
                 at: serverTimestamp(),
-                reason: 'Exceção: palpites especiais reabertos por extensão de prazo (até 29/jun); os pontos especiais deste utilizador NÃO entram na contabilização final (total).',
+                reason: 'Exceção: palpites especiais reabertos por extensão de prazo (até 28/jun); os pontos especiais deste utilizador NÃO entram na contabilização final (total).',
                 before: {},
                 after: {},
               },
@@ -161,27 +161,34 @@ export default function SpecialBetsAdmin() {
       if (usersSnap.empty) { setExNote('Utilizadores não encontrados por email.'); setExBusy(false); return; }
       let n = 0;
       for (const u of usersSnap.docs) {
-        await setDoc(
-          doc(db, 'pools', poolDoc.id, 'adjustments', `special-exception-${u.id}`),
-          {
-            uid: u.id,
-            nickname: u.data().nickname || '',
-            at: serverTimestamp(),
-            reason: 'Exceção: palpites especiais reabertos por extensão de prazo (até 29/jun); os pontos especiais deste utilizador NÃO entram na contabilização final (total).',
-            before: {},
-            after: {},
-          },
-          { merge: true }
-        );
+        const adjRef = doc(db, 'pools', poolDoc.id, 'adjustments', `special-exception-${u.id}`);
+        const adjSnap = await getDoc(adjRef);
+        if (adjSnap.exists()) continue; // already logged — keep the original date
+        await setDoc(adjRef, {
+          uid: u.id,
+          nickname: u.data().nickname || '',
+          at: serverTimestamp(),
+          reason: 'Exceção: palpites especiais reabertos por extensão de prazo (até 28/jun); os pontos especiais deste utilizador NÃO entram na contabilização final (total).',
+          before: {},
+          after: {},
+        });
         n += 1;
       }
-      setExNote(`Registado no histórico (${n} utilizador(es)).`);
+      setExNote(n > 0 ? `Registado no histórico (${n} novo(s)).` : 'Já estava registado no histórico.');
     } catch (err) {
       logError('SPECIAL_EXCEPTION_LOG_FAILED', 'Falha a registar exceção no histórico', { e: String(err) });
       setExNote('Erro ao registar.');
     }
     setExBusy(false);
   };
+
+  // Auto-register the exception in the adjustments history the first time an
+  // admin opens this page (idempotent — skips users already logged), so the note
+  // shows up without needing to press the button.
+  useEffect(() => {
+    registerException();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!loaded) return <div className="admin__section"><p className="admin__empty">A carregar...</p></div>;
 
