@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useModalA11y } from '../hooks/useModalA11y';
 import Avatar from './Avatar';
@@ -12,7 +13,10 @@ export default function GroupChampionCertificate({ winner, onClose }) {
 
   const reasons = [t('certReason1'), t('certReason2'), t('certReason3')];
 
-  return (
+  // Portal to <body>: the modal must escape <main>, which is the app-shell's
+  // scroll container (overflow:auto) — a position:fixed descendant of it gets
+  // clipped/mis-placed on iOS. Same pattern as ProfileModal / the bracket picker.
+  return createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <div
         className="modal cert"
@@ -58,6 +62,7 @@ export default function GroupChampionCertificate({ winner, onClose }) {
           {t('certClose')}
         </button>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

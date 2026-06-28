@@ -3481,6 +3481,9 @@
 /* Group-stage champion certificate */
 .cert {
   max-width: 400px;
+  max-height: calc(100dvh - 32px); /* tall content scrolls in-place; close stays reachable */
+  overflow-y: auto;
+  overscroll-behavior: contain;
   text-align: center;
   gap: 12px;
   border: 2px solid var(--gold);

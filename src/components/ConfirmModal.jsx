@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useModalA11y } from '../hooks/useModalA11y';
 
@@ -5,7 +6,9 @@ export default function ConfirmModal({ title, message, confirmLabel, onConfirm, 
   const { t } = useLanguage();
   const ref = useModalA11y({ onEscape: onCancel });
 
-  return (
+  // Portal to <body> so the overlay escapes <main> (the app-shell scroll
+  // container) — a position:fixed descendant of it is clipped on iOS.
+  return createPortal(
     <div className="modal-overlay" onClick={onCancel}>
       <div
         className="modal confirm-modal"
@@ -30,6 +33,7 @@ export default function ConfirmModal({ title, message, confirmLabel, onConfirm, 
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
