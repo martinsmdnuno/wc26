@@ -22,6 +22,8 @@ export default function SpecialBetsAdmin() {
   const [busy, setBusy] = useState(null); // catId being resolved
   const [done, setDone] = useState({}); // { catId: '<n> pts atribuídos' }
   const [loaded, setLoaded] = useState(false);
+  const [exBusy, setExBusy] = useState(false);
+  const [exNote, setExNote] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -142,6 +144,45 @@ export default function SpecialBetsAdmin() {
     setBusy(null);
   };
 
+  // Register the WC26-GXFD special-bets exception in that pool's adjustments
+  // history NOW (idempotent), without waiting for the special resolution.
+  const registerException = async () => {
+    setExBusy(true);
+    setExNote('');
+    try {
+      const poolsSnap = await getDocs(
+        query(collection(db, 'pools'), where('inviteCode', '==', SPECIAL_EXCEPTION.poolCode))
+      );
+      const poolDoc = poolsSnap.docs[0];
+      if (!poolDoc) { setExNote(`Bolão ${SPECIAL_EXCEPTION.poolCode} não encontrado.`); setExBusy(false); return; }
+      const usersSnap = await getDocs(
+        query(collection(db, 'users'), where('email', 'in', SPECIAL_EXCEPTION.emails))
+      );
+      if (usersSnap.empty) { setExNote('Utilizadores não encontrados por email.'); setExBusy(false); return; }
+      let n = 0;
+      for (const u of usersSnap.docs) {
+        await setDoc(
+          doc(db, 'pools', poolDoc.id, 'adjustments', `special-exception-${u.id}`),
+          {
+            uid: u.id,
+            nickname: u.data().nickname || '',
+            at: serverTimestamp(),
+            reason: 'Exceção: palpites especiais reabertos por extensão de prazo (até 29/jun); os pontos especiais deste utilizador NÃO entram na contabilização final (total).',
+            before: {},
+            after: {},
+          },
+          { merge: true }
+        );
+        n += 1;
+      }
+      setExNote(`Registado no histórico (${n} utilizador(es)).`);
+    } catch (err) {
+      logError('SPECIAL_EXCEPTION_LOG_FAILED', 'Falha a registar exceção no histórico', { e: String(err) });
+      setExNote('Erro ao registar.');
+    }
+    setExBusy(false);
+  };
+
   if (!loaded) return <div className="admin__section"><p className="admin__empty">A carregar...</p></div>;
 
   return (
@@ -151,6 +192,19 @@ export default function SpecialBetsAdmin() {
         Define a resposta certa de cada categoria e atribui {SPECIAL_POINTS} pts a quem acertou.
         Podes recalcular se corrigires a resposta.
       </p>
+
+      <div style={{ margin: '4px 0 16px' }}>
+        <button
+          className="admin__btn admin__btn--ghost admin__btn--small"
+          disabled={exBusy}
+          onClick={registerException}
+        >
+          {exBusy ? '...' : `Registar exceção ${SPECIAL_EXCEPTION.poolCode} no histórico`}
+        </button>
+        {exNote && (
+          <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--muted, #888)' }}>{exNote}</span>
+        )}
+      </div>
 
       <table className="admin__table">
         <thead>
