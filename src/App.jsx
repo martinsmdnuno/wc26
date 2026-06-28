@@ -37,7 +37,6 @@ export default function App() {
   const [animClass, setAnimClass] = useState('page-enter-done');
   const [teamIso, setTeamIso] = useState(null);
   const prevPageRef = useRef('schedule');
-  const headerRef = useRef(null);
   const mainRef = useRef(null); // the app-shell scroll container (<main>)
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
   const { t } = useLanguage();
@@ -87,23 +86,6 @@ export default function App() {
     navigate(prevPageRef.current);
   }, [navigate]);
 
-  // Publish the (dynamic) header height as a CSS variable so sticky sub-bars
-  // — e.g. the Bolão view chips — can stack right below it. The header grows a
-  // row when the PoolSelector is shown, so we measure instead of hardcoding.
-  useEffect(() => {
-    const el = headerRef.current;
-    if (!el) return;
-    const apply = () =>
-      document.documentElement.style.setProperty(
-        '--header-h',
-        `${el.offsetHeight}px`
-      );
-    apply();
-    const ro = new ResizeObserver(apply);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [profile?.nickname]);
-
   // Hash-based deep links — used by notification clicks (e.g. /#bets) so a tapped
   // push lands on the relevant page instead of just opening the home screen.
   useEffect(() => {
@@ -149,7 +131,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <header className="app-header" ref={headerRef}>
+      <header className="app-header">
         <div className="app-header__content">
           <div className="app-header__side app-header__side--left">
             {profile?.nickname && <HamburgerMenu onNavigate={navigate} />}
