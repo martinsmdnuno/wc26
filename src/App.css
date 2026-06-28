@@ -5099,7 +5099,7 @@
 
 /* ===== KNOCKOUT BRACKET (read-only, two-sided) — Bracket page ===== */
 .kbr-board {
-  display: flex;
+  display: none; /* phones use .kbr-mobile; the two-sided tree shows ≥700px */
   align-items: stretch;
   overflow: auto;
   max-height: 72dvh;
@@ -5110,6 +5110,15 @@
   --kbr-gap: 22px;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  scroll-snap-type: x proximity;
+}
+.kbr-side { scroll-snap-align: start; }
+/* Round headers stay visible while the tall tree scrolls. */
+.kbr-board .kbr-col-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--off-white);
 }
 .kbr-side { display: flex; }
 .kbr-center {
@@ -5164,7 +5173,12 @@
   cursor: pointer;
 }
 .kbr-t + .kbr-t { border-top: 1px solid var(--border); }
-.kbr-t--win { background: rgba(0, 166, 81, 0.14); color: var(--green-dark); }
+.kbr-t--win {
+  background: rgba(0, 166, 81, 0.14);
+  color: var(--green-dark);
+  font-weight: 700;
+  box-shadow: inset 3px 0 0 var(--green-mid);
+}
 .kbr-t--out { opacity: 0.5; }
 .kbr-t--ph { cursor: default; }
 .kbr-t--ph .kbr-name { color: var(--gray); font-style: italic; font-weight: 500; }
@@ -5217,6 +5231,62 @@
   min-width: 140px;
 }
 .kbr-champ--empty { background: var(--off-white); color: var(--gray); border: 1px dashed var(--border-strong); }
+
+/* ---- Bracket: round-by-round mobile view ---- */
+.kbr-mobile { display: block; }
+
+.kbr-phasebar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 10px;
+}
+.kbr-phasebar::-webkit-scrollbar { display: none; }
+
+.kbr-phasebar__tab {
+  flex: 0 0 auto;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--gray);
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.kbr-phasebar__tab--active {
+  color: var(--white);
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+}
+
+.kbr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.kbr-list .kbr-box { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06); }
+.kbr-list .kbr-t { font-size: 14px; padding: 10px 12px; }
+.kbr-list .kbr-fl { width: 24px; height: 17px; }
+
+.kbr-list-champ {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (min-width: 700px) {
+  .kbr-mobile { display: none; }
+  .kbr-board { display: flex; }
+}
 
 /* Bracket team picker (modal) */
 .bkt-modal {

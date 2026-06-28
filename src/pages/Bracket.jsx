@@ -1,21 +1,25 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useCachedScores } from '../hooks/useLiveScores';
-import { resolveWinners, slotLabel, matchSlots, BRACKET_SIDES } from '../utils/knockout';
+import { resolveWinners, slotLabel, matchSlots, BRACKET_SIDES, ROUND_IDS } from '../utils/knockout';
 
-// Read-only ACTUAL tournament bracket, laid out as a classic two-sided knockout
-// tree converging on the centre (final + champion). Teams fill in as group
-// standings / knockout results become certain (reusing the same resolver as the
-// calendar); undecided slots show a readable placeholder. Prediction bracket
-// (points) stays in the Bolão. Layout/CSS validated as a prototype before port.
+// Read-only ACTUAL tournament bracket. On wide screens it's a classic two-sided
+// knockout tree converging on the centre (final + champion). On phones the tree
+// is unreadable (≈1300px wide), so we switch to a round-by-round view: a phase
+// selector + one full-width column at a time. Teams fill in as group standings /
+// knockout results become certain (reusing the calendar's resolver); undecided
+// slots show a readable placeholder.
 const OUTER_TO_INNER = ['r32', 'r16', 'qf', 'sf'];
+const PHASES = ['r32', 'r16', 'qf', 'sf', 'final'];
 
-const flag = (iso) => `https://flagcdn.com/w40/${iso}.png`;
+// w80 (rendered at 20px) keeps flags crisp on retina screens.
+const flag = (iso) => `https://flagcdn.com/w80/${iso}.png`;
 
 export default function Bracket({ onTeamClick }) {
   const { t } = useLanguage();
   const scores = useCachedScores();
   const { teams, winners, champion } = useMemo(() => resolveWinners(scores), [scores]);
+  const [phase, setPhase] = useState('r32');
 
   const teamRow = (iso, raw, win, key) => {
     if (!iso) {
@@ -53,6 +57,17 @@ export default function Bracket({ onTeamClick }) {
     );
   };
 
+  const championBlock = (
+    <div className={`kbr-champ ${champion ? '' : 'kbr-champ--empty'}`}>
+      {champion ? (
+        <>
+          <img src={flag(champion)} alt="" className="kbr-fl" />
+          <span className="kbr-name">{t(`team.${champion}`)}</span>
+        </>
+      ) : `🏆 ${t('bracketChampion')}`}
+    </div>
+  );
+
   const renderSide = (sideKey) => {
     const half = BRACKET_SIDES[sideKey];
     let cols = OUTER_TO_INNER.map((ph) => ({ ph, ids: half[ph] || [] }));
@@ -82,20 +97,44 @@ export default function Bracket({ onTeamClick }) {
     <div className="bracket">
       <p className="special__intro">{t('bracketActualIntro')}</p>
 
+      {/* Phones: round-by-round */}
+      <div className="kbr-mobile">
+        <div className="kbr-phasebar" role="tablist" aria-label={t('bracketTab')}>
+          {PHASES.map((ph) => (
+            <button
+              key={ph}
+              type="button"
+              role="tab"
+              aria-selected={ph === phase}
+              className={`kbr-phasebar__tab ${ph === phase ? 'kbr-phasebar__tab--active' : ''}`}
+              onClick={() => setPhase(ph)}
+            >
+              {t(`bracket.round.${ph}`)}
+            </button>
+          ))}
+        </div>
+
+        <div className="kbr-list">
+          {(ROUND_IDS[phase] || []).map((id) => (
+            <div key={id} className="kbr-list-item">{matchBox(id)}</div>
+          ))}
+          {phase === 'final' && (
+            <div className="kbr-list-champ">
+              <div className="kbr-col-head kbr-final-head">🏆 {t('bracketChampion')}</div>
+              {championBlock}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Wide screens: two-sided tree */}
       <div className="kbr-board">
         {renderSide('left')}
 
         <div className="kbr-center">
           <div className="kbr-col-head kbr-final-head">{t('bracket.round.final')}</div>
           <div className="kbr-m kbr-final">{matchBox(BRACKET_SIDES.finalId)}</div>
-          <div className={`kbr-champ ${champion ? '' : 'kbr-champ--empty'}`}>
-            {champion ? (
-              <>
-                <img src={flag(champion)} alt="" className="kbr-fl" />
-                <span className="kbr-name">{t(`team.${champion}`)}</span>
-              </>
-            ) : `🏆 ${t('bracketChampion')}`}
-          </div>
+          {championBlock}
         </div>
 
         {renderSide('right')}
