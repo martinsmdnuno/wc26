@@ -163,6 +163,7 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
         <div className="bet-card__group">
           <button
             className="bet-card__group-toggle"
+            aria-expanded={showBets}
             onClick={() => setShowBets((s) => !s)}
           >
             {showBets ? '▾' : '▸'} 📊 {t('matchBetsToggle')}
