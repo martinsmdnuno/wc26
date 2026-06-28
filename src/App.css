@@ -1093,6 +1093,13 @@
   margin-bottom: 12px;
 }
 
+.rules__intro {
+  font-size: 13px;
+  color: var(--gray);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
 .rules__list {
   list-style: none;
   display: flex;
