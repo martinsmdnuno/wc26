@@ -5187,7 +5187,31 @@
   background: #fff;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
-.kbr-name { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kbr-name { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kbr-score {
+  flex: 0 0 auto;
+  margin-left: 6px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: inherit;
+}
+.kbr-box { position: relative; }
+.kbr-box--live { box-shadow: 0 0 0 1px var(--green-mid); }
+.kbr-live {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  z-index: 1;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  background: #E5534B;
+  padding: 1px 5px;
+  border-radius: 999px;
+  animation: pulse 1.6s ease-in-out infinite;
+}
 
 /* connectors */
 .kbr-lnk { position: absolute; top: 0; bottom: 0; width: var(--kbr-gap); }
