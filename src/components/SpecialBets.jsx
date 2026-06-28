@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Autocomplete from './Autocomplete';
 import SpecialStats from './SpecialStats';
 import { useLanguage } from '../i18n/LanguageContext';
+import { useToast } from '../hooks/useToast';
 import { useSpecialBets } from '../hooks/useSpecialBets';
 import { useSpecialStats } from '../hooks/useSpecialStats';
 import { SPECIAL_CATEGORIES, SPECIAL_POINTS, isSpecialLocked } from '../data/specialBets';
@@ -9,6 +10,7 @@ import { optionsFor, lookupOption } from '../data/playerIndex';
 
 export default function SpecialBets() {
   const { t } = useLanguage();
+  const toast = useToast();
   const { picks, results, loading, savePick } = useSpecialBets();
   const [savingId, setSavingId] = useState(null);
   const [savedId, setSavedId] = useState(null);
@@ -25,7 +27,9 @@ export default function SpecialBets() {
       setSavedId(categoryId);
       setTimeout(() => setSavedId((id) => (id === categoryId ? null : id)), 1500);
     } catch {
-      // surfaced via logError inside the hook
+      // logError happens inside the hook; the toast tells the user it failed so
+      // they don't assume the pick was saved.
+      toast(t('toastSaveError'), 'error');
     } finally {
       setSavingId(null);
     }
