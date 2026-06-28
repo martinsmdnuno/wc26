@@ -4,7 +4,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../firebase';
 import Autocomplete from '../../components/Autocomplete';
-import { SPECIAL_CATEGORIES, SPECIAL_POINTS, SPECIAL_EXCEPTION, SPECIAL_DEADLINE_MS } from '../../data/specialBets';
+import { SPECIAL_CATEGORIES, SPECIAL_POINTS, SPECIAL_EXCEPTION } from '../../data/specialBets';
 import { optionsFor } from '../../data/playerIndex';
 import { SPECIAL_RESULTS_DOC } from '../../hooks/useSpecialBets';
 import { logError } from '../../utils/logError';
@@ -59,12 +59,13 @@ export default function SpecialBetsAdmin() {
       // from `totalPoints` (and logged). Full-exclude users → all categories out;
       // baseline users (Ricardo) → only LATE picks out (pickedAt > deadline).
       const fullExcludedUids = new Set();
-      const baselineUids = new Set();
+      const baselineLateByUid = {}; // uid -> Set(categoryId) excluded for baseline users
       try {
         const us = await getDocs(query(collection(db, 'users'), where('email', 'in', SPECIAL_EXCEPTION.emails)));
         for (const u of us.docs) {
           const email = (u.data().email || '').toLowerCase();
-          if (SPECIAL_EXCEPTION.baselineEmails.includes(email)) baselineUids.add(u.id);
+          const lateCats = SPECIAL_EXCEPTION.baselineLateCategories[email];
+          if (lateCats) baselineLateByUid[u.id] = new Set(lateCats);
           else fullExcludedUids.add(u.id);
         }
       } catch { /* best-effort; exclusion just won't apply if this fails */ }
@@ -83,13 +84,11 @@ export default function SpecialBetsAdmin() {
           const newAward = isHit ? SPECIAL_POINTS : 0;
           const delta = newAward - prevAward;
           // Exclude from the final total: full-exclude users for every category;
-          // baseline users (Ricardo) ONLY for categories picked late (during the
-          // reopening, i.e. pickedAt after the original deadline). The exception
-          // note is written to the adjustments log by registerException, not here.
+          // baseline users (Ricardo) only for their listed reopening categories
+          // (e.g. surpriseTeam). The note is written by registerException, not here.
           const inExcPool = poolDoc.data().inviteCode === SPECIAL_EXCEPTION.poolCode;
-          const pickedLate = bet.pickedAt?.[cat.id] != null && bet.pickedAt[cat.id] > SPECIAL_DEADLINE_MS;
           const isExcluded = inExcPool && (fullExcludedUids.has(bet.userId)
-            || (baselineUids.has(bet.userId) && pickedLate));
+            || (baselineLateByUid[bet.userId]?.has(cat.id) ?? false));
 
           if (delta !== 0 || prevAward !== newAward) {
             await setDoc(
@@ -154,9 +153,9 @@ export default function SpecialBetsAdmin() {
         const adjRef = doc(db, 'pools', poolDoc.id, 'adjustments', `special-exception-${u.id}`);
         const adjSnap = await getDoc(adjRef);
         if (adjSnap.exists()) continue; // already logged — keep the original date
-        const isBaseline = SPECIAL_EXCEPTION.baselineEmails.includes((u.data().email || '').toLowerCase());
-        const reason = isBaseline
-          ? 'Exceção: palpites especiais reabertos por extensão de prazo (até 28/jun). Apenas os palpites preenchidos na reabertura NÃO entram na contabilização final; os preenchidos a tempo contam.'
+        const lateCats = SPECIAL_EXCEPTION.baselineLateCategories[(u.data().email || '').toLowerCase()];
+        const reason = lateCats
+          ? `Exceção: ${lateCats.map((c) => CATEGORY_LABELS[c] || c).join(', ')} preenchido(s) na reabertura (até 28/jun) — NÃO entra(m) na contabilização final; os restantes especiais contam.`
           : 'Exceção: palpites especiais reabertos por extensão de prazo (até 28/jun); os pontos especiais deste utilizador NÃO entram na contabilização final (total).';
         await setDoc(adjRef, {
           uid: u.id,
