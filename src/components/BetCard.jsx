@@ -31,16 +31,39 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick, r
 
   const [scoreA, setScoreA] = useState(bet?.predictedScoreA ?? '');
   const [scoreB, setScoreB] = useState(bet?.predictedScoreB ?? '');
+  // Knockout-only extra prediction (when the 90' guess is a draw): who advances
+  // and how it's decided. Track A scores these + a boost for getting it all right.
+  const [advancer, setAdvancer] = useState(bet?.predictedAdvancer ?? null);
+  const [decidedBy, setDecidedBy] = useState(bet?.predictedDecidedBy ?? null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const debounceRef = useRef(null);
+
+  const isDraw = scoreA !== '' && scoreB !== '' && Number(scoreA) === Number(scoreB);
+  const showKoExtra = isKnockout && hasTeams && isDraw;
 
   const dateStr = kickoffDateStr(match, t('dateLocale'), {
     weekday: 'short',
     day: 'numeric',
     month: 'short',
   });
+
+  const persist = useCallback(async (a, b, adv, dec) => {
+    setSaving(true);
+    setSaved(false);
+    setSaveError(false);
+    try {
+      await onSave(match.id, Number(a), Number(b), { predictedAdvancer: adv, predictedDecidedBy: dec });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      console.error('Failed to save bet:', err);
+      setSaveError(true);
+      setTimeout(() => setSaveError(false), 4000);
+    }
+    setSaving(false);
+  }, [match.id, onSave]);
 
   const handleChange = useCallback(
     (side, value) => {
@@ -52,25 +75,27 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick, r
 
       clearTimeout(debounceRef.current);
       if (newA !== '' && newB !== '') {
-        debounceRef.current = setTimeout(async () => {
-          setSaving(true);
-          setSaved(false);
-          setSaveError(false);
-          try {
-            await onSave(match.id, Number(newA), Number(newB));
-            setSaved(true);
-            setTimeout(() => setSaved(false), 2000);
-          } catch (err) {
-            console.error('Failed to save bet:', err);
-            setSaveError(true);
-            setTimeout(() => setSaveError(false), 4000);
-          }
-          setSaving(false);
-        }, 800);
+        // A decisive score clears any draw-only extra prediction.
+        const draw = Number(newA) === Number(newB);
+        const adv = draw ? advancer : null;
+        const dec = draw ? decidedBy : null;
+        if (!draw && (advancer || decidedBy)) { setAdvancer(null); setDecidedBy(null); }
+        debounceRef.current = setTimeout(() => persist(newA, newB, adv, dec), 800);
       }
     },
-    [scoreA, scoreB, match.id, onSave]
+    [scoreA, scoreB, advancer, decidedBy, persist]
   );
+
+  const pickAdvancer = (iso) => {
+    if (isLocked) return;
+    setAdvancer(iso);
+    persist(scoreA, scoreB, iso, decidedBy);
+  };
+  const pickDecidedBy = (val) => {
+    if (isLocked) return;
+    setDecidedBy(val);
+    persist(scoreA, scoreB, advancer, val);
+  };
 
   return (
     <div className={`bet-card ${isLive ? 'bet-card--live' : ''} ${isFinished ? 'bet-card--finished' : ''}`}>
@@ -150,6 +175,48 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick, r
           )}
         </button>
       </div>
+
+      {showKoExtra && !isLocked && (
+        <div className="bet-card__ko">
+          <div className="bet-card__ko-row">
+            <span className="bet-card__ko-label">{t('koWhoAdvances')}</span>
+            <div className="bet-card__ko-opts">
+              <button
+                type="button"
+                className={`bet-card__ko-opt ${advancer === homeIso ? 'bet-card__ko-opt--on' : ''}`}
+                onClick={() => pickAdvancer(homeIso)}
+              >{homeName}</button>
+              <button
+                type="button"
+                className={`bet-card__ko-opt ${advancer === awayIso ? 'bet-card__ko-opt--on' : ''}`}
+                onClick={() => pickAdvancer(awayIso)}
+              >{awayName}</button>
+            </div>
+          </div>
+          <div className="bet-card__ko-row">
+            <span className="bet-card__ko-label">{t('koHowEnds')}</span>
+            <div className="bet-card__ko-opts">
+              <button
+                type="button"
+                className={`bet-card__ko-opt ${decidedBy === 'et' ? 'bet-card__ko-opt--on' : ''}`}
+                onClick={() => pickDecidedBy('et')}
+              >{t('koET')}</button>
+              <button
+                type="button"
+                className={`bet-card__ko-opt ${decidedBy === 'pens' ? 'bet-card__ko-opt--on' : ''}`}
+                onClick={() => pickDecidedBy('pens')}
+              >{t('koPens')}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isKnockout && isLocked && bet?.predictedAdvancer && (
+        <div className="bet-card__ko-summary">
+          {t('koWhoAdvances')}: <strong>{t(`team.${bet.predictedAdvancer}`)}</strong>
+          {bet.predictedDecidedBy && ` · ${bet.predictedDecidedBy === 'pens' ? t('koPens') : t('koET')}`}
+        </div>
+      )}
 
       {isFinished && matchScore?.scoreHome != null && (
         <div className="bet-card__result">
