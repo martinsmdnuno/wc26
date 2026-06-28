@@ -9,6 +9,7 @@ import { kickoffMs } from '../utils/matchTime';
 import { useCachedScores } from '../hooks/useLiveScores';
 import { useScrollToToday } from '../hooks/useScrollToToday';
 import { resolveKnockout } from '../utils/knockout';
+import { currentPhase } from '../utils/phases';
 
 function getNextMatchId(matches) {
   const now = Date.now();
@@ -20,7 +21,7 @@ function getNextMatchId(matches) {
 }
 
 export default function Schedule({ onTeamClick }) {
-  const [activePhase, setActivePhase] = useState('group');
+  const [activePhase, setActivePhase] = useState(currentPhase);
   const { t } = useLanguage();
   const cachedScores = useCachedScores();
   // Fill knockout fixtures with the teams already certain from group results.
@@ -32,17 +33,19 @@ export default function Schedule({ onTeamClick }) {
   );
 
   const phase = schedule.phases.find((p) => p.id === activePhase);
-  const allGroupMatches = schedule.phases.find((p) => p.id === 'group')?.matches || [];
-  const nextMatchId = useMemo(() => getNextMatchId(allGroupMatches), []);
+  // "Today" / "next match" affordances apply while viewing the phase the
+  // tournament is currently in (the default phase on open).
+  const phaseIsCurrent = activePhase === currentPhase();
+  const nextMatchId = useMemo(() => getNextMatchId(phase?.matches || []), [phase]);
 
   const matchesByDate = useMemo(
     () => (phase ? groupMatchesByDate(phase.matches) : {}),
     [phase]
   );
 
-  // Land on today's fixtures (group phase only) and keep them pinned as the
+  // Land on today's fixtures (current phase only) and keep them pinned as the
   // live scores load in and shift the layout above today.
-  const dayRefs = useScrollToToday(matchesByDate, activePhase === 'group');
+  const dayRefs = useScrollToToday(matchesByDate, phaseIsCurrent);
 
   return (
     <div className="schedule">
@@ -78,7 +81,7 @@ export default function Schedule({ onTeamClick }) {
                   key={match.id}
                   match={match}
                   matchScore={cachedScores[String(match.id)]}
-                  isNext={match.id === nextMatchId && activePhase === 'group'}
+                  isNext={match.id === nextMatchId && phaseIsCurrent}
                   showCalButton
                   onTeamClick={onTeamClick}
                   resolvedHome={resolvedKO[match.id]?.home}

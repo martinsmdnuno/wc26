@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useCachedScores } from '../hooks/useLiveScores';
 import { resolveWinners, slotLabel, matchSlots, BRACKET_SIDES, ROUND_IDS } from '../utils/knockout';
+import { currentBracketPhase } from '../utils/phases';
 
 // Read-only ACTUAL tournament bracket. On wide screens it's a classic two-sided
 // knockout tree converging on the centre (final + champion). On phones the tree
@@ -19,7 +20,7 @@ export default function Bracket({ onTeamClick }) {
   const { t } = useLanguage();
   const scores = useCachedScores();
   const { teams, winners, champion } = useMemo(() => resolveWinners(scores), [scores]);
-  const [phase, setPhase] = useState('r32');
+  const [phase, setPhase] = useState(currentBracketPhase);
 
   const teamRow = (iso, raw, win, key, score) => {
     if (!iso) {

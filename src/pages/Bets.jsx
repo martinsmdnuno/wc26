@@ -10,6 +10,7 @@ import { usePools } from '../hooks/usePools';
 import { useCachedScores } from '../hooks/useLiveScores';
 import { useScrollToToday } from '../hooks/useScrollToToday';
 import { groupMatchesByDate } from '../utils/matchOrder';
+import { currentPhase } from '../utils/phases';
 import TimezoneNote from '../components/TimezoneNote';
 import lazyWithReload from '../utils/lazyWithReload';
 
@@ -22,7 +23,7 @@ const PhaseSummary = lazyWithReload(() => import('../components/PhaseSummary'));
 const Leaderboard = lazyWithReload(() => import('../components/Leaderboard'));
 
 export default function Bets({ onTeamClick }) {
-  const [activePhase, setActivePhase] = useState('group');
+  const [activePhase, setActivePhase] = useState(currentPhase);
   const [view, setView] = useState('bet');
   const { t } = useLanguage();
   const { activePoolId, activePool } = usePools();
@@ -42,10 +43,10 @@ export default function Bets({ onTeamClick }) {
     [phase]
   );
 
-  // Land on today's fixtures, but only in the match-betting view and on the
-  // group phase. The list grows as bets + live scores load in, so the hook
-  // re-pins today to the top until it settles or the user scrolls.
-  const dayRefs = useScrollToToday(matchesByDate, view === 'bet' && activePhase === 'group');
+  // Land on today's fixtures, but only in the match-betting view and while
+  // viewing the tournament's current phase. The list grows as bets + live scores
+  // load in, so the hook re-pins today to the top until it settles or the user scrolls.
+  const dayRefs = useScrollToToday(matchesByDate, view === 'bet' && activePhase === currentPhase());
 
   const handleSave = async (matchId, scoreA, scoreB) => {
     await saveBet(matchId, scoreA, scoreB);
