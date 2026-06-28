@@ -203,17 +203,18 @@
 
 .phase-filter__chip {
   white-space: nowrap;
-  padding: 8px 16px;
-  border-radius: 20px;
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
   font-size: 13px;
   font-weight: 600;
   background: var(--surface);
   color: var(--gray);
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   transition: all 0.2s;
-  min-height: 44px;
+  min-height: var(--h-control);
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .phase-filter__chip--active {
@@ -534,15 +535,18 @@
 }
 
 .teams__view-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 14px;
-  border-radius: 20px;
+  border-radius: var(--r-pill);
   font-size: 13px;
   font-weight: 600;
   background: var(--surface);
   color: var(--gray);
-  border: 1px solid transparent;
+  border: 1px solid var(--border);
   transition: all 0.2s;
-  min-height: 36px;
+  min-height: var(--h-control);
 }
 
 .teams__view-chip--active {
@@ -3816,7 +3820,7 @@
 
 .admin__filter-chip {
   padding: 6px 12px;
-  border-radius: 20px;
+  border-radius: var(--r-pill);
   font-size: 12px;
   font-weight: 500;
   background: var(--chip);
@@ -4187,13 +4191,17 @@
 
 .special__subnav-chip {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 12px;
-  border-radius: 10px;
+  border-radius: var(--r-pill);
   font-size: 13px;
   font-weight: 600;
   background: var(--surface);
   color: var(--gray);
   border: 1px solid var(--border);
+  min-height: var(--h-control);
 }
 
 .special__subnav-chip--active {
@@ -4833,14 +4841,17 @@
 
 .bracket__round-chip {
   flex: 0 0 auto;
-  padding: 7px 12px;
-  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
   font-size: 13px;
   font-weight: 600;
   background: var(--surface);
   color: var(--gray);
   border: 1px solid var(--border);
   white-space: nowrap;
+  min-height: var(--h-control);
 }
 
 .bracket__round-chip--active {
@@ -5291,18 +5302,18 @@
 
 .kbr-phasebar__tab {
   flex: 0 0 auto;
-  padding: 7px 14px;
-  border-radius: 999px;
-  font-family: 'Oswald', sans-serif;
-  font-size: 12px;
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
   color: var(--gray);
-  background: var(--off-white);
+  background: var(--surface);
   border: 1px solid var(--border);
   cursor: pointer;
   white-space: nowrap;
+  min-height: var(--h-control);
 }
 .kbr-phasebar__tab--active {
   color: var(--white);

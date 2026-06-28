@@ -22,6 +22,21 @@
   --warn: #9a3412;
   --danger: #D32F2F;
   --danger-soft: rgba(211, 47, 47, 0.1);
+
+  /* Shape & rhythm tokens (theme-independent — defined once). Used to keep
+     pills, buttons, modals and badges visually consistent across the app. */
+  --r-xs: 4px;    /* badges / status tags */
+  --r-sm: 8px;    /* inputs, list items, small controls, close buttons */
+  --r-md: 12px;   /* cards, panels, buttons */
+  --r-lg: 16px;   /* modals */
+  --r-pill: 999px;/* chips / pills / premium tags */
+  --h-control: 44px;    /* tappable chips & buttons (min touch target) */
+  --h-control-sm: 36px; /* compact controls */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
   color-scheme: light;
 
   font-family: 'DM Sans', system-ui, sans-serif;
