@@ -1,15 +1,20 @@
 /* ===== APP SHELL ===== */
+/* True app-shell: the shell is exactly one viewport tall and does NOT scroll;
+   only <main> scrolls. This keeps header + bottom nav as plain flex children
+   (no position:fixed), which is what kills the iOS PWA "floating dock" bug —
+   a fixed bottom bar mis-anchors during momentum/rubber-band scroll and needs
+   keyboard-hiding hacks. As normal-flow children they can't drift. */
 .app {
   display: flex;
   flex-direction: column;
-  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 .app-header {
+  flex: 0 0 auto;
   background: var(--green-dark);
   padding: 10px 20px;
-  position: sticky;
-  top: 0;
   z-index: 100;
 }
 
@@ -73,12 +78,15 @@
 }
 
 .app-main {
-  flex: 1;
-  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
-  /* `clip` (not `hidden`) prevents horizontal overflow WITHOUT turning this
-     into a scroll container — `hidden` would, which traps `position: sticky`
-     descendants (the Bolão view chips) so they never stick to the viewport. */
-  overflow-x: clip;
+  flex: 1 1 auto;
+  min-height: 0; /* allow the flex child to shrink so it can scroll */
+  /* <main> is the single scroll container of the shell. Sticky descendants
+     (the Bolão view chips) now stick relative to <main>, just below the
+     header — which is exactly what we want. */
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .page-wrapper {
@@ -104,10 +112,7 @@
 
 /* ===== BOTTOM NAV ===== */
 .bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  flex: 0 0 auto; /* plain flex child at the bottom of the shell — never fixed */
   width: 100%;
   max-width: 430px;
   margin: 0 auto;
@@ -118,15 +123,6 @@
   padding: 8px 0;
   padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
   box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
-  z-index: 100;
-  /* No `transform: translateZ(0)` here: an own-element transform makes iOS
-     Safari mis-anchor a position:fixed element (it floats mid-screen / scrolls
-     with the content instead of sticking to the viewport bottom). */
-}
-
-.bottom-nav--keyboard-open {
-  visibility: hidden;
-  pointer-events: none;
 }
 
 .bottom-nav__tab {
@@ -185,9 +181,9 @@
 .phase-filter {
   padding: 12px 0;
   position: sticky;
-  /* Stick right below the dynamic-height header (grows with the notification
-     bell / pool selector); a hardcoded value drifts when the header changes. */
-  top: var(--header-h, 52px);
+  /* The scroller is <main>, which already starts below the header, so this
+     sticks at the top of the scroll viewport (top: 0), not offset by header-h. */
+  top: 0;
   z-index: 50;
   background: var(--off-white);
 }
@@ -1446,10 +1442,10 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  /* Stick right below the (dynamic-height) app header so the Ranking chip
-     stays one tap away from anywhere in the matches list. */
+  /* <main> is the scroll container (starts below the header), so the toggle
+     sticks at the top of the scroll viewport. */
   position: sticky;
-  top: var(--header-h, 56px);
+  top: 0;
   z-index: 90;
   background: var(--off-white);
 }
