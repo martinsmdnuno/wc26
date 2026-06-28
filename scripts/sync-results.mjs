@@ -166,7 +166,7 @@ async function scoreMatch(matchId, scoreA, scoreB) {
       const result = calculatePoints(bet.predictedScoreA, bet.predictedScoreB, scoreA, scoreB);
       if (!result) continue;
       const prev = bet.pointsAwarded;
-      batch.update(betDoc.ref, { pointsAwarded: result.points });
+      batch.update(betDoc.ref, { pointsAwarded: result.points, scoredType: result.type });
       if (!deltas[bet.userId]) deltas[bet.userId] = { points: 0, exact: 0, outcome: 0 };
       deltas[bet.userId].points += result.points - (prev ?? 0);
       deltas[bet.userId].exact += (result.type === 'exact' ? 1 : 0) - (prev === 5 ? 1 : 0);
@@ -217,6 +217,13 @@ for (const ev of finished) {
     continue;
   }
   const { match, swapped } = found;
+  // Knockout matches need the 90' score + advancer + how-it-ends (extra time /
+  // penalties), which ESPN's final score can't give us reliably — so the admin
+  // is the source of truth for them (Track A). Skip auto-ingest/scoring here.
+  if (!GROUP_MATCH_IDS.has(match.id)) {
+    console.log(`  SKIP (knockout — admin-scored): match ${match.id}`);
+    continue;
+  }
   const scoreA = swapped ? ev.scoreAway : ev.scoreHome;
   const scoreB = swapped ? ev.scoreHome : ev.scoreAway;
   // Scorers relative to the internal match: side 'A' = match.home.

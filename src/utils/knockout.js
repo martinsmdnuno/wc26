@@ -50,9 +50,13 @@ const POS_INDEX = { 1: 0, 2: 1, 3: 2 };
 function outcome(matchId, resolved, results) {
   const r = results?.[String(matchId)];
   if (!r || (r.status && r.status !== 'finished')) return null;
-  if (r.scoreHome == null || r.scoreAway == null) return null;
   const teams = resolved[matchId];
   if (!teams || !teams.home || !teams.away) return null;
+  // Admin-recorded advancer (match decided in extra time / penalties) takes
+  // precedence over the score logic, so a 90' draw still resolves the bracket.
+  if (r.advancer === teams.home) return { winner: teams.home, loser: teams.away };
+  if (r.advancer === teams.away) return { winner: teams.away, loser: teams.home };
+  if (r.scoreHome == null || r.scoreAway == null) return null;
   let winner;
   if (r.scoreHome > r.scoreAway) winner = 'home';
   else if (r.scoreAway > r.scoreHome) winner = 'away';
