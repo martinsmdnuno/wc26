@@ -5338,10 +5338,11 @@
   gap: 8px;
 }
 
-@media (min-width: 700px) {
-  .kbr-mobile { display: none; }
-  .kbr-board { display: flex; }
-}
+/* The app is always a ~430px column (#root max-width:430), so the two-sided
+   tree (.kbr-board) never fits — the round-by-round view (.kbr-mobile) is used
+   at every size. The desktop tree stays in the markup (hidden) in case the
+   column is ever widened; re-enable by gating on a container query, not the
+   viewport (the viewport can be wide while the column stays 430). */
 
 /* Bracket team picker (modal) */
 .bkt-modal {
