@@ -8,11 +8,13 @@
 //     (the final table order, incl. tiebreakers, is then settled).
 //   - Winner / loser feeders (W73 / L101) -> once that match is finished and both
 //     of its teams are already resolved.
-//   - The 8 best third-placed slots (e.g. "3C/E/F/H/I") are NEVER auto-filled:
-//     which third goes to which match comes from FIFA's official allocation
-//     table and isn't derivable from the pools, so those stay as placeholders.
+//   - The 8 best third-placed slots (e.g. "3C/E/F/H/I") -> resolved once ALL 12
+//     groups are complete, via FIFA's official allocation table (Annexe C, see
+//     thirdPlaceAllocation.js): the set of 8 qualifying thirds keys into the
+//     table, which says exactly which group's third faces each group winner.
 import schedule from '../data/schedule.json';
 import { computeStandings } from './standings';
+import { THIRD_PLACE_ALLOCATION } from '../data/thirdPlaceAllocation';
 
 const phaseById = Object.fromEntries(schedule.phases.map((p) => [p.id, p]));
 const GROUP_MATCHES = phaseById.group?.matches || [];
@@ -63,22 +65,39 @@ function outcome(matchId, resolved, results) {
 // Returns { [matchId]: { home: iso|null, away: iso|null } } for every knockout
 // match, with isos only where the team is already certain.
 export function resolveKnockout(results) {
-  const { groups } = computeStandings(results || {});
+  const { groups, thirds } = computeStandings(results || {});
   const groupComplete = (g) => {
     const rows = groups[g] || [];
     return rows.length > 0 && rows.every((r) => r.played === rows.length - 1);
   };
 
+  // Best-third allocation is only knowable once EVERY group is finished (the set
+  // of 8 qualifying thirds is then settled). The 8 qualifiers, alphabetically,
+  // key into FIFA's Annexe C table -> { '1A': 'E', … } (winner of A plays E's 3rd).
+  const allGroupsComplete = Object.keys(groups).every(groupComplete);
+  const thirdMap = allGroupsComplete
+    ? THIRD_PLACE_ALLOCATION[thirds.slice(0, 8).map((r) => r.group).sort().join('')] || null
+    : null;
+
   const resolved = {};
-  const resolveSide = (slot) => {
+  const resolveSide = (slot, match) => {
     const src = parseSlot(slot);
     if (!src) return null;
     if (src.type === 'group') {
-      // Best-third pools (more than one group) are never auto-resolvable.
-      if (src.groups.length !== 1) return null;
-      const g = src.groups[0];
-      if (!groupComplete(g)) return null;
-      return groups[g]?.[POS_INDEX[src.pos]]?.iso || null;
+      if (src.groups.length === 1) {
+        const g = src.groups[0];
+        if (!groupComplete(g)) return null;
+        return groups[g]?.[POS_INDEX[src.pos]]?.iso || null;
+      }
+      // Best-third pool: look at the group winner on the other side of this
+      // match, then ask the allocation table which group's third they face.
+      if (src.pos !== '3' || !thirdMap) return null;
+      const otherSrc = parseSlot(match.home === slot ? match.away : match.home);
+      if (!otherSrc || otherSrc.type !== 'group' || otherSrc.pos !== '1' || otherSrc.groups.length !== 1) {
+        return null;
+      }
+      const thirdGroup = thirdMap[`1${otherSrc.groups[0]}`];
+      return thirdGroup ? groups[thirdGroup]?.[2]?.iso || null : null;
     }
     if (src.type === 'winner') return outcome(src.match, resolved, results)?.winner || null;
     if (src.type === 'loser') return outcome(src.match, resolved, results)?.loser || null;
@@ -87,7 +106,7 @@ export function resolveKnockout(results) {
 
   for (const pid of KNOCKOUT_PHASES) {
     for (const m of phaseById[pid]?.matches || []) {
-      resolved[m.id] = { home: resolveSide(m.home), away: resolveSide(m.away) };
+      resolved[m.id] = { home: resolveSide(m.home, m), away: resolveSide(m.away, m) };
     }
   }
   return resolved;
