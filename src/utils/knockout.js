@@ -134,6 +134,15 @@ function halfFromRoot(sfId) {
   return rounds;
 }
 
+// Ordered match ids per knockout round (schedule order), for the round-by-round
+// mobile view of the read-only bracket.
+export const ROUND_IDS = Object.fromEntries(
+  ['r32', 'r16', 'qf', 'sf', 'final'].map((pid) => [
+    pid,
+    (phaseById[pid]?.matches || []).map((m) => m.id),
+  ])
+);
+
 // Static split of the bracket into its two halves + the final, derived from the
 // schedule's feeder graph. The final's home feeder is the left half, away the right.
 export const BRACKET_SIDES = (() => {
