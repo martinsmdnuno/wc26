@@ -189,6 +189,8 @@ export default function PoolAdmin({ poolId, onBack }) {
                 {isAdmin && !member.isAdmin && member.uid !== user?.uid && (
                   <button
                     className="pool-admin__remove-btn"
+                    aria-label={t('poolRemoveMember')}
+                    title={t('poolRemoveMember')}
                     onClick={() => setConfirm({
                       type: 'remove',
                       data: member,

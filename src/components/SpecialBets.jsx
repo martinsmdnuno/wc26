@@ -49,12 +49,14 @@ export default function SpecialBets() {
       <div className="special__subnav">
         <button
           className={`special__subnav-chip ${view === 'mine' ? 'special__subnav-chip--active' : ''}`}
+          aria-pressed={view === 'mine'}
           onClick={() => setView('mine')}
         >
           🎯 {t('specialMyPicks')}
         </button>
         <button
           className={`special__subnav-chip ${view === 'group' ? 'special__subnav-chip--active' : ''}`}
+          aria-pressed={view === 'group'}
           onClick={() => setView('group')}
         >
           📊 {t('specialGroup')}
