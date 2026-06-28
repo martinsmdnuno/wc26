@@ -4,7 +4,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../firebase';
 import Autocomplete from '../../components/Autocomplete';
-import { SPECIAL_CATEGORIES, SPECIAL_POINTS, SPECIAL_EXCEPTION } from '../../data/specialBets';
+import { SPECIAL_CATEGORIES, SPECIAL_POINTS, SPECIAL_EXCEPTION, SPECIAL_DEADLINE_MS } from '../../data/specialBets';
 import { optionsFor } from '../../data/playerIndex';
 import { SPECIAL_RESULTS_DOC } from '../../hooks/useSpecialBets';
 import { logError } from '../../utils/logError';
@@ -55,13 +55,18 @@ export default function SpecialBetsAdmin() {
         { merge: true }
       );
 
-      // One-off exception: special points of these users (in the exception pool)
-      // are kept in `specialPoints` but EXCLUDED from `totalPoints`, and logged in
-      // the adjustments history. Resolve their uids by e-mail.
-      let excludedUids = new Set();
+      // One-off exception: special points kept in `specialPoints` but excluded
+      // from `totalPoints` (and logged). Full-exclude users → all categories out;
+      // baseline users (Ricardo) → only LATE picks out (pickedAt > deadline).
+      const fullExcludedUids = new Set();
+      const baselineUids = new Set();
       try {
         const us = await getDocs(query(collection(db, 'users'), where('email', 'in', SPECIAL_EXCEPTION.emails)));
-        excludedUids = new Set(us.docs.map((d) => d.id));
+        for (const u of us.docs) {
+          const email = (u.data().email || '').toLowerCase();
+          if (SPECIAL_EXCEPTION.baselineEmails.includes(email)) baselineUids.add(u.id);
+          else fullExcludedUids.add(u.id);
+        }
       } catch { /* best-effort; exclusion just won't apply if this fails */ }
 
       // 2. Recalculate this category across every pool, crediting the delta so
@@ -77,9 +82,14 @@ export default function SpecialBetsAdmin() {
           const isHit = bet.picks?.[cat.id] && bet.picks[cat.id] === correctId;
           const newAward = isHit ? SPECIAL_POINTS : 0;
           const delta = newAward - prevAward;
-          // Excluded = the exception users, only in the exception pool.
-          const isExcluded = poolDoc.data().inviteCode === SPECIAL_EXCEPTION.poolCode
-            && excludedUids.has(bet.userId);
+          // Exclude from the final total: full-exclude users for every category;
+          // baseline users (Ricardo) ONLY for categories picked late (during the
+          // reopening, i.e. pickedAt after the original deadline). The exception
+          // note is written to the adjustments log by registerException, not here.
+          const inExcPool = poolDoc.data().inviteCode === SPECIAL_EXCEPTION.poolCode;
+          const pickedLate = bet.pickedAt?.[cat.id] != null && bet.pickedAt[cat.id] > SPECIAL_DEADLINE_MS;
+          const isExcluded = inExcPool && (fullExcludedUids.has(bet.userId)
+            || (baselineUids.has(bet.userId) && pickedLate));
 
           if (delta !== 0 || prevAward !== newAward) {
             await setDoc(
@@ -92,7 +102,7 @@ export default function SpecialBetsAdmin() {
             const lbRef = doc(db, 'pools', poolId, 'leaderboard', bet.userId);
             const lbSnap = await getDoc(lbRef);
             if (lbSnap.exists()) {
-              // Excluded users: track specialPoints but keep it OUT of the total.
+              // Excluded: track specialPoints but keep it OUT of the total.
               await updateDoc(lbRef, isExcluded
                 ? { specialPoints: increment(delta) }
                 : { totalPoints: increment(delta), specialPoints: increment(delta) });
@@ -110,26 +120,6 @@ export default function SpecialBetsAdmin() {
                 specialPoints: Math.max(0, delta),
               });
             }
-          }
-          // Log the exception in the adjustments history (idempotent per user).
-          if (isExcluded) {
-            let nickname = '';
-            try {
-              const us = await getDoc(doc(db, 'users', bet.userId));
-              if (us.exists()) nickname = us.data().nickname || '';
-            } catch { /* nickname is best-effort */ }
-            await setDoc(
-              doc(db, 'pools', poolId, 'adjustments', `special-exception-${bet.userId}`),
-              {
-                uid: bet.userId,
-                nickname,
-                at: serverTimestamp(),
-                reason: 'Exceção: palpites especiais reabertos por extensão de prazo (até 28/jun); os pontos especiais deste utilizador NÃO entram na contabilização final (total).',
-                before: {},
-                after: {},
-              },
-              { merge: true }
-            );
           }
           if (newAward > 0) credited += 1;
         }
@@ -164,11 +154,15 @@ export default function SpecialBetsAdmin() {
         const adjRef = doc(db, 'pools', poolDoc.id, 'adjustments', `special-exception-${u.id}`);
         const adjSnap = await getDoc(adjRef);
         if (adjSnap.exists()) continue; // already logged — keep the original date
+        const isBaseline = SPECIAL_EXCEPTION.baselineEmails.includes((u.data().email || '').toLowerCase());
+        const reason = isBaseline
+          ? 'Exceção: palpites especiais reabertos por extensão de prazo (até 28/jun). Apenas os palpites preenchidos na reabertura NÃO entram na contabilização final; os preenchidos a tempo contam.'
+          : 'Exceção: palpites especiais reabertos por extensão de prazo (até 28/jun); os pontos especiais deste utilizador NÃO entram na contabilização final (total).';
         await setDoc(adjRef, {
           uid: u.id,
           nickname: u.data().nickname || '',
           at: serverTimestamp(),
-          reason: 'Exceção: palpites especiais reabertos por extensão de prazo (até 28/jun); os pontos especiais deste utilizador NÃO entram na contabilização final (total).',
+          reason,
           before: {},
           after: {},
         });

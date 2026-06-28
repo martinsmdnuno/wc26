@@ -20,16 +20,25 @@ export function isSpecialLocked(now = new Date()) {
   return now.getTime() >= new Date(SPECIAL_DEADLINE).getTime();
 }
 
-// One-off exception: in pool WC26-GXFD these two users got a late extension to
-// fill their special bets (until 28 Jun end of day, Portugal/UTC+1). In return,
-// their special points are EXCLUDED from the final total — see SpecialBetsAdmin
-// (the exclusion + a note in the adjustments log are applied on resolve). The
-// matching deadline is also enforced in firestore.rules, keyed by e-mail.
+// One-off exception: in pool WC26-GXFD these users got a late extension to fill
+// their special bets (until 28 Jun end of day, Portugal/UTC+1) — see
+// SpecialBetsAdmin (exclusion + adjustments-log note applied on resolve). The
+// deadline is also enforced in firestore.rules, keyed by e-mail.
+//
+// Exclusion from the FINAL total differs per user:
+//   - `emails` not in `baselineEmails` → ALL their special points are excluded.
+//   - `baselineEmails` (Ricardo) → only LATE picks are excluded: a category
+//     counts if it was picked on time (no pickedAt, or pickedAt ≤ SPECIAL_DEADLINE);
+//     categories picked during the reopening are excluded.
 export const SPECIAL_EXCEPTION = {
   poolCode: 'WC26-GXFD',
   emails: ['22444@aegmmaia.pt', 'tatianalopes4@hotmail.com', 'ricardojbd@gmail.com'],
+  baselineEmails: ['ricardojbd@gmail.com'],
   deadline: '2026-06-28T23:00:00Z',
 };
+
+// Epoch ms of the original special-bets deadline (picks at/before this are "on time").
+export const SPECIAL_DEADLINE_MS = new Date(SPECIAL_DEADLINE).getTime();
 
 // True while the named users may still edit specials in the exception pool.
 export function isSpecialExceptionActive(poolCode, email, now = new Date()) {
