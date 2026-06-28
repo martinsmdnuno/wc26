@@ -38,6 +38,7 @@ export default function App() {
   const [teamIso, setTeamIso] = useState(null);
   const prevPageRef = useRef('schedule');
   const headerRef = useRef(null);
+  const mainRef = useRef(null); // the app-shell scroll container (<main>)
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
   const { t } = useLanguage();
   const { user, profile, loading } = useAuth();
@@ -46,7 +47,7 @@ export default function App() {
   const navigate = useCallback((newPage) => {
     // Re-tapping the tab you're already on scrolls back to the top.
     if (newPage === page) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     // Silent redirect for non-admin trying to access admin
@@ -56,6 +57,7 @@ export default function App() {
     setAnimClass('page-exit');
     setTimeout(() => {
       setPage(newPage);
+      mainRef.current?.scrollTo({ top: 0 }); // new page starts at the top
       setAnimClass('page-enter');
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -71,6 +73,7 @@ export default function App() {
     setAnimClass('page-exit');
     setTimeout(() => {
       setPage('team');
+      mainRef.current?.scrollTo({ top: 0 });
       setAnimClass('page-enter');
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -171,7 +174,7 @@ export default function App() {
         <AuthScreen />
       ) : (
         <>
-          <main className="app-main">
+          <main className="app-main" ref={mainRef}>
             <div className={`page-wrapper ${animClass}`}>
               <Suspense fallback={<div className="app-loading__text" style={{ textAlign: 'center', padding: 40 }}>⚽</div>}>
                 {page === 'schedule' && <Schedule onTeamClick={navigateToTeam} />}
