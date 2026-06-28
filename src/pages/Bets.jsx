@@ -10,6 +10,7 @@ import { usePools } from '../hooks/usePools';
 import { useCachedScores } from '../hooks/useLiveScores';
 import { useScrollToToday } from '../hooks/useScrollToToday';
 import { groupMatchesByDate } from '../utils/matchOrder';
+import { resolveKnockout } from '../utils/knockout';
 import { currentPhase } from '../utils/phases';
 import TimezoneNote from '../components/TimezoneNote';
 import lazyWithReload from '../utils/lazyWithReload';
@@ -37,6 +38,9 @@ export default function Bets({ onTeamClick }) {
   );
 
   const phase = schedule.phases.find((p) => p.id === activePhase);
+  // Fill knockout fixtures with the teams already certain from group results,
+  // so the betting cards show real teams instead of "2A vs 2B".
+  const resolvedKO = useMemo(() => resolveKnockout(cachedScores), [cachedScores]);
 
   const matchesByDate = useMemo(
     () => (phase ? groupMatchesByDate(phase.matches) : {}),
@@ -159,6 +163,8 @@ export default function Bets({ onTeamClick }) {
                         match={match}
                         bet={betsMap[match.id]}
                         matchScore={cachedScores[String(match.id)]}
+                        resolvedHome={resolvedKO[match.id]?.home}
+                        resolvedAway={resolvedKO[match.id]?.away}
                         onSave={handleSave}
                         onTeamClick={onTeamClick}
                       />

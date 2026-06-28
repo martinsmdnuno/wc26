@@ -2,21 +2,26 @@ import { useState, useRef, useCallback } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { isMatchLocked } from '../data/matchLock';
 import { kickoffDateStr, kickoffTimeStr } from '../utils/matchTime';
+import { slotLabel } from '../utils/knockout';
 import MatchBets from './MatchBets';
 
 function getFlagUrl(iso) {
   return `https://flagcdn.com/w80/${iso}.png`;
 }
 
-export default function BetCard({ match, bet, onSave, matchScore, onTeamClick }) {
+export default function BetCard({ match, bet, onSave, matchScore, onTeamClick, resolvedHome, resolvedAway }) {
   const { t } = useLanguage();
-  const hasTeams = !!match.home_iso;
-  const isKnockout = !hasTeams;
+  // Knockout fixtures carry slot strings ("2A", "W73") instead of team isos;
+  // fill them with the teams already certain from results (same as the calendar).
+  const isKnockout = !match.home_iso;
+  const homeIso = match.home_iso || resolvedHome || null;
+  const awayIso = match.away_iso || resolvedAway || null;
+  const hasTeams = !!homeIso && !!awayIso; // both known → bettable
   const [showBets, setShowBets] = useState(false);
   const revealAvailable = hasTeams && isMatchLocked(match.id);
 
-  const homeName = hasTeams ? t(`team.${match.home_iso}`) : match.home;
-  const awayName = hasTeams ? t(`team.${match.away_iso}`) : match.away;
+  const homeName = homeIso ? t(`team.${homeIso}`) : slotLabel(match.home, t);
+  const awayName = awayIso ? t(`team.${awayIso}`) : slotLabel(match.away, t);
 
   const isFinished = matchScore?.status === 'finished';
   const isLive = matchScore?.status === 'live';
@@ -96,11 +101,11 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
         <button
           type="button"
           className="bet-card__team"
-          onClick={() => onTeamClick?.(match.home_iso)}
-          disabled={!hasTeams || !onTeamClick}
+          onClick={() => onTeamClick?.(homeIso)}
+          disabled={!homeIso || !onTeamClick}
         >
-          {hasTeams ? (
-            <img src={getFlagUrl(match.home_iso)} alt="" className="match-card__flag match-card__flag--clickable" loading="lazy" />
+          {homeIso ? (
+            <img src={getFlagUrl(homeIso)} alt="" className="match-card__flag match-card__flag--clickable" loading="lazy" />
           ) : (
             <div className="match-card__flag-placeholder" />
           )}
@@ -134,12 +139,12 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick })
         <button
           type="button"
           className="bet-card__team bet-card__team--away"
-          onClick={() => onTeamClick?.(match.away_iso)}
-          disabled={!hasTeams || !onTeamClick}
+          onClick={() => onTeamClick?.(awayIso)}
+          disabled={!awayIso || !onTeamClick}
         >
           <span className="match-card__name">{awayName}</span>
-          {hasTeams ? (
-            <img src={getFlagUrl(match.away_iso)} alt="" className="match-card__flag match-card__flag--clickable" loading="lazy" />
+          {awayIso ? (
+            <img src={getFlagUrl(awayIso)} alt="" className="match-card__flag match-card__flag--clickable" loading="lazy" />
           ) : (
             <div className="match-card__flag-placeholder" />
           )}
