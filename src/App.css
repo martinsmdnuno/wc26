@@ -4439,6 +4439,27 @@
   padding: 8px 0;
 }
 
+.match-bets__error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--gray);
+  padding: 8px 0;
+}
+.match-bets__retry {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green-dark);
+  background: rgba(0, 99, 65, 0.1);
+  border-radius: 8px;
+  padding: 6px 12px;
+  min-height: 36px;
+  cursor: pointer;
+}
+
 .match-bets__summary {
   background: var(--off-white);
   border-radius: 10px;
