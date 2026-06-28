@@ -22,6 +22,17 @@ function kickoffMs(m) {
 
 const KNOCKOUT_MATCHES = schedule.phases.filter((p) => p.id !== 'group').flatMap((p) => p.matches);
 const FIRST_KNOCKOUT_MS = KNOCKOUT_MATCHES.reduce((min, m) => Math.min(min, kickoffMs(m)), Infinity);
+
+// Last group kickoff + ~2h: the moment the group stage is, for all practical
+// purposes, finished. Gates the "Oráculo da Circunvalação" certificate so we
+// never crown a leader mid-stage.
+const LAST_GROUP_MS = (groupPhase?.matches || []).reduce((max, m) => Math.max(max, kickoffMs(m)), 0);
+const GROUP_STAGE_END_MS = LAST_GROUP_MS ? LAST_GROUP_MS + 2 * 60 * 60 * 1000 : Infinity;
+
+// True once the group stage is over (all group matches have been played).
+export function groupStageComplete(now = Date.now()) {
+  return now >= GROUP_STAGE_END_MS;
+}
 const finalMatch = schedule.phases.find((p) => p.id === 'final')?.matches[0];
 // Tournament is "over" ~3h after the final kicks off.
 const TOURNAMENT_END_MS = finalMatch ? kickoffMs(finalMatch) + 3 * 60 * 60 * 1000 : Infinity;
