@@ -9,7 +9,7 @@ function getFlagUrl(iso) {
   return `https://flagcdn.com/w80/${iso}.png`;
 }
 
-export default function BetCard({ match, bet, onSave, matchScore, onTeamClick, resolvedHome, resolvedAway }) {
+export default function BetCard({ id, match, bet, onSave, matchScore, onTeamClick, resolvedHome, resolvedAway }) {
   const { t } = useLanguage();
   // Knockout fixtures carry slot strings ("2A", "W73") instead of team isos;
   // fill them with the teams already certain from results (same as the calendar).
@@ -98,7 +98,7 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick, r
   };
 
   return (
-    <div className={`bet-card ${isLive ? 'bet-card--live' : ''} ${isFinished ? 'bet-card--finished' : ''}`}>
+    <div id={id} className={`bet-card ${isLive ? 'bet-card--live' : ''} ${isFinished ? 'bet-card--finished' : ''}`}>
       {match.group_label && (
         <span className="match-card__group">{t('group')} {match.group_label}</span>
       )}

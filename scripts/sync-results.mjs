@@ -332,7 +332,9 @@ for (const ev of finished) {
       console.log(`  SKIP (knockout needs admin — unclear ET/pens): match ${match.id} ${ev.homeName} ${ev.scoreHome}-${ev.scoreAway} ${ev.awayName}`);
       continue;
     }
-    const advancer = ko.advancerSide === 'home' ? resolveIso(ev.homeName) : resolveIso(ev.awayName);
+    const homeIso = resolveIso(ev.homeName);
+    const awayIso = resolveIso(ev.awayName);
+    const advancer = ko.advancerSide === 'home' ? homeIso : awayIso;
     const scoreA = ko.a90; // 90' base, mirrors ScoresAdmin (Track A)
     const scoreB = ko.b90;
     // ESPN home is the bracket's home slot, so side 'A' = ESPN home (no swap).
@@ -353,6 +355,7 @@ for (const ev of finished) {
     await ref.set({
       matchId: match.id, scoreA, scoreB, scorers,
       decidedBy: ko.decidedBy, advancer, penA: ko.penA, penB: ko.penB,
+      homeIso, awayIso, // resolved teams, so notifications can name the sides
       status: 'finished', updatedAt: new Date(), source: 'auto-espn',
     }, { merge: true });
     const n = await scoreMatch(match.id, scoreA, scoreB, { a90: scoreA, b90: scoreB, decidedBy: ko.decidedBy, advancer });
