@@ -10,22 +10,26 @@ if (!raw) { console.log('FIREBASE_SERVICE_ACCOUNT not set — nothing to do.'); 
 initializeApp({ credential: cert(JSON.parse(raw)) });
 const db = getFirestore();
 
-// Collection-group query across every pool's bets (index already exists).
-const snap = await db.collectionGroup('bets').where('matchId', '>=', 73).get();
-console.log(`TOTAL knockout bets (matchId >= 73): ${snap.size}`);
-
+// Iterate per pool (collection-scoped query uses the automatic single-field
+// index — avoids needing a collection-group index for matchId).
+const pools = await db.collection('pools').get();
 const byMatch = {};
 const byPool = {};
+let total = 0;
 let scored = 0;
-for (const d of snap.docs) {
-  const b = d.data();
-  byMatch[b.matchId] = (byMatch[b.matchId] || 0) + 1;
-  // path: pools/{poolId}/bets/{id}
-  const poolId = d.ref.parent.parent?.id || '?';
-  byPool[poolId] = (byPool[poolId] || 0) + 1;
-  if (b.pointsAwarded != null) scored += 1;
+for (const poolDoc of pools.docs) {
+  const snap = await poolDoc.ref.collection('bets').where('matchId', '>=', 73).get();
+  if (snap.empty) continue;
+  byPool[poolDoc.id] = snap.size;
+  for (const d of snap.docs) {
+    const b = d.data();
+    total += 1;
+    byMatch[b.matchId] = (byMatch[b.matchId] || 0) + 1;
+    if (b.pointsAwarded != null) scored += 1;
+  }
 }
 
+console.log(`TOTAL knockout bets (matchId >= 73): ${total}`);
 console.log(`Already scored (pointsAwarded != null): ${scored}`);
 console.log('\nBy match:');
 for (const id of Object.keys(byMatch).map(Number).sort((a, b) => a - b)) {
