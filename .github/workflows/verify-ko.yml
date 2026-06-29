@@ -1,0 +1,32 @@
+name: Verify KO (one-off)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - claude/xenodochial-euclid-2f42d0
+    paths:
+      - scripts/verify-ko.mjs
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+      - name: Verify KO scoring
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -z "$FIREBASE_SERVICE_ACCOUNT" ]; then
+            echo "FIREBASE_SERVICE_ACCOUNT not set — skipping."
+            exit 0
+          fi
+          npm i --no-save firebase-admin@12
+          node scripts/verify-ko.mjs
