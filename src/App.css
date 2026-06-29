@@ -2227,6 +2227,17 @@
   color: var(--gray);
 }
 
+/* Final result shown in the scoreboard slot once the match is over (replaces
+   the editable inputs), so the real score reads clearly instead of the guess. */
+.bet-card__final-score {
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--dark);
+  white-space: nowrap;
+  padding: 0 8px;
+}
+
 /* Knockout extra prediction (advancer / how it ends) — shown on a 90' draw */
 .bet-card__ko {
   display: flex;

@@ -138,27 +138,35 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick, r
         </button>
 
         <div className="bet-card__scores">
-          <input
-            className="bet-card__input"
-            type="number"
-            inputMode="numeric"
-            min="0"
-            value={scoreA}
-            onChange={(e) => handleChange('home', e.target.value)}
-            disabled={isLocked || !hasTeams}
-            aria-label={`${homeName} ${t('goals')}`}
-          />
-          <span className="bet-card__separator">:</span>
-          <input
-            className="bet-card__input"
-            type="number"
-            inputMode="numeric"
-            min="0"
-            value={scoreB}
-            onChange={(e) => handleChange('away', e.target.value)}
-            disabled={isLocked || !hasTeams}
-            aria-label={`${awayName} ${t('goals')}`}
-          />
+          {isFinished && matchScore?.scoreHome != null ? (
+            <span className="bet-card__final-score" aria-label={t('finalResult')}>
+              {matchScore.scoreHome}<span className="bet-card__separator">:</span>{matchScore.scoreAway}
+            </span>
+          ) : (
+            <>
+              <input
+                className="bet-card__input"
+                type="number"
+                inputMode="numeric"
+                min="0"
+                value={scoreA}
+                onChange={(e) => handleChange('home', e.target.value)}
+                disabled={isLocked || !hasTeams}
+                aria-label={`${homeName} ${t('goals')}`}
+              />
+              <span className="bet-card__separator">:</span>
+              <input
+                className="bet-card__input"
+                type="number"
+                inputMode="numeric"
+                min="0"
+                value={scoreB}
+                onChange={(e) => handleChange('away', e.target.value)}
+                disabled={isLocked || !hasTeams}
+                aria-label={`${awayName} ${t('goals')}`}
+              />
+            </>
+          )}
         </div>
 
         <button
@@ -218,10 +226,10 @@ export default function BetCard({ match, bet, onSave, matchScore, onTeamClick, r
         </div>
       )}
 
-      {isFinished && matchScore?.scoreHome != null && (
+      {isFinished && matchScore?.scoreHome != null && bet?.predictedScoreA != null && (
         <div className="bet-card__result">
           <span className="bet-card__actual">
-            {t('finalResult')}: {matchScore.scoreHome} - {matchScore.scoreAway}
+            {t('specialYourPick')}: {bet.predictedScoreA} - {bet.predictedScoreB}
           </span>
           {bet?.pointsAwarded != null && (
             <span className={`bet-card__points bet-card__points--${bet.pointsAwarded}`}>
