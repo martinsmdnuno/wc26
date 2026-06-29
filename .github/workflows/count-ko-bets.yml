@@ -2,6 +2,12 @@ name: Count KO bets (one-off)
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - claude/xenodochial-euclid-2f42d0
+    paths:
+      - scripts/count-ko-bets.mjs
+      - .github/workflows/count-ko-bets.yml
 
 permissions:
   contents: read
