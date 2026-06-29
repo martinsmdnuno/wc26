@@ -16,12 +16,20 @@ for (let id = 73; id <= 88; id++) {
   console.log(`  ${id}: ${r.scoreA}-${r.scoreB} status=${r.status} decidedBy=${r.decidedBy ?? '-'} advancer=${r.advancer ?? '-'} scored=${r.scored} source=${r.source ?? '-'}`);
 }
 
-console.log('\n== leaderboard (per pool) knockoutPoints ==');
-const pools = await db.collection('pools').get();
-for (const p of pools.docs) {
-  const lb = await p.ref.collection('leaderboard').get();
-  const rows = lb.docs.map((d) => d.data())
-    .map((x) => `${x.nickname || '?'}: ko=${x.knockoutPoints ?? 0} total=${x.totalPoints ?? 0}`);
-  console.log(`  pool ${p.id}: ${rows.join(' | ')}`);
+const POOL = 'OFMzULHb6f8pvpEcTV8d'; // "Tacho de Sexta"
+const pref = db.collection('pools').doc(POOL);
+
+console.log(`\n== leaderboard for pool ${POOL} ==`);
+const lb = await pref.collection('leaderboard').get();
+for (const d of lb.docs) {
+  const x = d.data();
+  console.log(`  ${x.nickname || d.id}: ko=${x.knockoutPoints ?? 0} group=${x.groupPoints ?? 0} total=${x.totalPoints ?? 0}`);
+}
+
+console.log('\n== match 73 bets in that pool ==');
+const bets = await pref.collection('bets').where('matchId', '==', 73).get();
+for (const d of bets.docs) {
+  const b = d.data();
+  console.log(`  uid=${b.userId?.slice(0, 6)} pred=${b.predictedScoreA}-${b.predictedScoreB} pointsAwarded=${b.pointsAwarded ?? 'null'} scoredType=${b.scoredType ?? '-'}`);
 }
 console.log('done');
