@@ -189,6 +189,7 @@ export default function Bets({ onTeamClick, focusMatch, onFocusHandled }) {
                         resolvedAway={resolvedKO[match.id]?.away}
                         onSave={handleSave}
                         onTeamClick={onTeamClick}
+                        autoExpandBets={match.id === focusMatch}
                       />
                     ))}
                   </div>
