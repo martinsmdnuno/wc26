@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { isMatchLocked } from '../data/matchLock';
 import { kickoffDateStr, kickoffTimeStr } from '../utils/matchTime';
@@ -9,7 +9,7 @@ function getFlagUrl(iso) {
   return `https://flagcdn.com/w80/${iso}.png`;
 }
 
-export default function BetCard({ id, match, bet, onSave, matchScore, onTeamClick, resolvedHome, resolvedAway }) {
+export default function BetCard({ id, match, bet, onSave, matchScore, onTeamClick, resolvedHome, resolvedAway, autoExpandBets }) {
   const { t } = useLanguage();
   // Knockout fixtures carry slot strings ("2A", "W73") instead of team isos;
   // fill them with the teams already certain from results (same as the calendar).
@@ -19,6 +19,11 @@ export default function BetCard({ id, match, bet, onSave, matchScore, onTeamClic
   const hasTeams = !!homeIso && !!awayIso; // both known → bettable
   const [showBets, setShowBets] = useState(false);
   const revealAvailable = hasTeams && isMatchLocked(match.id);
+  // Arriving from a notification deep link: open the group-predictions panel
+  // automatically (only when there's something to reveal).
+  useEffect(() => {
+    if (autoExpandBets && revealAvailable) setShowBets(true);
+  }, [autoExpandBets, revealAvailable]);
 
   const homeName = homeIso ? t(`team.${homeIso}`) : slotLabel(match.home, t);
   const awayName = awayIso ? t(`team.${awayIso}`) : slotLabel(match.away, t);
