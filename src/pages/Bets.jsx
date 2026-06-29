@@ -97,6 +97,12 @@ export default function Bets({ onTeamClick }) {
           🎯 {t('betTab')}
         </button>
         <button
+          className={`teams__view-chip ${view === 'ranking' ? 'teams__view-chip--active' : ''}`}
+          onClick={() => setView('ranking')}
+        >
+          🏅 {t('rankingTab')}
+        </button>
+        <button
           className={`teams__view-chip ${view === 'special' ? 'teams__view-chip--active' : ''}`}
           onClick={() => setView('special')}
         >
@@ -113,12 +119,6 @@ export default function Bets({ onTeamClick }) {
           onClick={() => setView('summary')}
         >
           📋 {t('summaryTab')}
-        </button>
-        <button
-          className={`teams__view-chip ${view === 'ranking' ? 'teams__view-chip--active' : ''}`}
-          onClick={() => setView('ranking')}
-        >
-          🏅 {t('rankingTab')}
         </button>
       </div>
 
