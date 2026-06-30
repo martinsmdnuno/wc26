@@ -3565,6 +3565,25 @@
     var(--surface);
 }
 
+/* Off-screen clone used for image/PDF export: force the light, printable
+   palette (regardless of the user's theme) and let the full card render
+   un-clipped at a fixed width. See utils/certificateImage.js. */
+.cert--export {
+  --surface: #FFFFFF;
+  --gold: #C9A84C;
+  --gold-text: #8A6D1E;
+  --dark: #1A1A1A;
+  --gray: #6B7280;
+  --green-dark: #006341;
+  --white: #FFFFFF;
+  width: 420px;
+  max-width: 420px;
+  max-height: none;
+  overflow: visible;
+  box-shadow: none;
+  margin: 0;
+}
+
 .cert__seal {
   font-size: 52px;
   line-height: 1;
