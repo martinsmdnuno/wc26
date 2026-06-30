@@ -109,35 +109,31 @@ export async function shareCertificate(cardEl, t) {
   return 'downloaded';
 }
 
-// "Save as PDF" via native print. We print the rasterised image inside a hidden
-// iframe (not window.print() of the page): the gold background is baked into the
-// pixels, so it prints reliably regardless of the browser's "background graphics"
-// setting — which the old @media-print path could not guarantee.
+// "Save as PDF" via native print. We add a rasterised image of the card to a
+// print-only layer in the page and call window.print() directly (no iframe —
+// iframe.print() is a silent no-op in several browsers). The gold background is
+// baked into the image pixels, so it prints reliably regardless of the browser's
+// "background graphics" setting. The @media-print rules (App.css) hide everything
+// except .cert-print-layer.
 export async function printCertificate(cardEl) {
   const blob = await renderCertificateBlob(cardEl);
   const url = URL.createObjectURL(blob);
 
-  const iframe = document.createElement('iframe');
-  iframe.setAttribute('aria-hidden', 'true');
-  iframe.style.cssText = 'position:fixed; right:0; bottom:0; width:0; height:0; border:0;';
-  document.body.appendChild(iframe);
+  const layer = document.createElement('div');
+  layer.className = 'cert-print-layer';
+  const img = document.createElement('img');
+  img.alt = '';
+  img.src = url;
+  layer.appendChild(img);
+  document.body.appendChild(layer);
 
   const cleanup = () => {
-    iframe.remove();
+    layer.remove();
     URL.revokeObjectURL(url);
+    window.removeEventListener('afterprint', cleanup);
   };
 
-  const doc = iframe.contentDocument;
-  doc.open();
-  doc.write(
-    `<!doctype html><html><head><meta charset="utf-8"><title>Certificado</title>` +
-      `<style>@page{margin:12mm;}html,body{margin:0;padding:0;}` +
-      `img{width:100%;height:auto;display:block;}</style></head>` +
-      `<body><img src="${url}" alt=""></body></html>`
-  );
-  doc.close();
-
-  const img = doc.querySelector('img');
+  // Wait for the image to decode before printing, or the page prints blank.
   await new Promise((resolve) => {
     if (img.complete) return resolve();
     img.addEventListener('load', resolve, { once: true });
@@ -145,10 +141,8 @@ export async function printCertificate(cardEl) {
     setTimeout(resolve, 2000);
   });
 
-  const win = iframe.contentWindow;
-  win.addEventListener('afterprint', cleanup, { once: true });
-  win.focus();
-  win.print();
-  // Fallback cleanup in browsers that don't fire afterprint.
+  window.addEventListener('afterprint', cleanup, { once: true });
+  window.print();
+  // Fallback cleanup for browsers that don't fire afterprint.
   setTimeout(cleanup, 60000);
 }
