@@ -3557,17 +3557,20 @@
   max-height: calc(100dvh - 32px); /* tall content scrolls in-place; close stays reachable */
   overflow-y: auto;
   overscroll-behavior: contain;
+  position: relative;
   text-align: center;
   gap: 12px;
-  border: 2px solid var(--gold);
+  border: 3px solid var(--gold);
   background:
     radial-gradient(120% 90% at 50% 0%, rgba(232, 201, 122, 0.16), transparent 60%),
     var(--surface);
 }
 
 /* Off-screen clone used for image/PDF export: force the light, printable
-   palette (regardless of the user's theme) and let the full card render
-   un-clipped at a fixed width. See utils/certificateImage.js. */
+   palette (regardless of the user's theme), render un-clipped, and size the
+   card to the 13×18 cm photo-paper ratio (≈13:18) with a prominent double
+   frame. Captured at pixelRatio 3 → ~1536×2126 px ≈ 300 dpi at 13×18 cm.
+   See utils/certificateImage.js. */
 .cert--export {
   --surface: #FFFFFF;
   --gold: #C9A84C;
@@ -3576,17 +3579,35 @@
   --gray: #6B7280;
   --green-dark: #006341;
   --white: #FFFFFF;
-  width: 420px;
-  max-width: 420px;
+  width: 512px;
+  max-width: 512px;
+  min-height: 709px; /* 512 × 18/13 → fills 13×18 photo paper */
   max-height: none;
   overflow: visible;
   box-shadow: none;
   margin: 0;
+  justify-content: center; /* center the stack within the photo-ratio frame */
+  border-width: 4px; /* more prominent outer frame */
+  padding: 40px 32px;
+}
+
+/* Inner gold hairline → classic double-frame certificate look. */
+.cert--export::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid var(--gold);
+  border-radius: 14px;
+  pointer-events: none;
 }
 
 .cert__seal {
   font-size: 52px;
-  line-height: 1;
+  line-height: 1.2;
+  /* Force the colour-emoji font so the crystal-ball seal rasterises in the
+     html-to-image export (large standalone emoji can fall back to a blank
+     glyph otherwise). */
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
 }
 
 .cert__badge {
@@ -3776,14 +3797,19 @@
     display: block !important;
   }
 
+  /* Target 13×18 cm photo paper, borderless: the certificate already has its
+     own gold frame, so we fill the sheet and let the image fit by aspect. */
   .cert-print-layer img {
-    width: 100%;
-    height: auto;
     display: block;
+    width: 130mm;
+    height: 180mm;
+    object-fit: contain;
+    margin: 0 auto;
   }
 
   @page {
-    margin: 12mm;
+    size: 130mm 180mm;
+    margin: 0;
   }
 }
 

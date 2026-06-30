@@ -55,7 +55,8 @@ export async function renderCertificateBlob(cardEl) {
   try {
     await waitForImages(clone);
     const blob = await toBlob(clone, {
-      pixelRatio: 2, // crisp on retina / when printed
+      // 512px card × 3 → ~1536×2126 px ≈ 300 dpi at 13×18 cm photo paper.
+      pixelRatio: 3,
       backgroundColor: '#ffffff', // opaque paper — no transparent corners
       cacheBust: true,
     });
