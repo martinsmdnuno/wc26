@@ -7,7 +7,7 @@
 // action buttons, and rasterise it with html-to-image onto an opaque white
 // background — which is what fixes the "transparent background" exports.
 
-import { toBlob } from 'html-to-image';
+import { toBlob, getFontEmbedCSS } from 'html-to-image';
 
 // Wait for the document's web fonts so the captured title isn't a fallback face.
 async function ensureFonts() {
@@ -16,6 +16,28 @@ async function ensureFonts() {
   } catch {
     /* fonts are best-effort; system fallback is fine */
   }
+}
+
+// Embedding the web fonts (fetching the Google Fonts CSS + each font file and
+// base64-ing them) is by far the slowest part of a capture. It never changes
+// between exports, so compute it once and reuse — turning the second+ export
+// (and the print path) from seconds into near-instant.
+let fontEmbedCSSCache;
+async function embeddedFontCSS(node) {
+  if (fontEmbedCSSCache === undefined) {
+    try {
+      fontEmbedCSSCache = await getFontEmbedCSS(node);
+    } catch {
+      fontEmbedCSSCache = '';
+    }
+  }
+  return fontEmbedCSSCache;
+}
+
+// Kick off the (one-time) font embedding ahead of time — e.g. when the
+// certificate modal opens — so the first export click is already fast.
+export function prewarmCertificateExport(node) {
+  if (node) embeddedFontCSS(node);
 }
 
 // Resolve once every <img> in the clone has settled (loaded or errored), so the
@@ -54,11 +76,12 @@ export async function renderCertificateBlob(cardEl) {
 
   try {
     await waitForImages(clone);
+    const fontEmbedCSS = await embeddedFontCSS(clone);
     const blob = await toBlob(clone, {
       // 512px card × 3 → ~1536×2126 px ≈ 300 dpi at 13×18 cm photo paper.
       pixelRatio: 3,
       backgroundColor: '#ffffff', // opaque paper — no transparent corners
-      cacheBust: true,
+      fontEmbedCSS, // reuse the cached font CSS instead of re-fetching it
     });
     if (!blob) throw new Error('toBlob returned null');
     return blob;

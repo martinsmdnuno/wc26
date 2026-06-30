@@ -3601,6 +3601,13 @@
   pointer-events: none;
 }
 
+/* html-to-image mis-renders the avatar's box-shadow gold ring (it comes out as
+   a clipped wedge). Use a real border for the export instead — renders clean. */
+.cert--export .cert__avatar {
+  box-shadow: none;
+  border: 3px solid var(--gold);
+}
+
 .cert__seal {
   font-size: 52px;
   line-height: 1.2;

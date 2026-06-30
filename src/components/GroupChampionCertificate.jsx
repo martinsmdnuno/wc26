@@ -1,8 +1,8 @@
 import { createPortal } from 'react-dom';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useModalA11y } from '../hooks/useModalA11y';
-import { shareCertificate, printCertificate } from '../utils/certificateImage';
+import { shareCertificate, printCertificate, prewarmCertificateExport } from '../utils/certificateImage';
 import Avatar from './Avatar';
 
 // Tongue-in-cheek certificate for the group-stage winner — the "Oráculo da
@@ -21,6 +21,12 @@ export default function GroupChampionCertificate({ winner, onClose }) {
     a11yRef.current = node;
     cardRef.current = node;
   };
+
+  // Pre-embed the web fonts as soon as the card is open, so the first export
+  // (image or PDF) doesn't pay the one-time font-fetch cost on click.
+  useEffect(() => {
+    prewarmCertificateExport(cardRef.current);
+  }, []);
 
   // "Save as PDF": rasterise the card and print that image (see
   // utils/certificateImage.js) so the gold background prints reliably.
