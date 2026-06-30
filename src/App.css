@@ -3606,6 +3606,15 @@
 .cert--export .cert__avatar {
   box-shadow: none;
   border: 3px solid var(--gold);
+  background: transparent; /* avoid a green sliver if any gap remains */
+}
+
+/* The legend avatars are a coloured disc inset in a square with a transparent
+   margin — invisible at 56px, but enlarged in the export that margin reads as a
+   white ring inside the gold border. Overscan the artwork so it fills right up
+   to the ring. */
+.cert--export .cert__avatar img {
+  transform: scale(1.1);
 }
 
 .cert__seal {
